@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <item
+        android:id="@+id/main_item"
+        android:title="@string/lists">
+        <menu>
+            <item
+                android:id="@+id/nav_watch_list"
+                android:icon="@drawable/watch_list"
+                android:title="@string/watch_list" />
+            <item
+                android:id="@+id/nav_favorite_list"
+                android:icon="@drawable/favorite_list"
+                android:title="@string/favorite_list" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/labels_item"
+        android:title="@string/community">
+        <menu>
+            <item
+                android:id="@+id/nav_join_room"
+                android:icon="@drawable/baseline_home_max_24"
+                android:title="@string/join_room" />
+        </menu>
+    </item>
+</menu>

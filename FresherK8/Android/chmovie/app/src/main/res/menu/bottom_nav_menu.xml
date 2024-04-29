@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_movies"
+        android:icon="@drawable/movie"
+        android:title="@string/movies"/>
+    <item
+        android:id="@+id/nav_series"
+        android:icon="@drawable/series"
+        android:title="@string/series"/>
+    <item
+        android:id="@+id/nav_explore"
+        android:icon="@drawable/explore"
+        android:title="@string/explore"/>
+    <item
+        android:id="@+id/nav_my_list"
+        android:icon="@drawable/my_list"
+        android:title="@string/my_list"/>
+</menu>
