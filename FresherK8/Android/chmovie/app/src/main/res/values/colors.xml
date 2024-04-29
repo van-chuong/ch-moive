@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#FF1EC7FA</color>
+    <color name="secondary">#FF1E6FF1</color>
+    <color name="tint_primary">#FFE5E5E5</color>
+    <color name="tint_secondary">#FF7F7F7F</color>
+    <color name="tint_tertiary">#FF3F3F3F</color>
+    <color name="white">#FFFFFF</color>
+    <color name="red">#A90003</color>
+    <color name="blue">#0288D1</color>
+    <color name="yellow">#FBC02D</color>
+    <color name="green">#388E3C</color>
+    <color name="fill_primary">#FF262626</color>
+    <color name="fill_secondary">#FF3F3F3F</color>
+    <color name="background_primary">#141414</color>
+    <color name="separator">#FF262626</color>
+    <color name="shadow_primary">#171717</color>
+    <color name="blur">#80464646</color>
+    <color name="linear_start">#FF1EC7FA</color>
+    <color name="linear_finish">#FF1E6FF1</color>
+</resources>
