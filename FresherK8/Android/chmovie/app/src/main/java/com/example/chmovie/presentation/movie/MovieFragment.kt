@@ -1,6 +1,5 @@
 package com.example.chmovie.presentation.movie
 
-import android.app.ProgressDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -24,13 +23,15 @@ class MovieFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMovieBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        return binding.root
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.loadPopularMovies(1)
         viewModel.popularMovies.observe(viewLifecycleOwner) {
             Log.d("PopularMovies", it.toString())
         }
-        viewModel.loadPopularMovies(1)
-        return root
     }
 
     override fun onDestroyView() {
