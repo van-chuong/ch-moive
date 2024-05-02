@@ -22,4 +22,10 @@
     <string name="search">Search</string>
     <string name="forward">Forward</string>
     <string name="profile">Profile</string>
+    <string name="logo">Logo</string>
+    <string name="log_in">Log In</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+    <string name="enter_user_name">Enter user name</string>
+    <string name="enter_password">Enter password</string>
 </resources>
