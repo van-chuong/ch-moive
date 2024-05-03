@@ -4,11 +4,14 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import com.example.chmovie.R
+import com.example.chmovie.data.source.local.PrefManager
 import com.example.chmovie.databinding.ActivityMainBinding
+import com.example.chmovie.shared.constant.Constant
 
 class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding by lazy {
@@ -30,7 +33,15 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        installSplashScreen()
         setContentView(binding.root)
+        // Get the navigation graph
+        val navGraph = navController.navInflater.inflate(R.navigation.mobile_navigation)
+        val sessionId = PrefManager.with(this).getString(Constant.SESSION_KEY, "")
+        if (sessionId.isNullOrEmpty()) {
+            navGraph.setStartDestination(R.id.nav_login)
+        }
+        navController.graph = navGraph
         initView()
         handleEvent()
     }
@@ -49,12 +60,18 @@ class MainActivity : AppCompatActivity() {
             binding.toolbar.title = ""
             binding.toolbar.menu.findItem(R.id.nav_search).isVisible = false
             when (destination.id) {
+                R.id.nav_login -> {
+                    binding.bottomNavView.visibility = View.GONE
+                    binding.toolbar.visibility = View.GONE
+                }
+
                 R.id.nav_favorite_list -> binding.bottomNavView.visibility = View.GONE
                 R.id.nav_watch_list -> binding.bottomNavView.visibility = View.GONE
                 R.id.nav_join_room -> binding.bottomNavView.visibility = View.GONE
                 else -> {
                     binding.bottomNavView.visibility = View.VISIBLE
                     binding.toolbar.menu.findItem(R.id.nav_search).isVisible = true
+                    binding.toolbar.visibility = View.VISIBLE
                 }
             }
         }
@@ -66,6 +83,4 @@ class MainActivity : AppCompatActivity() {
             return@setOnMenuItemClickListener true
         }
     }
-
-
 }

@@ -12,7 +12,12 @@
         <item name="colorControlNormal">@color/tint_primary</item>
         <item name="android:textColorSecondary">@color/tint_tertiary</item>
     </style>
-
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/shadow_primary</item>
+            <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_foreground</item>
+        <item name="windowSplashScreenAnimationDuration">200</item>
+        <item name="postSplashScreenTheme">@style/Theme.CHMovie.NoActionBar</item>
+    </style>
     <style name="NavigationView">
         <item name="android:textColorSecondary">@color/tint_tertiary</item>
     </style>
@@ -51,5 +56,17 @@
     <style name="Text_Caption">
         <item name="android:textSize">10sp</item>
         <item name="android:textColor">@color/tint_secondary</item>
+    </style>
+
+    <style name="InputStyle" parent="Widget.AppCompat.EditText">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:ems">10</item>
+        <item name="android:layout_marginBottom">20dp</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:background">@drawable/input_bg</item>
+        <item name="android:textColorHint">@color/tint_secondary</item>
+        <item name="android:textColor">@color/tint_primary</item>
     </style>
 </resources>
