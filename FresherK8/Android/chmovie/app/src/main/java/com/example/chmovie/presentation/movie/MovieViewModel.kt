@@ -1,22 +1,23 @@
 package com.example.chmovie.presentation.movie
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import com.example.chmovie.data.models.MovieDetail
 import com.example.chmovie.data.repositories.MovieRepository
-import kotlinx.coroutines.launch
+import com.example.chmovie.shared.base.BaseViewModel
 
-class MovieViewModel(private val movieRepository: MovieRepository) : ViewModel() {
+class MovieViewModel(private val movieRepository: MovieRepository) : BaseViewModel() {
 
-    private val _popularMovies = MutableLiveData<List<MovieDetail>>()
-    val popularMovies: MutableLiveData<List<MovieDetail>> = _popularMovies
+    private val _popularMovies = MutableLiveData<MutableList<MovieDetail>>()
+    val popularMovies: LiveData<MutableList<MovieDetail>> = _popularMovies
+
     fun loadPopularMovies(page: Int) {
-        viewModelScope.launch {
-            val movies = movieRepository.getPopularMovies(page)
-            _popularMovies.postValue(movies?.results)
-        }
+        launchTaskSync(
+            onRequest = { movieRepository.getPopularMovies(page) },
+            onSuccess = { _popularMovies.value = it.results.toMutableList() },
+            onError = { exception.value = it }
+        )
     }
 }
+
