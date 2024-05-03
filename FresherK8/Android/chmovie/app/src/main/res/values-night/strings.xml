@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="movies">Movies</string>
+    <string name="series">Series</string>
+    <string name="explore">Explore</string>
+    <string name="my_list">My list</string>
+    <string name="watch_list">Watch List</string>
+    <string name="favorite_list">Favorite List</string>
+    <string name="lists">LISTS</string>
+    <string name="join_room">Join Room</string>
+    <string name="community">COMMUNITY</string>
+    <string name="search">Search</string>
+    <string name="forward">Forward</string>
+    <string name="profile">Profile</string>
+</resources>

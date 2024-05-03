@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_movies">
+
+    <fragment
+        android:id="@+id/nav_movies"
+        android:name="com.example.chmovie.presentation.movie.MovieFragment"
+        android:label="@string/movies"
+        tools:layout="@layout/fragment_movie" />
+
+    <fragment
+        android:id="@+id/nav_series"
+        android:name="com.example.chmovie.presentation.serie.SeriesFragment"
+        android:label="@string/series"
+        tools:layout="@layout/fragment_series" />
+
+    <fragment
+        android:id="@+id/nav_explore"
+        android:name="com.example.chmovie.presentation.explore.ExploreFragment"
+        android:label="@string/explore"
+        tools:layout="@layout/fragment_explore" />
+
+    <fragment
+        android:id="@+id/nav_my_list"
+        android:name="com.example.chmovie.presentation.my_list.MyListFragment"
+        android:label="@string/my_list"
+        tools:layout="@layout/fragment_my_list" />
+
+    <fragment
+        android:id="@+id/nav_favorite_list"
+        android:name="com.example.chmovie.presentation.favorite.FavoriteFragment"
+        android:label="@string/favorite_list"
+        tools:layout="@layout/fragment_favorite" />
+
+    <fragment
+        android:id="@+id/nav_watch_list"
+        android:name="com.example.chmovie.presentation.watch_list.WatchListFragment"
+        android:label="@string/favorite_list"
+        tools:layout="@layout/fragment_watch_list" />
+
+    <fragment
+        android:id="@+id/nav_join_room"
+        android:name="com.example.chmovie.presentation.room.JoinRoomFragment"
+        android:label="@string/join_room"
+        tools:layout="@layout/fragment_join_room" />
+</navigation>
