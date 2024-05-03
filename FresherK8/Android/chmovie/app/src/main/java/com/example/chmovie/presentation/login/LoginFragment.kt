@@ -1,6 +1,7 @@
 package com.example.chmovie.presentation.login
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.chmovie.R
 import com.example.chmovie.databinding.FragmentLoginBinding
-import com.example.chmovie.shared.utils.ResponseResult
+import com.example.chmovie.shared.scheduler.DataResult
 import com.example.chmovie.shared.widget.CustomProgressDialog
 import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -43,17 +44,22 @@ class LoginFragment : Fragment() {
     private fun initView() {
         viewModel.loginResultLiveData.observe(viewLifecycleOwner) { loginResult ->
             when (loginResult) {
-                is ResponseResult.Success -> {
+                is DataResult.Success -> {
+                    progressDialog.dismiss()
                     navigateToMainFragment()
                 }
 
-                is ResponseResult.Error -> {
+                is DataResult.Error -> {
                     progressDialog.dismiss()
-                    Snackbar.make(requireView(), loginResult.error, Snackbar.LENGTH_LONG)
-                        .setBackgroundTint(resources.getColor(R.color.red))
-                        .setActionTextColor(resources.getColor(R.color.white))
-                        .show()
+                    loginResult.exception.message?.let {
+                        Snackbar.make(requireView(), it, Snackbar.LENGTH_LONG)
+                            .setBackgroundTint(resources.getColor(R.color.red))
+                            .setActionTextColor(resources.getColor(R.color.white))
+                            .show()
+                    }
                 }
+
+                is DataResult.Loading -> {}
             }
         }
     }
@@ -65,11 +71,14 @@ class LoginFragment : Fragment() {
             val password = binding.edtPassword.text.toString().trim()
             hiddenKeyBoard()
             if (username.isEmpty() || password.isEmpty()) {
-                Toast.makeText(
-                    requireContext(),
+                Snackbar.make(
+                    requireView(),
                     "Please enter username and password",
-                    Toast.LENGTH_SHORT
-                ).show()
+                    Snackbar.LENGTH_LONG
+                )
+                    .setBackgroundTint(resources.getColor(R.color.red))
+                    .setActionTextColor(resources.getColor(R.color.white))
+                    .show()
             } else {
                 progressDialog.show()
                 viewModel.login(username, password)
@@ -88,7 +97,6 @@ class LoginFragment : Fragment() {
     }
 
     private fun navigateToMainFragment() {
-        // Lấy NavController từ Activity và thực hiện chuyển Fragment
         val navController = findNavController()
         navController.navigate(R.id.nav_movies)
     }

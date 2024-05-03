@@ -1,19 +1,29 @@
 package com.example.chmovie.data.repositories
 
 import android.util.Log
+import com.example.chmovie.data.models.ErrorResponse
 import com.example.chmovie.data.models.RequestToken
+import com.example.chmovie.data.models.toErrorResponse
 import com.example.chmovie.data.source.remote.MovieApiClient
-import okhttp3.ResponseBody
+import com.example.chmovie.shared.scheduler.DataResult
 import org.json.JSONObject
 
 class AuthRepository {
-    suspend fun getRequestToken(): RequestToken? {
+    suspend fun getRequestToken(): DataResult<RequestToken> {
         return try {
-            Log.d("OKKKKKKK", "getRequestToken")
-            MovieApiClient.instance.getRequestToken()
+            val response = MovieApiClient.instance.getRequestToken()
+            if (response.isSuccessful) {
+                if (response.body() != null) {
+                    DataResult.Success(response.body()!!)
+                } else {
+                    DataResult.Error(Exception("Response body is null"))
+                }
+            } else {
+                val errorResponse: ErrorResponse? = response.errorBody()?.toErrorResponse()
+                DataResult.Error(Exception(errorResponse?.message))
+            }
         } catch (e: Exception) {
-            e.printStackTrace()
-            null
+            DataResult.Error(e)
         }
     }
 
@@ -21,31 +31,49 @@ class AuthRepository {
         username: String,
         password: String,
         requestToken: RequestToken
-    ): RequestToken? {
+    ): DataResult<RequestToken> {
         return try {
-            Log.d("OKKKKKKK", "validateWithLogin")
-            MovieApiClient.instance.validateWithLogin(
+            val response = MovieApiClient.instance.validateWithLogin(
                 mapOf(
                     "username" to username,
                     "password" to password,
                     "request_token" to requestToken.requestToken
                 )
             )
+            if (response.isSuccessful) {
+                if (response.body() != null) {
+                    DataResult.Success(response.body()!!)
+                } else {
+                    DataResult.Error(Exception("Response body is null"))
+                }
+            } else {
+                val errorResponse: ErrorResponse? = response.errorBody()?.toErrorResponse()
+                DataResult.Error(Exception(errorResponse?.message))
+            }
         } catch (e: Exception) {
-            e.printStackTrace()
-            null
+            DataResult.Error(e)
         }
     }
 
-    suspend fun createSession(requestToken: RequestToken): String? {
+
+    suspend fun createSession(requestToken: RequestToken): DataResult<String> {
         return try {
-            Log.d("OKKKKKKK", "createSession")
-            JSONObject(MovieApiClient.instance.createSession(
+            val response = MovieApiClient.instance.createSession(
                 mapOf("request_token" to requestToken.requestToken)
-            ).string()).getString("session_id")
+            )
+            if (response.isSuccessful) {
+                if (response.body() != null) {
+                    val sessionId = JSONObject(response.body()!!.string()).getString("session_id")
+                    DataResult.Success(sessionId)
+                } else {
+                    DataResult.Error(Exception("Response body is null"))
+                }
+            } else {
+                val errorResponse: ErrorResponse? = response.errorBody()?.toErrorResponse()
+                DataResult.Error(Exception(errorResponse?.message))
+            }
         } catch (e: Exception) {
-            e.printStackTrace()
-            null
+            DataResult.Error(e)
         }
     }
 }

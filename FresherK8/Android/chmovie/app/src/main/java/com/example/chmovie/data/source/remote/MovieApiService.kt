@@ -4,6 +4,7 @@ import com.example.chmovie.data.models.MovieDetail
 import com.example.chmovie.data.models.PopularMoviesResponse
 import com.example.chmovie.data.models.RequestToken
 import okhttp3.ResponseBody
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -19,12 +20,12 @@ interface MovieApiService {
     suspend fun getPopularMovies(@Query("page") id: Int): PopularMoviesResponse
 
     @GET("authentication/token/new")
-    suspend fun getRequestToken(): RequestToken
+    suspend fun getRequestToken(): Response<RequestToken>
 
     @POST("authentication/token/validate_with_login")
-    suspend fun validateWithLogin(@Body body: Map<String, String>): RequestToken
+    suspend fun validateWithLogin(@Body body: Map<String, String>): Response<RequestToken>
 
     @POST("authentication/session/new")
-    suspend fun createSession(@Body body: Map<String, String>): ResponseBody
+    suspend fun createSession(@Body body: Map<String, String>): Response<ResponseBody>
 
 }

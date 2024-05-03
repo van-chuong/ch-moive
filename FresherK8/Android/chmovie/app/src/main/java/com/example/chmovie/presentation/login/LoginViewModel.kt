@@ -1,38 +1,49 @@
 package com.example.chmovie.presentation.login
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.chmovie.data.repositories.AuthRepository
 import com.example.chmovie.data.source.local.PrefManager
+import com.example.chmovie.shared.base.BaseViewModel
 import com.example.chmovie.shared.constant.Constant
-import com.example.chmovie.shared.utils.ResponseResult
-import kotlinx.coroutines.launch
+import com.example.chmovie.shared.scheduler.DataResult
 
 class LoginViewModel(
     private val authRepository: AuthRepository,
     private val prefManager: PrefManager
-) : ViewModel() {
-    private val _loginResultLiveData = MutableLiveData<ResponseResult>()
-    val loginResultLiveData: LiveData<ResponseResult>
-        get() = _loginResultLiveData
+) : BaseViewModel() {
+    private val _loginResultLiveData = MutableLiveData<DataResult<String>>()
+    val loginResultLiveData: LiveData<DataResult<String>> get() = _loginResultLiveData
 
     fun login(username: String, password: String) {
-        viewModelScope.launch {
-            try {
-                val requestToken = authRepository.getRequestToken()
-                    ?: throw Exception("Failed to get request token")
-                val validatedToken =
-                    authRepository.validateWithLogin(username, password, requestToken)
-                        ?: throw Exception("Invalid username and password")
-                val session = authRepository.createSession(validatedToken)
-                    ?: throw Exception("Failed to create session")
+        launchTaskSync(
+            onRequest = {
+                when (val requestTokenResult = authRepository.getRequestToken()) {
+                    is DataResult.Success -> {
+                        val requestToken = requestTokenResult.data
+                        val validatedTokenResult = authRepository.validateWithLogin(username, password, requestToken)
+                        when (validatedTokenResult) {
+                            is DataResult.Success -> {
+                                val validatedToken = validatedTokenResult.data
+                                val sessionResult = authRepository.createSession(validatedToken)
+                                sessionResult
+                            }
+                            is DataResult.Error -> validatedTokenResult
+                            is DataResult.Loading -> TODO()
+                        }
+                    }
+                    is DataResult.Error -> requestTokenResult
+                    DataResult.Loading -> TODO()
+                }
+            },
+            onSuccess = { session ->
+                _loginResultLiveData.value = DataResult.Success("successful")
                 prefManager.save(Constant.SESSION_KEY, session)
-                _loginResultLiveData.value = ResponseResult.Success("Login successful")
-            } catch (e: Exception) {
-                _loginResultLiveData.value = ResponseResult.Error("Login failed: ${e.message}")
+            },
+            onError = { exception ->
+                _loginResultLiveData.value = DataResult.Error(exception)
             }
-        }
+        )
     }
 }
