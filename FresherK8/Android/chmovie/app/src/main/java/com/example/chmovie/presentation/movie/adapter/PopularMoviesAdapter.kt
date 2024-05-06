@@ -9,27 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.chmovie.R
 import com.example.chmovie.data.models.MovieDetail
 import com.example.chmovie.databinding.ItemCommonHomeBinding
-import com.example.chmovie.shared.helper.OnItemClickListener
 
-class PopularMoviesAdapter :
-    ListAdapter<MovieDetail, PopularMoviesAdapter.ItemViewHolder>(MovieDiffCallBack()) {
-
-    private val movies = mutableListOf<MovieDetail>()
-    private var itemClickListener: OnItemClickListener<MovieDetail>? = null
-    fun updateData(newData: MutableList<MovieDetail>) {
-        submitList(newData)
-        movies.clear()
-        movies.addAll(newData)
-    }
-
-    fun registerItemClickListener(onItemClickListener: OnItemClickListener<MovieDetail>) {
-        itemClickListener = onItemClickListener
-    }
-
-    fun unRegisterItemClickListener() {
-        itemClickListener = null
-    }
-
+class PopularMoviesAdapter(private var listener: ((MovieDetail) -> Unit)) : ListAdapter<MovieDetail, PopularMoviesAdapter.ItemViewHolder>(MovieDiffCallBack()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val binding = DataBindingUtil.inflate<ItemCommonHomeBinding>(
             LayoutInflater.from(parent.context),
@@ -41,13 +22,13 @@ class PopularMoviesAdapter :
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.bind(movies[position])
+        holder.bind(currentList[position])
         holder.itemView.setOnClickListener {
-            itemClickListener?.onItemViewClick(movies[position])
+            listener.invoke(getItem(position))
         }
     }
 
-    override fun getItemCount() = movies.size
+    override fun getItemCount() = currentList.size
 
     inner class ItemViewHolder(
         private val binding: ItemCommonHomeBinding,

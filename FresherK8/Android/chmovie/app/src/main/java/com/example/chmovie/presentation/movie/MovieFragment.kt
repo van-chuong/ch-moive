@@ -5,19 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
-import com.example.chmovie.R
 import com.example.chmovie.data.models.MovieDetail
 import com.example.chmovie.databinding.FragmentMovieBinding
 import com.example.chmovie.presentation.movie.adapter.ComingSoonMoviesAdapter
 import com.example.chmovie.presentation.movie.adapter.InTheaterMoviesAdapter
 import com.example.chmovie.presentation.movie.adapter.PopularMoviesAdapter
 import com.example.chmovie.presentation.movie.adapter.TrendingMoviesAdapter
-import com.example.chmovie.presentation.movie_detail.MovieDetailFragment
-import com.example.chmovie.shared.helper.OnItemClickListener
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MovieFragment : Fragment(), OnItemClickListener<MovieDetail> {
+class MovieFragment : Fragment(){
     companion object {
         fun newInstance() = MovieFragment()
     }
@@ -26,10 +22,17 @@ class MovieFragment : Fragment(), OnItemClickListener<MovieDetail> {
     private val binding get() = _binding!!
 
     private val viewModel: MovieViewModel by viewModel()
-    private var trendingAdapter: TrendingMoviesAdapter? = null
-    private var popularAdapter: PopularMoviesAdapter? = null
-    private var inTheaterAdapter: InTheaterMoviesAdapter? = null
-    private var comingSoonAdapter: ComingSoonMoviesAdapter? = null
+    private var trendingAdapter: TrendingMoviesAdapter = TrendingMoviesAdapter(::onClickItem)
+    private var popularAdapter: PopularMoviesAdapter = PopularMoviesAdapter(::onClickItem)
+    private var inTheaterAdapter: InTheaterMoviesAdapter = InTheaterMoviesAdapter(::onClickItem)
+    private var comingSoonAdapter: ComingSoonMoviesAdapter = ComingSoonMoviesAdapter(::onClickItem)
+
+    private fun onClickItem(movie: MovieDetail) {
+//        val bundle = Bundle().apply {
+//            putInt(MovieDetailFragment.ARGUMENT_MOVIE, movie.id)
+//        }
+//        findNavController().navigate(R.id.nav_movie_detail, bundle)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,7 +45,6 @@ class MovieFragment : Fragment(), OnItemClickListener<MovieDetail> {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         loadData()
-        setUpView()
         bindView()
         registerLiveData()
     }
@@ -56,64 +58,27 @@ class MovieFragment : Fragment(), OnItemClickListener<MovieDetail> {
         }
     }
 
-    private fun setUpView() {
-    }
-
     private fun registerLiveData() = with(viewModel) {
         trendingMovies.observe(viewLifecycleOwner) {
-            trendingAdapter?.updateData(it)
+            trendingAdapter.submitList(it)
         }
         topRatedMovies.observe(viewLifecycleOwner) {
-            popularAdapter?.updateData(it)
+            popularAdapter.submitList(it)
         }
         inTheaterMovies.observe(viewLifecycleOwner) {
-            inTheaterAdapter?.updateData(it)
+            inTheaterAdapter.submitList(it)
         }
         comingSoonMovies.observe(viewLifecycleOwner) {
-            comingSoonAdapter?.updateData(it)
+            comingSoonAdapter.submitList(it)
         }
     }
 
     private fun bindView() {
-        trendingAdapter = TrendingMoviesAdapter().apply {
-            registerItemClickListener(this@MovieFragment)
-        }
-        popularAdapter = PopularMoviesAdapter().apply {
-            registerItemClickListener(this@MovieFragment)
-        }
-        inTheaterAdapter = InTheaterMoviesAdapter().apply {
-            registerItemClickListener(this@MovieFragment)
-        }
-        comingSoonAdapter = ComingSoonMoviesAdapter().apply {
-            registerItemClickListener(this@MovieFragment)
-        }
         with(binding) {
             rvTrending.adapter = trendingAdapter
             rvPopular.adapter = popularAdapter
             rvInTheatre.adapter = inTheaterAdapter
             rvComingSoon.adapter = comingSoonAdapter
-        }
-    }
-
-    override fun onItemViewClick(item: MovieDetail, position: Int) {
-        // Navigation to MovieDetail
-        val bundle = Bundle().apply {
-            putInt(MovieDetailFragment.ARGUMENT_MOVIE, item.id)
-        }
-        findNavController().navigate(R.id.nav_movie_detail, bundle)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        unRegisterItemClickListeners()
-    }
-
-    private fun unRegisterItemClickListeners() {
-        with(binding) {
-            rvTrending.adapter?.let { (it as TrendingMoviesAdapter).unRegisterItemClickListener() }
-            rvPopular.adapter?.let { (it as PopularMoviesAdapter).unRegisterItemClickListener() }
-            rvInTheatre.adapter?.let { (it as InTheaterMoviesAdapter).unRegisterItemClickListener() }
-            rvComingSoon.adapter?.let { (it as ComingSoonMoviesAdapter).unRegisterItemClickListener() }
         }
     }
 
