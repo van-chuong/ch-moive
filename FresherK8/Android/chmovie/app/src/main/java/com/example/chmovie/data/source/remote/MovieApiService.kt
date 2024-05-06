@@ -1,7 +1,7 @@
 package com.example.chmovie.data.source.remote
 
 import com.example.chmovie.data.models.MovieDetail
-import com.example.chmovie.data.models.PopularMoviesResponse
+import com.example.chmovie.data.models.MoviesResponse
 import com.example.chmovie.data.models.RequestToken
 import okhttp3.ResponseBody
 import retrofit2.Response

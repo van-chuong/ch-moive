@@ -2,8 +2,8 @@
 <layout>
     <data>
         <variable
-            name="viewModel"
-            type="com.example.chmovie.presentation.movie.adapter.ItemMovieViewModel" />
+            name="movieDetail"
+            type="com.example.chmovie.data.models.MovieDetail" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -11,11 +11,10 @@
         android:layout_height="wrap_content">
 
         <com.makeramen.roundedimageview.RoundedImageView
-            android:onClick="@{viewModel.onItemClicked}"
             android:layout_width="240dp"
             android:layout_height="420dp"
             android:scaleType="center"
-            app:imageUrl="@{viewModel.movie.posterPath}"
+            app:imageUrl="@{movieDetail.posterPath}"
             android:layout_marginStart="20dp"
             app:riv_corner_radius="20dp"
             app:layout_constraintEnd_toEndOf="parent"

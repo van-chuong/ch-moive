@@ -16,15 +16,10 @@ class ComingSoonMoviesAdapter :
 
     private val movies = mutableListOf<MovieDetail>()
     private var itemClickListener: OnItemClickListener<MovieDetail>? = null
-
-    fun updateData(newData: MutableList<MovieDetail>?) {
-        newData?.let {
-            val callBack = MoviesDiffUtil(movies, it)
-            val diffResult = DiffUtil.calculateDiff(callBack)
-            diffResult.dispatchUpdatesTo(this)
-            movies.clear()
-            movies.addAll(it)
-        }
+    fun updateData(newData: MutableList<MovieDetail>) {
+        submitList(newData)
+        movies.clear()
+        movies.addAll(newData)
     }
 
     fun registerItemClickListener(onItemClickListener: OnItemClickListener<MovieDetail>) {
@@ -42,29 +37,24 @@ class ComingSoonMoviesAdapter :
             parent,
             false
         )
-        return ItemViewHolder(binding, itemClickListener)
+        return ItemViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         holder.bind(movies[position])
+        holder.itemView.setOnClickListener {
+            itemClickListener?.onItemViewClick(movies[position])
+        }
     }
 
     override fun getItemCount() = movies.size
 
     inner class ItemViewHolder(
         private val binding: ItemCommonHomeBinding,
-        private val itemClickListener: OnItemClickListener<MovieDetail>?,
-        private val itemViewModel: ItemMovieViewModel = ItemMovieViewModel(
-            itemClickListener
-        )
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        init {
-            binding.viewModel = itemViewModel
-        }
-
         fun bind(movie: MovieDetail?) {
-            itemViewModel.setData(movie)
+            binding.movieDetail = movie
             binding.executePendingBindings()
         }
     }
