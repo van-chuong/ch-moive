@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.chmovie.R
 import com.example.chmovie.data.models.MovieDetail
 import com.example.chmovie.databinding.ItemTrendingNowBinding
+import com.example.chmovie.shared.utils.MovieDiffCallBack
 
 class TrendingMoviesAdapter(private var listener: ((MovieDetail) -> Unit)) : ListAdapter<MovieDetail, TrendingMoviesAdapter.ItemViewHolder>(MovieDiffCallBack()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -33,13 +34,4 @@ class TrendingMoviesAdapter(private var listener: ((MovieDetail) -> Unit)) : Lis
         }
     }
 
-    class MovieDiffCallBack : DiffUtil.ItemCallback<MovieDetail>() {
-        override fun areItemsTheSame(oldItem: MovieDetail, newItem: MovieDetail): Boolean {
-            return oldItem.id == newItem.id
-        }
-
-        override fun areContentsTheSame(oldItem: MovieDetail, newItem: MovieDetail): Boolean {
-            return oldItem == newItem
-        }
-    }
 }

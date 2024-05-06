@@ -9,8 +9,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.chmovie.R
 import com.example.chmovie.data.models.MovieDetail
 import com.example.chmovie.databinding.ItemCommonHomeBinding
+import com.example.chmovie.shared.utils.MovieDiffCallBack
 
-class PopularMoviesAdapter(private var listener: ((MovieDetail) -> Unit)) : ListAdapter<MovieDetail, PopularMoviesAdapter.ItemViewHolder>(MovieDiffCallBack()) {
+class PopularMoviesAdapter(private var listener: ((MovieDetail) -> Unit)) : ListAdapter<MovieDetail, PopularMoviesAdapter.ItemViewHolder>(
+    MovieDiffCallBack()
+) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val binding = DataBindingUtil.inflate<ItemCommonHomeBinding>(
             LayoutInflater.from(parent.context),
@@ -36,16 +39,6 @@ class PopularMoviesAdapter(private var listener: ((MovieDetail) -> Unit)) : List
         fun bind(movie: MovieDetail?) {
             binding.movieDetail = movie
             binding.executePendingBindings()
-        }
-    }
-
-    class MovieDiffCallBack : DiffUtil.ItemCallback<MovieDetail>() {
-        override fun areItemsTheSame(oldItem: MovieDetail, newItem: MovieDetail): Boolean {
-            return oldItem.id == newItem.id
-        }
-
-        override fun areContentsTheSame(oldItem: MovieDetail, newItem: MovieDetail): Boolean {
-            return oldItem == newItem
         }
     }
 }
