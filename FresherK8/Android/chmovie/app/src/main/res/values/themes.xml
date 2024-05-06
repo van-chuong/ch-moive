@@ -33,9 +33,9 @@
     <style name="Theme.CHMovie.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="Text_Heading">
-        <item name="android:textSize">34sp</item>
+        <item name="android:textSize">36sp</item>
         <item name="android:textColor">@color/tint_primary</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:textStyle">normal</item>
     </style>
 
     <style name="Text_Heading2">
@@ -57,6 +57,21 @@
         <item name="android:textSize">10sp</item>
         <item name="android:textColor">@color/tint_secondary</item>
     </style>
+    <!-- RecyclerView Styles -->
+    <style name="App_RecyclerView_Horizontal">
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerInParent">true</item>
+    </style>
+
+    <style name="App_RecyclerView_Vertical">
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerInParent">true</item>
+    </style>
+
 
     <style name="InputStyle" parent="Widget.AppCompat.EditText">
         <item name="android:layout_width">0dp</item>

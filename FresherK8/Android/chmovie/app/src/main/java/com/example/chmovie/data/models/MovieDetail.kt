@@ -51,7 +51,7 @@ data class MovieDetail(
     val voteCount: Int
 ) : Parcelable
 
-data class PopularMoviesResponse(
+data class MoviesResponse(
     @SerializedName("page")
     val page: Int,
     @SerializedName("results")
