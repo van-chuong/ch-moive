@@ -28,7 +28,6 @@ class PopularMoviesAdapter(private var listener: ((MovieDetail) -> Unit)) : List
         }
     }
 
-    override fun getItemCount() = currentList.size
 
     inner class ItemViewHolder(
         private val binding: ItemCommonHomeBinding,
