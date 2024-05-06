@@ -5,12 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.example.chmovie.R
 import com.example.chmovie.data.models.MovieDetail
 import com.example.chmovie.databinding.FragmentMovieBinding
 import com.example.chmovie.presentation.movie.adapter.ComingSoonMoviesAdapter
 import com.example.chmovie.presentation.movie.adapter.InTheaterMoviesAdapter
 import com.example.chmovie.presentation.movie.adapter.PopularMoviesAdapter
 import com.example.chmovie.presentation.movie.adapter.TrendingMoviesAdapter
+import com.example.chmovie.presentation.movie_detail.MovieDetailFragment
 import com.example.chmovie.shared.helper.OnItemClickListener
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -27,6 +30,7 @@ class MovieFragment : Fragment(), OnItemClickListener<MovieDetail> {
     private var popularAdapter: PopularMoviesAdapter? = null
     private var inTheaterAdapter: InTheaterMoviesAdapter? = null
     private var comingSoonAdapter: ComingSoonMoviesAdapter? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -93,6 +97,10 @@ class MovieFragment : Fragment(), OnItemClickListener<MovieDetail> {
 
     override fun onItemViewClick(item: MovieDetail, position: Int) {
         // Navigation to MovieDetail
+        val bundle = Bundle().apply {
+            putInt(MovieDetailFragment.ARGUMENT_MOVIE, item.id)
+        }
+        findNavController().navigate(R.id.nav_movie_detail, bundle)
     }
 
     override fun onStop() {
