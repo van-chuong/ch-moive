@@ -7,70 +7,35 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class MovieDetail(
+data class Series(
     @SerializedName("backdrop_path")
-    @Expose
-    val backdropPath: String = "",
-    @SerializedName("budget")
-    @Expose
-    val budget: Int = 0,
+    val backdropPath: String,
+    @SerializedName("episode_run_time")
+    val episodeRunTime: List<Int>,
     @SerializedName("genres")
-    @Expose
     val genres: List<Genre>,
     @SerializedName("id")
-    @Expose
-    val id: Int = 0,
-    @SerializedName("imdb_id")
-    @Expose
-    val imdbId: String = "",
+    val id: Int,
+    @SerializedName("name")
+    val name: String,
     @SerializedName("original_language")
-    @Expose
     val originalLanguage: String,
-    @SerializedName("original_title")
-    @Expose
-    val originalTitle: String = "",
+    @SerializedName("original_name")
+    val originalName: String,
     @SerializedName("overview")
-    @Expose
-    val overview: String = "",
+    val overview: String,
     @SerializedName("popularity")
-    @Expose
-    val popularity: Double = 0.0,
+    val popularity: Double,
     @SerializedName("poster_path")
-    @Expose
-    val posterPath: String = "",
+    val posterPath: String,
     @SerializedName("production_companies")
-    @Expose
     val productionCompanies: List<ProductionCompany>,
     @SerializedName("production_countries")
-    @Expose
     val productionCountries: List<ProductionCountry>,
-    @SerializedName("release_date")
-    @Expose
-    val releaseDate: String = "",
-    @SerializedName("revenue")
-    @Expose
-    val revenue: Int = 0,
-    @SerializedName("runtime")
-    @Expose
-    val runtime: Int = 0,
-    @SerializedName("status")
-    @Expose
-    val status: String = "",
-    @SerializedName("tagline")
-    @Expose
-    val tagline: String = "",
-    @SerializedName("title")
-    @Expose
-    val title: String = "",
-    @SerializedName("video")
-    @Expose
-    val video: Boolean,
     @SerializedName("vote_average")
-    @Expose
-    val voteAverage: Double = 0.0,
+    val voteAverage: Double,
     @SerializedName("vote_count")
-    @Expose
-    val voteCount: Int = 0,
+    val voteCount: Int,
     @SerializedName("videos")
     @Expose
     val videos: VideosResponse,
@@ -83,11 +48,11 @@ data class MovieDetail(
 ) : Parcelable
 
 @Parcelize
-data class MoviesResponse(
+data class SeriesResponse(
     @SerializedName("page")
     val page: Int,
     @SerializedName("results")
-    val results: List<MovieDetail>,
+    val results: List<Series>,
     @SerializedName("total_pages")
     val totalPages: Int,
     @SerializedName("total_results")
