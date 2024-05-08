@@ -1,4 +1,4 @@
-package com.example.chmovie.presentation.movie.adapter
+package com.example.chmovie.presentation.movie_detail.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,10 +10,9 @@ import com.example.chmovie.data.models.MovieDetail
 import com.example.chmovie.databinding.ItemCommonHomeBinding
 import com.example.chmovie.shared.utils.CustomDiffCallBack
 
-class ComingSoonMoviesAdapter(private var listener: ((MovieDetail) -> Unit)) : ListAdapter<MovieDetail, ComingSoonMoviesAdapter.ItemViewHolder>(
+class SimilarMoviesAdapter(private var listener: ((MovieDetail) -> Unit)) : ListAdapter<MovieDetail, SimilarMoviesAdapter.ItemViewHolder>(
     CustomDiffCallBack()
 ) {
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val binding = DataBindingUtil.inflate<ItemCommonHomeBinding>(
             LayoutInflater.from(parent.context),
@@ -31,10 +30,10 @@ class ComingSoonMoviesAdapter(private var listener: ((MovieDetail) -> Unit)) : L
         }
     }
 
+
     inner class ItemViewHolder(
         private val binding: ItemCommonHomeBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
-
         fun bind(movie: MovieDetail?) {
             binding.movieDetail = movie
             binding.executePendingBindings()

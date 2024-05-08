@@ -1,23 +1,21 @@
-package com.example.chmovie.presentation.movie.adapter
+package com.example.chmovie.presentation.movie_detail.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chmovie.R
-import com.example.chmovie.data.models.MovieDetail
-import com.example.chmovie.databinding.ItemCommonHomeBinding
+import com.example.chmovie.data.models.Cast
+import com.example.chmovie.databinding.ItemPersonBinding
 import com.example.chmovie.shared.utils.CustomDiffCallBack
 
-class ComingSoonMoviesAdapter(private var listener: ((MovieDetail) -> Unit)) : ListAdapter<MovieDetail, ComingSoonMoviesAdapter.ItemViewHolder>(
-    CustomDiffCallBack()
-) {
-
+class CastsAdapter(private var listener: ((Cast) -> Unit)) : ListAdapter<Cast, CastsAdapter.ItemViewHolder>(CustomDiffCallBack()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        val binding = DataBindingUtil.inflate<ItemCommonHomeBinding>(
+        val binding = DataBindingUtil.inflate<ItemPersonBinding>(
             LayoutInflater.from(parent.context),
-            R.layout.item_common_home,
+            R.layout.item_person,
             parent,
             false
         )
@@ -32,11 +30,10 @@ class ComingSoonMoviesAdapter(private var listener: ((MovieDetail) -> Unit)) : L
     }
 
     inner class ItemViewHolder(
-        private val binding: ItemCommonHomeBinding,
+        private val binding: ItemPersonBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(movie: MovieDetail?) {
-            binding.movieDetail = movie
+        fun bind(cast: Cast) {
+            binding.cast = cast
             binding.executePendingBindings()
         }
     }

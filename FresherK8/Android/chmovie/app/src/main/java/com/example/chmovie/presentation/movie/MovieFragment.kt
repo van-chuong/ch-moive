@@ -5,12 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.chmovie.data.models.MovieDetail
 import com.example.chmovie.databinding.FragmentMovieBinding
 import com.example.chmovie.presentation.movie.adapter.ComingSoonMoviesAdapter
 import com.example.chmovie.presentation.movie.adapter.InTheaterMoviesAdapter
 import com.example.chmovie.presentation.movie.adapter.PopularMoviesAdapter
 import com.example.chmovie.presentation.movie.adapter.TrendingMoviesAdapter
+import com.example.chmovie.shared.extension.navigateToMovieDetail
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MovieFragment : Fragment(){
@@ -28,10 +30,7 @@ class MovieFragment : Fragment(){
     private var comingSoonAdapter: ComingSoonMoviesAdapter = ComingSoonMoviesAdapter(::onClickItem)
 
     private fun onClickItem(movie: MovieDetail) {
-//        val bundle = Bundle().apply {
-//            putInt(MovieDetailFragment.ARGUMENT_MOVIE, movie.id)
-//        }
-//        findNavController().navigate(R.id.nav_movie_detail, bundle)
+        findNavController().navigateToMovieDetail(movie.id)
     }
 
     override fun onCreateView(

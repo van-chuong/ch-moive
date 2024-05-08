@@ -3,15 +3,16 @@ package com.example.chmovie.presentation.movie.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chmovie.R
 import com.example.chmovie.data.models.MovieDetail
 import com.example.chmovie.databinding.ItemTrendingNowBinding
-import com.example.chmovie.shared.utils.MovieDiffCallBack
+import com.example.chmovie.shared.utils.CustomDiffCallBack
 
-class TrendingMoviesAdapter(private var listener: ((MovieDetail) -> Unit)) : ListAdapter<MovieDetail, TrendingMoviesAdapter.ItemViewHolder>(MovieDiffCallBack()) {
+class TrendingMoviesAdapter(private var listener: ((MovieDetail) -> Unit)) : ListAdapter<MovieDetail, TrendingMoviesAdapter.ItemViewHolder>(
+    CustomDiffCallBack()
+) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val binding =
             DataBindingUtil.inflate<ItemTrendingNowBinding>(LayoutInflater.from(parent.context), R.layout.item_trending_now, parent, false)
