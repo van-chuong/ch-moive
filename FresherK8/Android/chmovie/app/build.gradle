@@ -70,9 +70,13 @@ dependencies {
     // Koin Android features
     implementation 'io.insert-koin:koin-android:3.5.6'
 
-    // Koin Android features
-    implementation 'io.insert-koin:koin-android:3.5.6'
-
     implementation 'com.makeramen:roundedimageview:2.3.0'
+    // Youtube player
+    implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0'
+    implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:custom-ui:12.1.0'
+    //Room database
+    kapt 'androidx.room:room-compiler:2.6.0'
+    implementation 'androidx.room:room-runtime:2.6.0'
+    implementation 'androidx.room:room-ktx:2.6.0'
 
 }

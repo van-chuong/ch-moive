@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/nav_series"
-        android:name="com.example.chmovie.presentation.serie.SeriesFragment"
+        android:name="com.example.chmovie.presentation.series.SeriesFragment"
         android:label="@string/series"
         tools:layout="@layout/fragment_series" />
 
@@ -52,4 +52,10 @@
         android:name="com.example.chmovie.presentation.login.LoginFragment"
         android:label="@string/log_in"
         tools:layout="@layout/fragment_login" />
+
+    <fragment
+        android:id="@+id/nav_movie_detail"
+        android:name="com.example.chmovie.presentation.movie_detail.MovieDetailFragment"
+        android:label="@string/movie_detail"
+        tools:layout="@layout/fragment_movie_detail" />
 </navigation>
