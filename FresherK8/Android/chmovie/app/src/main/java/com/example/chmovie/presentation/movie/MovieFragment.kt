@@ -12,7 +12,6 @@ import com.example.chmovie.presentation.movie.adapter.ComingSoonMoviesAdapter
 import com.example.chmovie.presentation.movie.adapter.InTheaterMoviesAdapter
 import com.example.chmovie.presentation.movie.adapter.PopularMoviesAdapter
 import com.example.chmovie.presentation.movie.adapter.TrendingMoviesAdapter
-import com.example.chmovie.shared.extension.navigateToMovieDetail
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MovieFragment : Fragment(){
@@ -30,7 +29,7 @@ class MovieFragment : Fragment(){
     private var comingSoonAdapter: ComingSoonMoviesAdapter = ComingSoonMoviesAdapter(::onClickItem)
 
     private fun onClickItem(movie: MovieDetail) {
-        findNavController().navigateToMovieDetail(movie.id)
+        findNavController().navigate(MovieFragmentDirections.actionNavMoviesToNavMovieDetail(movie.id))
     }
 
     override fun onCreateView(

@@ -13,7 +13,7 @@ import com.example.chmovie.R
 import com.example.chmovie.databinding.FragmentLoginBinding
 import com.example.chmovie.shared.scheduler.DataResult
 import com.example.chmovie.shared.widget.CustomProgressDialog
-import com.example.chmovie.shared.widget.CustomSnackbar
+import com.example.chmovie.shared.widget.showFailedSnackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -51,7 +51,7 @@ class LoginFragment : Fragment() {
                 is DataResult.Error -> {
                     progressDialog.dismiss()
                     loginResult.exception.message?.let {
-                        CustomSnackbar.showFailedMessage(requireView(), it)
+                        requireView().showFailedSnackbar(it)
                     }
                 }
 
@@ -67,7 +67,7 @@ class LoginFragment : Fragment() {
             val password = binding.edtPassword.text.toString().trim()
             hiddenKeyBoard()
             if (username.isEmpty() || password.isEmpty()) {
-                CustomSnackbar.showFailedMessage(requireView(),"Please enter username and password")
+                requireView().showFailedSnackbar("Please enter username and password")
             } else {
                 progressDialog.show()
                 viewModel.login(username, password)

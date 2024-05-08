@@ -14,7 +14,7 @@ import com.example.chmovie.data.source.local.PrefManager
 import com.example.chmovie.shared.base.BaseViewModel
 import com.example.chmovie.shared.constant.Constant.SESSION_KEY
 import com.example.chmovie.shared.constant.Constant.USERNAME_KEY
-import com.example.chmovie.shared.helper.RuntimeFormatHelper
+import com.example.chmovie.shared.helper.formatRuntime
 import com.example.chmovie.shared.scheduler.DataResult
 import java.text.NumberFormat
 import java.util.Locale
@@ -83,7 +83,7 @@ class MovieDetailViewModel(
     }
 
     fun formatMovieRuntime(runtime: Int): String {
-        return RuntimeFormatHelper.format(runtime)
+        return runtime.formatRuntime()
     }
 
     fun formatGenres(genres: List<Genre>?): String? {
