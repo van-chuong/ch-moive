@@ -11,4 +11,37 @@ data class Favorite(
     val overview: String = "",
     val posterPath: String = "",
     val voteAverage: Double = 0.0,
-)
+    val mediaType: String,
+) {
+    companion object {
+        fun <T> of(currentItem: T): Favorite {
+            val mediaType = when (currentItem) {
+                is MovieDetail -> "movie"
+                is Series -> "tv"
+                else -> throw IllegalArgumentException("Unknown type")
+            }
+
+            return when (currentItem) {
+                is MovieDetail -> Favorite(
+                    currentItem.id,
+                    currentItem.title,
+                    currentItem.overview,
+                    currentItem.posterPath,
+                    currentItem.voteAverage,
+                    mediaType
+                )
+
+                is Series -> Favorite(
+                    currentItem.id,
+                    currentItem.name,
+                    currentItem.overview,
+                    currentItem.posterPath,
+                    currentItem.voteAverage,
+                    mediaType
+                )
+
+                else -> throw IllegalArgumentException("Unknown type")
+            }
+        }
+    }
+}

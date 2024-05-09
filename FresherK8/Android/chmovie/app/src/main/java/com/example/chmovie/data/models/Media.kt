@@ -12,7 +12,24 @@ data class Media(
     val mediaType: String = "movie",
     @SerializedName("watchlist")
     val watchlist: Boolean = true
-)
+) {
+    companion object {
+        fun <T> of(currentItem: T, watchlist: Boolean = true): Media {
+            val mediaType = when (currentItem) {
+                is MovieDetail -> "movie"
+                is Series -> "tv"
+                else -> throw IllegalArgumentException("Unknown type")
+            }
+            return when (currentItem) {
+                is MovieDetail -> Media(mediaId = currentItem.id, mediaType = mediaType, watchlist = watchlist)
+                is Series -> Media(mediaId = currentItem.id, mediaType = mediaType, watchlist = watchlist)
+                else -> throw IllegalArgumentException("Unknown type")
+            }
+        }
+    }
+
+}
+
 fun Media.toMap(): Map<String, String> {
     val gson = Gson()
     val json = gson.toJson(this)

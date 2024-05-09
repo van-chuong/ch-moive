@@ -23,8 +23,7 @@ class MovieDetailViewModel(
     private val movieRepository: MovieRepository,
     private val favoriteRepository: FavoriteRepository,
     prefManager: PrefManager
-) :
-    BaseViewModel() {
+) : BaseViewModel() {
     private val _movieId = MutableLiveData<Int?>()
     val movieId: LiveData<Int?> = _movieId
 
