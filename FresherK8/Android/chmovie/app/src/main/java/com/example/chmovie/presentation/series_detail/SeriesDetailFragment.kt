@@ -17,6 +17,7 @@ import com.example.chmovie.presentation.movie_detail.MovieDetailFragment
 import com.example.chmovie.presentation.movie_detail.MovieDetailViewModel
 import com.example.chmovie.presentation.movie_detail.adapter.CastsAdapter
 import com.example.chmovie.presentation.series_detail.adapter.SimilarSeriesAdapter
+import com.example.chmovie.presentation.watch_video.WatchVideoActivity.Companion.navigateToWatchVideo
 import com.example.chmovie.shared.scheduler.DataResult
 import com.example.chmovie.shared.widget.showFailedSnackbar
 import com.example.chmovie.shared.widget.showSuccessSnackbar
@@ -123,7 +124,7 @@ class SeriesDetailFragment : Fragment() {
             if (videoKey.isNullOrEmpty()) {
                 requireView().showFailedSnackbar("Something went wrong try again later")
             } else {
-                MovieDetailFragment.navigateToWatchVideo(requireActivity(), videoKey)
+                navigateToWatchVideo(requireActivity(), videoKey)
             }
         }
         binding.btnFavorite.setOnClickListener {

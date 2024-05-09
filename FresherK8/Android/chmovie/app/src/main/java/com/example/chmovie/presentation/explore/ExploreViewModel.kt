@@ -2,11 +2,29 @@ package com.example.chmovie.presentation.explore
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.example.chmovie.data.models.Cast
+import com.example.chmovie.data.models.MovieProvider
+import com.example.chmovie.data.repositories.ProviderRepository
+import com.example.chmovie.shared.base.BaseViewModel
 
-class ExploreViewModel : ViewModel() {
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is Explore Fragment"
+class ExploreViewModel(private val providerRepository: ProviderRepository) : BaseViewModel() {
+    private val _popularProvider = MutableLiveData<MutableList<MovieProvider>>()
+    val popularProvider: LiveData<MutableList<MovieProvider>> = _popularProvider
+    private val _popularPerson = MutableLiveData<MutableList<Cast>>()
+    val popularPerson: LiveData<MutableList<Cast>> = _popularPerson
+    fun loadPopularProvider() {
+        launchTaskSync(
+            onRequest = { providerRepository.getPopularProvider() },
+            onSuccess = { _popularProvider.value = it.results.toMutableList() },
+            onError = { exception.value = it }
+        )
     }
-    val text: LiveData<String> = _text
+
+    fun loadPopularPerson() {
+        launchTaskSync(
+            onRequest = { providerRepository.getPopularPerson() },
+            onSuccess = { _popularPerson.value = it.results.toMutableList() },
+            onError = { exception.value = it }
+        )
+    }
 }

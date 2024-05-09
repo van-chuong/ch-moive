@@ -31,7 +31,6 @@ class MovieDetailViewModel(
     private val _movieDetail = MutableLiveData<MovieDetail>()
     val movieDetail: LiveData<MovieDetail> = _movieDetail
 
-
     private val _favoriteMovies = MutableLiveData<MutableList<Favorite>>()
     val favoriteMovies: LiveData<MutableList<Favorite>> = _favoriteMovies
 
@@ -96,7 +95,7 @@ class MovieDetailViewModel(
 
     fun formatMoney(value: Int): String {
         val formatter = NumberFormat.getCurrencyInstance(Locale.US)
-        return '$' + formatter.format(value.toDouble() / 100.0)
+        return formatter.format(value.toDouble() / 100.0)
     }
 
     fun getVideoKey(videos: List<Video>?): String? {

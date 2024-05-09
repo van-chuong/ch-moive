@@ -1,5 +1,7 @@
 package com.example.chmovie.presentation.movie_detail
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +17,7 @@ import com.example.chmovie.data.models.MovieDetail
 import com.example.chmovie.databinding.FragmentMovieDetailBinding
 import com.example.chmovie.presentation.movie_detail.adapter.CastsAdapter
 import com.example.chmovie.presentation.movie_detail.adapter.SimilarMoviesAdapter
+import com.example.chmovie.presentation.watch_video.WatchVideoActivity
 import com.example.chmovie.presentation.watch_video.WatchVideoActivity.Companion.navigateToWatchVideo
 import com.example.chmovie.shared.scheduler.DataResult
 import com.example.chmovie.shared.widget.showFailedSnackbar
@@ -23,7 +26,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class MovieDetailFragment : Fragment() {
-
     private val args: MovieDetailFragmentArgs by navArgs()
     private var _binding: FragmentMovieDetailBinding? = null
     private val binding get() = _binding!!
@@ -38,7 +40,7 @@ class MovieDetailFragment : Fragment() {
             }
 
             is Cast -> {
-
+                findNavController().navigate(MovieDetailFragmentDirections.actionNavMovieDetailToNavPersonDetail(item.id))
             }
         }
     }
@@ -131,7 +133,6 @@ class MovieDetailFragment : Fragment() {
             rvSimilar.adapter = similarMoviesAdapter
         }
     }
-
 
     private fun handleFavorite() {
         viewModel.movieDetail.value?.let { currentMovie ->
