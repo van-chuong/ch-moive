@@ -9,11 +9,16 @@
         android:id="@+id/nav_movies"
         android:name="com.example.chmovie.presentation.movie.MovieFragment"
         android:label="@string/movies"
-        tools:layout="@layout/fragment_movie" />
+        tools:layout="@layout/fragment_movie" >
+
+        <action
+            android:id="@+id/action_nav_movies_to_nav_movie_detail"
+            app:destination="@id/nav_movie_detail" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_series"
-        android:name="com.example.chmovie.presentation.serie.SeriesFragment"
+        android:name="com.example.chmovie.presentation.series.SeriesFragment"
         android:label="@string/series"
         tools:layout="@layout/fragment_series" />
 
@@ -52,4 +57,17 @@
         android:name="com.example.chmovie.presentation.login.LoginFragment"
         android:label="@string/log_in"
         tools:layout="@layout/fragment_login" />
+
+    <fragment
+        android:id="@+id/nav_movie_detail"
+        android:name="com.example.chmovie.presentation.movie_detail.MovieDetailFragment"
+        android:label="@string/movie_detail"
+        tools:layout="@layout/fragment_movie_detail">
+        <argument
+            android:name="movieId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_nav_movie_detail_self"
+            app:destination="@id/nav_movie_detail" />
+    </fragment>
 </navigation>

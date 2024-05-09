@@ -1,4 +1,4 @@
-package com.example.chmovie.data.source.remote
+package com.example.chmovie.data.source.remote.api
 
 import com.example.chmovie.data.models.MovieDetail
 import com.example.chmovie.data.models.MoviesResponse
@@ -14,7 +14,16 @@ import retrofit2.http.Query
 
 interface MovieApiService {
     @GET("movie/{movie_id}")
-    suspend fun getMovieById(@Path("movie_id") id: Int): MovieDetail
+    suspend fun getMovieById(
+        @Path("movie_id") id: Int,
+            @Query("append_to_response") appendToResponse: String = "videos,credits,similar"
+    ): MovieDetail
+
+    @GET("movie/{movie_id}/similar")
+    suspend fun getSimilarMovies(
+        @Path("movie_id") id: Int,
+        @Query("page") page: Int
+    ): MoviesResponse
 
     @GET("movie/popular")
     suspend fun getPopularMovies(@Query("page") id: Int): MoviesResponse
@@ -37,4 +46,13 @@ interface MovieApiService {
     @POST("authentication/session/new")
     suspend fun createSession(@Body body: Map<String, String>): Response<ResponseBody>
 
+    @GET("account/{account_id}/watchlist/movies")
+    suspend fun getWatchList(@Path("account_id") accountId: String, @Query("session_id") sessionId: String): MoviesResponse
+
+    @POST("account/{account_id}/watchlist")
+    suspend fun watchList(
+        @Path("account_id") accountId: String,
+        @Query("session_id") sessionId: String,
+        @Body body: Map<String, String>
+    ): Response<ResponseBody>
 }

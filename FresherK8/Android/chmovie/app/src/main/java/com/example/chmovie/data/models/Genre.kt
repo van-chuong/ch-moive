@@ -2,13 +2,16 @@ package com.example.chmovie.data.models
 
 
 import android.os.Parcelable
+import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Genre(
     @SerializedName("id")
-    val id: Int,
+    @Expose
+    val id: Int = 0,
     @SerializedName("name")
-    val name: String
+    @Expose
+    val name: String = ""
 ): Parcelable

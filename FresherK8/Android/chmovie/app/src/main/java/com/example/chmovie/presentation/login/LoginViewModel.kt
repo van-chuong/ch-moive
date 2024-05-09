@@ -1,6 +1,5 @@
 package com.example.chmovie.presentation.login
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.chmovie.data.repositories.AuthRepository
@@ -39,6 +38,7 @@ class LoginViewModel(
             },
             onSuccess = { session ->
                 _loginResultLiveData.value = DataResult.Success("successful")
+                prefManager.save(Constant.USERNAME_KEY, username)
                 prefManager.save(Constant.SESSION_KEY, session)
             },
             onError = { exception ->

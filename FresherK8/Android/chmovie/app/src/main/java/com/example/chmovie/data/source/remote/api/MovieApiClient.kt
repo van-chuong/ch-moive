@@ -1,4 +1,4 @@
-package com.example.chmovie.data.source.remote
+package com.example.chmovie.data.source.remote.api
 
 import com.example.chmovie.shared.constant.Constant
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory

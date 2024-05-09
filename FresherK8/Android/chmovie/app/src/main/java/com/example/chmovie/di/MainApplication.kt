@@ -14,7 +14,9 @@ class MainApplication : Application() {
         val modules = listOf(
             repositoryModule,
             viewModelModule,
-            prefManagerModule
+            prefManagerModule,
+            dataBaseModule,
+            dataSourceModule
         )
         startKoin {
             androidLogger(Level.ERROR)

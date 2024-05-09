@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.chmovie.data.models.MovieDetail
 import com.example.chmovie.databinding.FragmentMovieBinding
 import com.example.chmovie.presentation.movie.adapter.ComingSoonMoviesAdapter
@@ -28,10 +29,7 @@ class MovieFragment : Fragment(){
     private var comingSoonAdapter: ComingSoonMoviesAdapter = ComingSoonMoviesAdapter(::onClickItem)
 
     private fun onClickItem(movie: MovieDetail) {
-//        val bundle = Bundle().apply {
-//            putInt(MovieDetailFragment.ARGUMENT_MOVIE, movie.id)
-//        }
-//        findNavController().navigate(R.id.nav_movie_detail, bundle)
+        findNavController().navigate(MovieFragmentDirections.actionNavMoviesToNavMovieDetail(movie.id))
     }
 
     override fun onCreateView(

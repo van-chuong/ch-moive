@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -14,7 +13,7 @@ import com.example.chmovie.R
 import com.example.chmovie.databinding.FragmentLoginBinding
 import com.example.chmovie.shared.scheduler.DataResult
 import com.example.chmovie.shared.widget.CustomProgressDialog
-import com.google.android.material.snackbar.Snackbar
+import com.example.chmovie.shared.widget.showFailedSnackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -52,10 +51,7 @@ class LoginFragment : Fragment() {
                 is DataResult.Error -> {
                     progressDialog.dismiss()
                     loginResult.exception.message?.let {
-                        Snackbar.make(requireView(), it, Snackbar.LENGTH_LONG)
-                            .setBackgroundTint(resources.getColor(R.color.red))
-                            .setActionTextColor(resources.getColor(R.color.white))
-                            .show()
+                        requireView().showFailedSnackbar(it)
                     }
                 }
 
@@ -71,14 +67,7 @@ class LoginFragment : Fragment() {
             val password = binding.edtPassword.text.toString().trim()
             hiddenKeyBoard()
             if (username.isEmpty() || password.isEmpty()) {
-                Snackbar.make(
-                    requireView(),
-                    "Please enter username and password",
-                    Snackbar.LENGTH_LONG
-                )
-                    .setBackgroundTint(resources.getColor(R.color.red))
-                    .setActionTextColor(resources.getColor(R.color.white))
-                    .show()
+                requireView().showFailedSnackbar("Please enter username and password")
             } else {
                 progressDialog.show()
                 viewModel.login(username, password)
