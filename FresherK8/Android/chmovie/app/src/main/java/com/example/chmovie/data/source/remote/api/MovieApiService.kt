@@ -3,6 +3,8 @@ package com.example.chmovie.data.source.remote.api
 import com.example.chmovie.data.models.MovieDetail
 import com.example.chmovie.data.models.MoviesResponse
 import com.example.chmovie.data.models.RequestToken
+import com.example.chmovie.data.models.Series
+import com.example.chmovie.data.models.SeriesResponse
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body
@@ -13,17 +15,12 @@ import retrofit2.http.Query
 
 
 interface MovieApiService {
+    /*Movie*/
     @GET("movie/{movie_id}")
     suspend fun getMovieById(
         @Path("movie_id") id: Int,
-            @Query("append_to_response") appendToResponse: String = "videos,credits,similar"
+        @Query("append_to_response") appendToResponse: String = "videos,credits,similar"
     ): MovieDetail
-
-    @GET("movie/{movie_id}/similar")
-    suspend fun getSimilarMovies(
-        @Path("movie_id") id: Int,
-        @Query("page") page: Int
-    ): MoviesResponse
 
     @GET("movie/popular")
     suspend fun getPopularMovies(@Query("page") id: Int): MoviesResponse
@@ -37,6 +34,7 @@ interface MovieApiService {
     @GET("movie/upcoming")
     suspend fun getUpcoming(@Query("page") id: Int): MoviesResponse
 
+    /*Authen*/
     @GET("authentication/token/new")
     suspend fun getRequestToken(): Response<RequestToken>
 
@@ -46,6 +44,7 @@ interface MovieApiService {
     @POST("authentication/session/new")
     suspend fun createSession(@Body body: Map<String, String>): Response<ResponseBody>
 
+    /*Account*/
     @GET("account/{account_id}/watchlist/movies")
     suspend fun getWatchList(@Path("account_id") accountId: String, @Query("session_id") sessionId: String): MoviesResponse
 
@@ -55,4 +54,26 @@ interface MovieApiService {
         @Query("session_id") sessionId: String,
         @Body body: Map<String, String>
     ): Response<ResponseBody>
+
+    /*Series*/
+    @GET("tv/{series_id}")
+    suspend fun getSeriesDetail(
+        @Path("series_id") id: Int,
+        @Query("append_to_response") appendToResponse: String = "videos,credits,similar"
+    ): Series
+
+    @GET("tv/airing_today")
+    suspend fun getAirTodaySeries(@Query("page") id: Int): SeriesResponse
+
+    @GET("tv/top_rated")
+    suspend fun getTopRatedSeries(@Query("page") id: Int): SeriesResponse
+
+    @GET("tv/on_the_air")
+    suspend fun getOnTheAirSeries(@Query("page") id: Int): SeriesResponse
+
+    @GET("tv/popular")
+    suspend fun getPopularSeries(@Query("page") id: Int): SeriesResponse
+
+    @GET("account/{account_id}/watchlist/tv")
+    suspend fun getSeriesWatchList(@Path("account_id") accountId: String, @Query("session_id") sessionId: String): SeriesResponse
 }

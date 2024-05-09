@@ -3,9 +3,15 @@
 
     <data>
 
+        <import type="com.example.chmovie.data.models.Series" />
+
+        <import type="com.example.chmovie.data.models.MovieDetail" />
+
+        <import type="android.view.View" />
+
         <variable
-            name="movieDetail"
-            type="com.example.chmovie.data.models.MovieDetail" />
+            name="item"
+            type="Object" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -18,7 +24,20 @@
             android:layout_height="240dp"
             android:layout_marginStart="20dp"
             android:scaleType="center"
-            app:imageUrl="@{movieDetail.posterPath}"
+            android:visibility="@{item instanceof Series ? View.VISIBLE : View.GONE}"
+            app:imageUrl="@{(item instanceof Series) ? ((Series) item).posterPath : null}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:riv_corner_radius="20dp" />
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:layout_width="160dp"
+            android:layout_height="240dp"
+            android:layout_marginStart="20dp"
+            android:scaleType="center"
+            android:visibility="@{item instanceof MovieDetail ? View.VISIBLE : View.GONE}"
+            app:imageUrl="@{(item instanceof MovieDetail) ? ((MovieDetail) item).posterPath : null}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

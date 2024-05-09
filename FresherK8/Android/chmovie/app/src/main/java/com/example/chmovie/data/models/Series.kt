@@ -44,7 +44,7 @@ data class Series(
     val casts: CastsResponse,
     @SerializedName("similar")
     @Expose
-    val similar: MoviesResponse,
+    val similar: SeriesResponse,
 ) : Parcelable
 
 @Parcelize

@@ -30,12 +30,11 @@ class SimilarMoviesAdapter(private var listener: ((MovieDetail) -> Unit)) : List
         }
     }
 
-
     inner class ItemViewHolder(
         private val binding: ItemCommonHomeBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(movie: MovieDetail?) {
-            binding.movieDetail = movie
+            binding.item = movie
             binding.executePendingBindings()
         }
     }

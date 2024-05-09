@@ -69,6 +69,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_watch_list -> binding.bottomNavView.visibility = View.GONE
                 R.id.nav_join_room -> binding.bottomNavView.visibility = View.GONE
                 R.id.nav_movie_detail -> binding.bottomNavView.visibility = View.GONE
+                R.id.nav_series_detail -> binding.bottomNavView.visibility = View.GONE
                 else -> {
                     binding.bottomNavView.visibility = View.VISIBLE
                     binding.toolbar.menu.findItem(R.id.nav_search).isVisible = true
