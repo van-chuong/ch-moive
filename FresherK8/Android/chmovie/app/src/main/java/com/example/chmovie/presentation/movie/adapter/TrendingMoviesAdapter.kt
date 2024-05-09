@@ -14,8 +14,11 @@ class TrendingMoviesAdapter(private var listener: ((MovieDetail) -> Unit)) : Lis
     CustomDiffCallBack()
 ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        val binding =
-            DataBindingUtil.inflate<ItemTrendingNowBinding>(LayoutInflater.from(parent.context), R.layout.item_trending_now, parent, false)
+        val binding = DataBindingUtil.inflate<ItemTrendingNowBinding>(
+            LayoutInflater.from(parent.context),
+            R.layout.item_trending_now, parent,
+            false
+        )
         return ItemViewHolder(binding)
     }
 
@@ -30,7 +33,7 @@ class TrendingMoviesAdapter(private var listener: ((MovieDetail) -> Unit)) : Lis
         private val binding: ItemTrendingNowBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(movie: MovieDetail?) {
-            binding.movieDetail = movie
+            binding.item = movie
             binding.executePendingBindings()
         }
     }

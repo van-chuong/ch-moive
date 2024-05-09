@@ -10,10 +10,10 @@ import com.example.chmovie.data.models.MovieDetail
 import com.example.chmovie.databinding.ItemCommonHomeBinding
 import com.example.chmovie.shared.utils.CustomDiffCallBack
 
-class ComingSoonMoviesAdapter(private var listener: ((MovieDetail) -> Unit)) : ListAdapter<MovieDetail, ComingSoonMoviesAdapter.ItemViewHolder>(
-    CustomDiffCallBack()
-) {
-
+class ComingSoonMoviesAdapter(private var listener: ((MovieDetail) -> Unit)) :
+    ListAdapter<MovieDetail, ComingSoonMoviesAdapter.ItemViewHolder>(
+        CustomDiffCallBack()
+    ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val binding = DataBindingUtil.inflate<ItemCommonHomeBinding>(
             LayoutInflater.from(parent.context),
@@ -34,9 +34,8 @@ class ComingSoonMoviesAdapter(private var listener: ((MovieDetail) -> Unit)) : L
     inner class ItemViewHolder(
         private val binding: ItemCommonHomeBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
-
         fun bind(movie: MovieDetail?) {
-            binding.movieDetail = movie
+            binding.item = movie
             binding.executePendingBindings()
         }
     }

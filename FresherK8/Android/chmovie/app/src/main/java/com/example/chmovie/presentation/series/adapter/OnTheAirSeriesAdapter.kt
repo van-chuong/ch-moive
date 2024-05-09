@@ -1,4 +1,4 @@
-package com.example.chmovie.presentation.movie.adapter
+package com.example.chmovie.presentation.series.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,11 +6,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chmovie.R
-import com.example.chmovie.data.models.MovieDetail
+import com.example.chmovie.data.models.Series
 import com.example.chmovie.databinding.ItemCommonHomeBinding
 import com.example.chmovie.shared.utils.CustomDiffCallBack
 
-class InTheaterMoviesAdapter(private var listener: ((MovieDetail) -> Unit)) : ListAdapter<MovieDetail, InTheaterMoviesAdapter.ItemViewHolder>(
+class OnTheAirSeriesAdapter(private var listener: ((Series) -> Unit)) : ListAdapter<Series, OnTheAirSeriesAdapter.ItemViewHolder>(
     CustomDiffCallBack()
 ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -33,8 +33,8 @@ class InTheaterMoviesAdapter(private var listener: ((MovieDetail) -> Unit)) : Li
     inner class ItemViewHolder(
         private val binding: ItemCommonHomeBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(movie: MovieDetail?) {
-            binding.item = movie
+        fun bind(series: Series) {
+            binding.item = series
             binding.executePendingBindings()
         }
     }
