@@ -49,4 +49,8 @@
     <string name="airing_today">Airing Today</string>
     <string name="most_popular">Most Popular</string>
     <string name="total_runtime">Total runtime</string>
+    <string name="featured_provider">Featured Provider</string>
+    <string name="popular_person">Popular Person</string>
+    <string name="popular_movies">Popular movies</string>
+    <string name="popular_series">Popular series</string>
 </resources>
