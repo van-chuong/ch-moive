@@ -1,5 +1,7 @@
 package com.example.chmovie.shared.helper
 
+import java.text.DecimalFormat
+
 fun Int.formatRuntime(): String {
     require(this >= 0) { "Invalid duration" }
 
@@ -10,4 +12,9 @@ fun Int.formatRuntime(): String {
         if (hours > 0) append("$hours Hours ")
         if (remainingMinutes > 0) append("$remainingMinutes Minutes")
     }
+}
+
+fun Double.formatVoteAverage(): String {
+    val df = DecimalFormat("#.#")
+    return df.format(this).toDouble().toString()
 }

@@ -20,7 +20,11 @@
         android:id="@+id/nav_series"
         android:name="com.example.chmovie.presentation.series.SeriesFragment"
         android:label="@string/series"
-        tools:layout="@layout/fragment_series" />
+        tools:layout="@layout/fragment_series" >
+        <action
+            android:id="@+id/action_nav_series_to_nav_series_detail"
+            app:destination="@id/nav_series_detail" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_explore"
@@ -69,5 +73,18 @@
         <action
             android:id="@+id/action_nav_movie_detail_self"
             app:destination="@id/nav_movie_detail" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_series_detail"
+        android:name="com.example.chmovie.presentation.series_detail.SeriesDetailFragment"
+        android:label="Series detail"
+        tools:layout="@layout/fragment_series_detail">
+        <argument
+            android:name="seriesId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_nav_series_detail_self"
+            app:destination="@id/nav_series_detail" />
     </fragment>
 </navigation>
