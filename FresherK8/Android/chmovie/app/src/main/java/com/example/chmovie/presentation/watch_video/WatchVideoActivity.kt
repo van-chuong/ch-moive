@@ -1,5 +1,7 @@
 package com.example.chmovie.presentation.watch_video
 
+import android.app.Activity
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.View
@@ -17,7 +19,12 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.loadOrC
 
 class WatchVideoActivity : AppCompatActivity() {
     companion object {
-        const val ARGUMENT_WATCH_VIDEO = "ARGUMENT_WATCH_VIDEO"
+        private const val ARGUMENT_WATCH_VIDEO = "ARGUMENT_WATCH_VIDEO"
+        fun navigateToWatchVideo(activity: Activity, data: String) {
+            val intent = Intent(activity, WatchVideoActivity::class.java)
+            intent.putExtra(ARGUMENT_WATCH_VIDEO, data)
+            activity.startActivity(intent)
+        }
     }
 
     private val binding: ActivityWatchVideoBinding by lazy {
