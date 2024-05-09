@@ -1,6 +1,9 @@
 package com.example.chmovie.data.source.remote.api
 
+import com.example.chmovie.data.models.Cast
+import com.example.chmovie.data.models.CastsResponse
 import com.example.chmovie.data.models.MovieDetail
+import com.example.chmovie.data.models.MoviesProviderResponse
 import com.example.chmovie.data.models.MoviesResponse
 import com.example.chmovie.data.models.RequestToken
 import com.example.chmovie.data.models.Series
@@ -76,4 +79,17 @@ interface MovieApiService {
 
     @GET("account/{account_id}/watchlist/tv")
     suspend fun getSeriesWatchList(@Path("account_id") accountId: String, @Query("session_id") sessionId: String): SeriesResponse
+
+    /*Provider*/
+    @GET("watch/providers/movie")
+    suspend fun getPopularProvider(): MoviesProviderResponse
+
+    @GET("person/popular")
+    suspend fun getPopularPerson(): CastsResponse
+
+    @GET("person/{person_id}")
+    suspend fun getPersonById(
+        @Path("person_id") personId: Int,
+        @Query("append_to_response") appendToResponse: String = "movie_credits,tv_credits"
+    ): Cast
 }
