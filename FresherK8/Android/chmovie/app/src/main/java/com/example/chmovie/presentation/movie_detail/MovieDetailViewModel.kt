@@ -1,5 +1,6 @@
 package com.example.chmovie.presentation.movie_detail
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.chmovie.data.models.Favorite
@@ -77,7 +78,7 @@ class MovieDetailViewModel(
         launchTaskSync(
             onRequest = { movieRepository.watchList(accountId.toString(), sessionId.toString(), media) },
             onSuccess = { _editWatchListResult.value = DataResult.Success(it) },
-            onError = { exception.value = it }
+            onError = { _editWatchListResult.value = DataResult.Error(it) }
         )
     }
 
