@@ -26,12 +26,16 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class MovieDetailFragment : Fragment() {
-    private val args: MovieDetailFragmentArgs by navArgs()
+
     private var _binding: FragmentMovieDetailBinding? = null
     private val binding get() = _binding!!
+
     private val viewModel: MovieDetailViewModel by viewModel()
+    private val args: MovieDetailFragmentArgs by navArgs()
+
     private var similarMoviesAdapter: SimilarMoviesAdapter = SimilarMoviesAdapter(::onClickItem)
     private var castsAdapter: CastsAdapter = CastsAdapter(::onClickItem)
+
     private var isFavorite = false
     private fun onClickItem(item: Any) {
         when (item) {

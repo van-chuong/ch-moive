@@ -11,30 +11,28 @@ import com.example.chmovie.databinding.ItemProviderBinding
 import com.example.chmovie.shared.utils.CustomDiffCallBack
 
 class PopularProviderAdapter(private var listener: ((MovieProvider) -> Unit)) :
-    ListAdapter<MovieProvider, PopularProviderAdapter.ItemViewHolder>(CustomDiffCallBack()) {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
+    ListAdapter<MovieProvider, PopularProviderAdapter.ProviderViewHolder>(CustomDiffCallBack()) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProviderViewHolder {
         val binding = DataBindingUtil.inflate<ItemProviderBinding>(
             LayoutInflater.from(parent.context),
             R.layout.item_provider,
             parent,
             false
         )
-        return ItemViewHolder(binding)
+        return ProviderViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ProviderViewHolder, position: Int) {
         holder.bind(currentList[position])
-        holder.itemView.setOnClickListener {
-            listener.invoke(getItem(position))
-        }
     }
 
-    inner class ItemViewHolder(
+    inner class ProviderViewHolder(
         private val binding: ItemProviderBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(provider: MovieProvider) {
             binding.provider = provider
             binding.executePendingBindings()
+            binding.root.setOnClickListener { listener.invoke(provider) }
         }
     }
 }

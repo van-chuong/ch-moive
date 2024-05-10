@@ -31,6 +31,7 @@ class SeriesDetailViewModel(
 
     private val _editWatchListResult = MutableLiveData<DataResult<String>>()
     val editWatchListResult: LiveData<DataResult<String>> = _editWatchListResult
+
     fun setSeriesId(data: Int) {
         _seriesId.value = data
     }

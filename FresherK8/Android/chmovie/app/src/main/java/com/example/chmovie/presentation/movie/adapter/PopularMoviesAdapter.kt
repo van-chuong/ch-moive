@@ -10,33 +10,31 @@ import com.example.chmovie.data.models.MovieDetail
 import com.example.chmovie.databinding.ItemCommonHomeBinding
 import com.example.chmovie.shared.utils.CustomDiffCallBack
 
-class PopularMoviesAdapter(private var listener: ((MovieDetail) -> Unit)) : ListAdapter<MovieDetail, PopularMoviesAdapter.ItemViewHolder>(
+class PopularMoviesAdapter(private var listener: ((MovieDetail) -> Unit)) : ListAdapter<MovieDetail, PopularMoviesAdapter.PopularViewHolder>(
     CustomDiffCallBack()
 ) {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PopularViewHolder {
         val binding = DataBindingUtil.inflate<ItemCommonHomeBinding>(
             LayoutInflater.from(parent.context),
             R.layout.item_common_home,
             parent,
             false
         )
-        return ItemViewHolder(binding)
+        return PopularViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: PopularViewHolder, position: Int) {
         holder.bind(currentList[position])
-        holder.itemView.setOnClickListener {
-            listener.invoke(getItem(position))
-        }
     }
 
-    inner class ItemViewHolder(
+    inner class PopularViewHolder(
         private val binding: ItemCommonHomeBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(movie: MovieDetail?) {
+        fun bind(movie: MovieDetail) {
             binding.item = movie
             binding.executePendingBindings()
+            binding.root.setOnClickListener { listener.invoke(movie) }
         }
     }
 }

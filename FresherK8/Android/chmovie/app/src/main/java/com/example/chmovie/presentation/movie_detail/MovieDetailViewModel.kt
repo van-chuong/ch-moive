@@ -25,6 +25,7 @@ class MovieDetailViewModel(
     private val favoriteRepository: FavoriteRepository,
     prefManager: PrefManager
 ) : BaseViewModel() {
+
     private val _movieId = MutableLiveData<Int?>()
     val movieId: LiveData<Int?> = _movieId
 
@@ -39,6 +40,7 @@ class MovieDetailViewModel(
 
     private val _editWatchListResult = MutableLiveData<DataResult<String>>()
     val editWatchListResult: LiveData<DataResult<String>> = _editWatchListResult
+
     fun setMovieId(data: Int?) {
         _movieId.value = data
     }

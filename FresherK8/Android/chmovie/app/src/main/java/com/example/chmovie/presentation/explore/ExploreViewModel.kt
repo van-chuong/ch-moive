@@ -8,8 +8,10 @@ import com.example.chmovie.data.repositories.ProviderRepository
 import com.example.chmovie.shared.base.BaseViewModel
 
 class ExploreViewModel(private val providerRepository: ProviderRepository) : BaseViewModel() {
+
     private val _popularProvider = MutableLiveData<MutableList<MovieProvider>>()
     val popularProvider: LiveData<MutableList<MovieProvider>> = _popularProvider
+
     private val _popularPerson = MutableLiveData<MutableList<Cast>>()
     val popularPerson: LiveData<MutableList<Cast>> = _popularPerson
     fun loadPopularProvider() {

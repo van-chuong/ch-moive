@@ -7,6 +7,7 @@ import com.example.chmovie.data.repositories.ProviderRepository
 import com.example.chmovie.shared.base.BaseViewModel
 
 class PersonDetailViewModel(private val providerRepository: ProviderRepository) : BaseViewModel() {
+
     private val _personDetail = MutableLiveData<Cast>()
     val personDetail: LiveData<Cast> = _personDetail
     fun loadPersonDetail(personId: Int) {

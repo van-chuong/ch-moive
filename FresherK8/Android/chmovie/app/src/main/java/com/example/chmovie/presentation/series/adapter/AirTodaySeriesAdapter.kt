@@ -10,32 +10,30 @@ import com.example.chmovie.data.models.Series
 import com.example.chmovie.databinding.ItemCommonHomeBinding
 import com.example.chmovie.shared.utils.CustomDiffCallBack
 
-class AirTodaySeriesAdapter(private var listener: ((Series) -> Unit)) : ListAdapter<Series, AirTodaySeriesAdapter.ItemViewHolder>(
+class AirTodaySeriesAdapter(private var listener: ((Series) -> Unit)) : ListAdapter<Series, AirTodaySeriesAdapter.AirTodayViewHolder>(
     CustomDiffCallBack()
 ) {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AirTodayViewHolder {
         val binding = DataBindingUtil.inflate<ItemCommonHomeBinding>(
             LayoutInflater.from(parent.context),
             R.layout.item_common_home,
             parent,
             false
         )
-        return ItemViewHolder(binding)
+        return AirTodayViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: AirTodayViewHolder, position: Int) {
         holder.bind(currentList[position])
-        holder.itemView.setOnClickListener {
-            listener.invoke(getItem(position))
-        }
     }
 
-    inner class ItemViewHolder(
+    inner class AirTodayViewHolder(
         private val binding: ItemCommonHomeBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(series: Series) {
             binding.item = series
             binding.executePendingBindings()
+            binding.root.setOnClickListener { listener.invoke(series) }
         }
     }
 }

@@ -21,10 +21,13 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class PersonDetailFragment : Fragment() {
     private var _binding: FragmentPersonDetailBinding? = null
     private val binding get() = _binding!!
+
     private val viewModel: PersonDetailViewModel by viewModel()
     private val args: PersonDetailFragmentArgs by navArgs()
+
     private var popularMoviesAdapter: PopularMoviesAdapter = PopularMoviesAdapter(::onClickItem)
     private var popularSeriesAdapter: TopRatedSeriesAdapter = TopRatedSeriesAdapter(::onClickItem)
+
 
     private fun onClickItem(item: Any) {
         when (item) {

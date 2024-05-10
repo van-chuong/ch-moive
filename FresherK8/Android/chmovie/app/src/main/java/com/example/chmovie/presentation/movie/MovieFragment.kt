@@ -15,14 +15,12 @@ import com.example.chmovie.presentation.movie.adapter.TrendingMoviesAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MovieFragment : Fragment(){
-    companion object {
-        fun newInstance() = MovieFragment()
-    }
 
     private var _binding: FragmentMovieBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: MovieViewModel by viewModel()
+
     private var trendingAdapter: TrendingMoviesAdapter = TrendingMoviesAdapter(::onClickItem)
     private var popularAdapter: PopularMoviesAdapter = PopularMoviesAdapter(::onClickItem)
     private var inTheaterAdapter: InTheaterMoviesAdapter = InTheaterMoviesAdapter(::onClickItem)

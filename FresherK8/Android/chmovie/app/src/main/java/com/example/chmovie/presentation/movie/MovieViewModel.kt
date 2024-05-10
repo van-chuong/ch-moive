@@ -10,12 +10,16 @@ class MovieViewModel(private val movieRepository: MovieRepository) : BaseViewMod
 
     private val _trendingMovies = MutableLiveData<MutableList<MovieDetail>>()
     val trendingMovies: LiveData<MutableList<MovieDetail>> = _trendingMovies
+
     private val _topRatedMovies = MutableLiveData<MutableList<MovieDetail>>()
     val topRatedMovies: LiveData<MutableList<MovieDetail>> = _topRatedMovies
+
     private val _inTheaterMovies = MutableLiveData<MutableList<MovieDetail>>()
     val inTheaterMovies: LiveData<MutableList<MovieDetail>> = _inTheaterMovies
+
     private val _comingSoonMovies = MutableLiveData<MutableList<MovieDetail>>()
     val comingSoonMovies: LiveData<MutableList<MovieDetail>> = _comingSoonMovies
+
     fun loadTrendingMovies(page: Int) {
         launchTaskSync(
             onRequest = { movieRepository.getPopularMovies(page) },

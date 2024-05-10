@@ -30,6 +30,7 @@ class WatchVideoActivity : AppCompatActivity() {
     private val binding: ActivityWatchVideoBinding by lazy {
         ActivityWatchVideoBinding.inflate(layoutInflater)
     }
+
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             if (isLandscapeMode) {
@@ -40,7 +41,9 @@ class WatchVideoActivity : AppCompatActivity() {
             }
         }
     }
+
     private var videoId: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)

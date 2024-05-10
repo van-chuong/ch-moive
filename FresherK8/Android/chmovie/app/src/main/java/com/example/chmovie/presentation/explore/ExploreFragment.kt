@@ -14,9 +14,12 @@ import com.example.chmovie.presentation.explore.adapter.PopularProviderAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ExploreFragment : Fragment() {
+
     private var _binding: FragmentExploreBinding? = null
     private val binding get() = _binding!!
+
     private val viewModel: ExploreViewModel by viewModel()
+
     private var featuredAdapter: PopularProviderAdapter = PopularProviderAdapter(::onClickItem)
     private var popularPersonAdapter: PopularPersonAdapter = PopularPersonAdapter(::onClickItem)
     private fun onClickItem(item: Any) {

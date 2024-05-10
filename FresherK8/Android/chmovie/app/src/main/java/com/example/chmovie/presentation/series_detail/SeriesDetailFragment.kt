@@ -25,13 +25,17 @@ import com.example.chmovie.shared.widget.showSuccessSnackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SeriesDetailFragment : Fragment() {
+
     private var _binding: FragmentSeriesDetailBinding? = null
     private val binding get() = _binding!!
+
     private val viewModel: SeriesDetailViewModel by viewModel()
     private val movieDetailViewModel: MovieDetailViewModel by viewModel()
     private val args: SeriesDetailFragmentArgs by navArgs()
+
     private var similarSeriesAdapter: SimilarSeriesAdapter = SimilarSeriesAdapter(::onClickItem)
     private var castsAdapter: CastsAdapter = CastsAdapter(::onClickItem)
+
     private var isFavorite = false
     private fun onClickItem(item: Any) {
         when (item) {
