@@ -6,15 +6,15 @@ import com.example.chmovie.R
 import com.google.android.material.snackbar.Snackbar
 
 fun View.showSuccessSnackbar(message: String) {
-    Snackbar.make(this, message, Snackbar.LENGTH_SHORT)
-        .setBackgroundTint(ContextCompat.getColor(context, R.color.green))
-        .setActionTextColor(ContextCompat.getColor(context, R.color.white))
-        .show()
+    val snackbar = Snackbar.make(this, message, Snackbar.LENGTH_SHORT)
+    snackbar.view.background = ContextCompat.getDrawable(context, R.drawable.container_snackbar_success)
+    snackbar.setActionTextColor(ContextCompat.getColor(context, R.color.white))
+    snackbar.show()
 }
 
 fun View.showFailedSnackbar(message: String) {
-    Snackbar.make(this, message, Snackbar.LENGTH_SHORT)
-        .setBackgroundTint(ContextCompat.getColor(context, R.color.red))
-        .setActionTextColor(ContextCompat.getColor(context, R.color.white))
-        .show()
+    val snackbar = Snackbar.make(this, message, Snackbar.LENGTH_SHORT)
+    snackbar.view.background = ContextCompat.getDrawable(context, R.drawable.container_snackbar_failed)
+    snackbar.setActionTextColor(ContextCompat.getColor(context, R.color.white))
+    snackbar.show()
 }

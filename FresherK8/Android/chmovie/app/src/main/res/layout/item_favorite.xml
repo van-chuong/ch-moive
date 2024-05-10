@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="com.example.chmovie.data.models.MovieDetail" />
+
+        <import type="com.example.chmovie.data.models.Favorite" />
+
+        <import type="android.view.View" />
+
+        <variable
+            name="item"
+            type="Object" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="10dp">
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/roundedImageView3"
+            android:layout_width="120dp"
+            android:layout_height="160dp"
+            android:scaleType="center"
+            android:visibility="@{item instanceof Favorite ? View.VISIBLE : View.GONE}"
+            app:imageUrl="@{(item instanceof Favorite) ? ((Favorite) item).posterPath : null}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:riv_corner_radius="20dp" />
+
+        <TextView
+            android:id="@+id/textView"
+            style="@style/Text_Heading3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:maxLines="1"
+            android:paddingLeft="20dp"
+            android:text="@{(item instanceof Favorite) ? ((Favorite) item).title : null}"
+            android:textColor="@color/tint_primary"
+            android:visibility="@{item instanceof Favorite ? View.VISIBLE : View.GONE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/roundedImageView3"
+            app:layout_constraintTop_toTopOf="@+id/roundedImageView3" />
+
+        <TextView
+            android:id="@+id/textView1"
+            style="@style/Text_Body"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:maxLines="4"
+            android:paddingLeft="20dp"
+            android:text="@{(item instanceof Favorite) ? ((Favorite) item).overview : null}"
+            android:textColor="@color/tint_secondary"
+            android:visibility="@{item instanceof Favorite ? View.VISIBLE : View.GONE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/roundedImageView3"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+        <TextView
+            style="@style/Text_Body"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:drawablePadding="8dp"
+            android:paddingLeft="20dp"
+            android:text="@{(item instanceof Favorite) ? String.valueOf(((Favorite) item).voteAverage) : null}"
+            android:visibility="@{item instanceof Favorite ? View.VISIBLE : View.GONE}"
+            app:drawableStartCompat="@drawable/baseline_star_24"
+            app:drawableTint="@color/primary"
+            app:layout_constraintBottom_toBottomOf="@+id/roundedImageView3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/roundedImageView3"
+            app:layout_constraintTop_toBottomOf="@+id/textView1" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
