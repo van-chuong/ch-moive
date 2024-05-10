@@ -14,6 +14,7 @@ import com.example.chmovie.shared.utils.CustomDiffCallBack
 class SimilarSeriesAdapter(private var listener: ((Series) -> Unit)) : ListAdapter<Series, SimilarSeriesAdapter.SimilarViewHolder>(
     CustomDiffCallBack()
 ) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SimilarViewHolder {
         val binding = DataBindingUtil.inflate<ItemCommonHomeBinding>(
             LayoutInflater.from(parent.context),

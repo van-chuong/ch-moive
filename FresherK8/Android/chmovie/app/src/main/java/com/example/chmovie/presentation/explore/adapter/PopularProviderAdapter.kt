@@ -12,6 +12,7 @@ import com.example.chmovie.shared.utils.CustomDiffCallBack
 
 class PopularProviderAdapter(private var listener: ((MovieProvider) -> Unit)) :
     ListAdapter<MovieProvider, PopularProviderAdapter.ProviderViewHolder>(CustomDiffCallBack()) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProviderViewHolder {
         val binding = DataBindingUtil.inflate<ItemProviderBinding>(
             LayoutInflater.from(parent.context),

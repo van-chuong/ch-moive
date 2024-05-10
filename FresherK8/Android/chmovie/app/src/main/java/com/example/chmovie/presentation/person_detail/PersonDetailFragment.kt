@@ -19,6 +19,7 @@ import com.example.chmovie.presentation.series.adapter.TrendingSeriesAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PersonDetailFragment : Fragment() {
+
     private var _binding: FragmentPersonDetailBinding? = null
     private val binding get() = _binding!!
 
@@ -27,7 +28,6 @@ class PersonDetailFragment : Fragment() {
 
     private var popularMoviesAdapter: PopularMoviesAdapter = PopularMoviesAdapter(::onClickItem)
     private var popularSeriesAdapter: TopRatedSeriesAdapter = TopRatedSeriesAdapter(::onClickItem)
-
 
     private fun onClickItem(item: Any) {
         when (item) {

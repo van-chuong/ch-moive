@@ -10,6 +10,7 @@ class PersonDetailViewModel(private val providerRepository: ProviderRepository) 
 
     private val _personDetail = MutableLiveData<Cast>()
     val personDetail: LiveData<Cast> = _personDetail
+
     fun loadPersonDetail(personId: Int) {
         launchTaskSync(
             onRequest = { providerRepository.getPersonDetail(personId) },

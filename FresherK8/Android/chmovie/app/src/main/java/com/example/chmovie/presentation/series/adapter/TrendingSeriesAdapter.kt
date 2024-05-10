@@ -13,6 +13,7 @@ import com.example.chmovie.shared.utils.CustomDiffCallBack
 class TrendingSeriesAdapter(private var listener: ((Series) -> Unit)) : ListAdapter<Series, TrendingSeriesAdapter.TrendingViewHolder>(
     CustomDiffCallBack()
 ) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrendingViewHolder {
         val binding = DataBindingUtil.inflate<ItemTrendingNowBinding>(
             LayoutInflater.from(parent.context),

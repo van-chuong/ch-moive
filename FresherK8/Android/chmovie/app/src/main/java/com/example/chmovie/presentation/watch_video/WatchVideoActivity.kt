@@ -18,6 +18,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.loadOrC
 
 
 class WatchVideoActivity : AppCompatActivity() {
+
     companion object {
         private const val ARGUMENT_WATCH_VIDEO = "ARGUMENT_WATCH_VIDEO"
         fun navigateToWatchVideo(activity: Activity, data: String) {

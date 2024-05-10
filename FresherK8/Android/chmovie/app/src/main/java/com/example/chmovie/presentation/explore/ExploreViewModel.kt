@@ -14,6 +14,7 @@ class ExploreViewModel(private val providerRepository: ProviderRepository) : Bas
 
     private val _popularPerson = MutableLiveData<MutableList<Cast>>()
     val popularPerson: LiveData<MutableList<Cast>> = _popularPerson
+
     fun loadPopularProvider() {
         launchTaskSync(
             onRequest = { providerRepository.getPopularProvider() },

@@ -37,6 +37,7 @@ class SeriesDetailFragment : Fragment() {
     private var castsAdapter: CastsAdapter = CastsAdapter(::onClickItem)
 
     private var isFavorite = false
+
     private fun onClickItem(item: Any) {
         when (item) {
             is Series -> {

@@ -22,6 +22,7 @@ class ExploreFragment : Fragment() {
 
     private var featuredAdapter: PopularProviderAdapter = PopularProviderAdapter(::onClickItem)
     private var popularPersonAdapter: PopularPersonAdapter = PopularPersonAdapter(::onClickItem)
+
     private fun onClickItem(item: Any) {
         when (item) {
             is MovieProvider -> {
