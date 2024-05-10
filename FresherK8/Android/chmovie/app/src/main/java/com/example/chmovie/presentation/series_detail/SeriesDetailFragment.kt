@@ -14,6 +14,7 @@ import com.example.chmovie.data.models.Media
 import com.example.chmovie.data.models.Series
 import com.example.chmovie.databinding.FragmentSeriesDetailBinding
 import com.example.chmovie.presentation.movie_detail.MovieDetailFragment
+import com.example.chmovie.presentation.movie_detail.MovieDetailFragmentDirections
 import com.example.chmovie.presentation.movie_detail.MovieDetailViewModel
 import com.example.chmovie.presentation.movie_detail.adapter.CastsAdapter
 import com.example.chmovie.presentation.series_detail.adapter.SimilarSeriesAdapter
@@ -39,7 +40,7 @@ class SeriesDetailFragment : Fragment() {
             }
 
             is Cast -> {
-
+                findNavController().navigate(SeriesDetailFragmentDirections.actionNavSeriesDetailToNavPersonDetail(item.id))
             }
         }
     }
