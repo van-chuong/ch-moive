@@ -10,7 +10,6 @@ class AuthRemoteImpl : AuthDataSource.Remote {
 
     override suspend fun getRequestToken(): Response<RequestToken> = MovieApiClient.instance.getRequestToken()
 
-
     override suspend fun validateWithLogin(username: String, password: String, requestToken: RequestToken): Response<RequestToken> =
         MovieApiClient.instance.validateWithLogin(
             mapOf(

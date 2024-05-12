@@ -9,6 +9,7 @@ interface ProviderDataSource {
     }
 
     interface Remote {
+
         suspend fun getPopularProvider(): MoviesProviderResponse
 
         suspend fun getPopularPerson(): CastsResponse

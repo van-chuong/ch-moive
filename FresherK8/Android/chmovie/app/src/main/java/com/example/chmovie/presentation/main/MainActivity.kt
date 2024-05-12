@@ -69,6 +69,8 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_movie_detail -> binding.bottomNavView.visibility = View.GONE
                 R.id.nav_series_detail -> binding.bottomNavView.visibility = View.GONE
                 R.id.nav_person_detail -> binding.bottomNavView.visibility = View.GONE
+                R.id.nav_search -> binding.bottomNavView.visibility = View.GONE
+
                 else -> {
                     binding.bottomNavView.visibility = View.VISIBLE
                     binding.toolbar.menu.findItem(R.id.nav_search).isVisible = true
@@ -78,8 +80,7 @@ class MainActivity : AppCompatActivity() {
         }
         binding.toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
-                R.id.nav_search -> Toast.makeText(applicationContext, "Search", Toast.LENGTH_SHORT)
-                    .show()
+                R.id.nav_search -> navController.navigate(R.id.nav_search)
             }
             return@setOnMenuItemClickListener true
         }

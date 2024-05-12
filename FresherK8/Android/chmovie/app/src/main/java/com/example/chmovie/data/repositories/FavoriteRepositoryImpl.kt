@@ -7,6 +7,7 @@ import com.example.chmovie.data.source.local.FavoriteDao
 import com.example.chmovie.shared.scheduler.DataResult
 
 class FavoriteRepositoryImpl(private val favoriteDataSource: FavoriteDataSource.Local):FavoriteRepository {
+
     override suspend fun getFavoriteMovies(): DataResult<MutableList<Favorite>> {
         return try {
             val response = favoriteDataSource.getFavoriteMovies()
