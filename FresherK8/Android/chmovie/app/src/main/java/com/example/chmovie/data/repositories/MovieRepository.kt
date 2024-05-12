@@ -27,4 +27,6 @@ interface MovieRepository {
 
     suspend fun watchList(accountId: String, sessionId: String, media: Media): DataResult<String>
 
+    suspend fun getMovieSearch(query: String, page: Int): DataResult<MoviesResponse>
+
 }

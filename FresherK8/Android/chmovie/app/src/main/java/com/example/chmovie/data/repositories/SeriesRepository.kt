@@ -1,6 +1,7 @@
 package com.example.chmovie.data.repositories
 
 import com.example.chmovie.data.models.Media
+import com.example.chmovie.data.models.MoviesResponse
 import com.example.chmovie.data.models.Series
 import com.example.chmovie.data.models.SeriesResponse
 import com.example.chmovie.shared.scheduler.DataResult
@@ -22,5 +23,7 @@ interface SeriesRepository {
     suspend fun getWatchList(accountId: String, sessionId: String): DataResult<SeriesResponse>
 
     suspend fun watchList(accountId: String, sessionId: String, media: Media): DataResult<String>
+
+    suspend fun getSeriesSearch(query: String, page: Int): DataResult<SeriesResponse>
 
 }

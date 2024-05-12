@@ -84,4 +84,13 @@ class SeriesRepositoryImpl(private val seriesDataSource: SeriesDataSource.Remote
         }
     }
 
+    override suspend fun getSeriesSearch(query: String, page: Int): DataResult<SeriesResponse> {
+        return try {
+            val response = seriesDataSource.getSeriesSearch(query, page)
+            DataResult.Success(response)
+        } catch (e: Exception) {
+            DataResult.Error(e)
+        }
+    }
+
 }
