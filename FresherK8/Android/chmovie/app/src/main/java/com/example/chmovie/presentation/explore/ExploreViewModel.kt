@@ -26,7 +26,10 @@ class ExploreViewModel(private val providerRepository: ProviderRepository) : Bas
     fun loadPopularPerson() {
         launchTaskSync(
             onRequest = { providerRepository.getPopularPerson() },
-            onSuccess = { _popularPerson.value = it.results.toMutableList() },
+            onSuccess = { response ->
+                val filteredList = response.results.filter { it.profilePath != null && it.profilePath.isNotEmpty() }
+                _popularPerson.value = filteredList.toMutableList()
+            },
             onError = { exception.value = it }
         )
     }

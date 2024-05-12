@@ -96,8 +96,8 @@ interface MovieApiService {
     @GET("watch/providers/movie")
     suspend fun getPopularProvider(): MoviesProviderResponse
 
-    @GET("person/popular")
-    suspend fun getPopularPerson(): CastsResponse
+    @GET("trending/person/{time_window}")
+    suspend fun getPopularPerson(@Path("time_window") timeWindow: String = "day"): CastsResponse
 
     @GET("person/{person_id}")
     suspend fun getPersonById(
