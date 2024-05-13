@@ -89,10 +89,8 @@ class MovieRepositoryImpl(private val moviesDataSource: MovieDataSource.Remote) 
     override suspend fun getMovieSearch(query: String, page: Int): DataResult<MoviesResponse> {
         return try {
             val response = moviesDataSource.getMovieSearch(query, page)
-            Log.d("Dataaaaaa",response.toString())
             DataResult.Success(response)
         } catch (e: Exception) {
-            Log.d("Dataaaaaa",e.toString())
             DataResult.Error(e)
         }
     }

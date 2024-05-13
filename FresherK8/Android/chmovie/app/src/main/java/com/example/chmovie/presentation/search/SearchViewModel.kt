@@ -24,8 +24,7 @@ class SearchViewModel(
     fun searchMovies(query: String, page: Int) {
         launchTaskSync(
             onRequest = { movieRepository.getMovieSearch(query, page) },
-            onSuccess = {
-                _movies.value = it.results.toMutableList() },
+            onSuccess = { _movies.value = it.results.toMutableList() },
             onError = { exception.value = it }
         )
     }

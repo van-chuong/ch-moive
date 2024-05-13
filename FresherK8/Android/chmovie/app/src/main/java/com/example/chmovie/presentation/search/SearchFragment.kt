@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.chmovie.R
 import com.example.chmovie.data.models.MovieDetail
@@ -17,8 +18,6 @@ import com.example.chmovie.data.models.Series
 import com.example.chmovie.databinding.FragmentSearchBinding
 import com.example.chmovie.presentation.movie.adapter.PopularMoviesAdapter
 import com.example.chmovie.presentation.series.adapter.OnTheAirSeriesAdapter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -98,11 +97,10 @@ class SearchFragment : Fragment() {
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private fun checkExistResults() {
         if (viewModel.movies.value.isNullOrEmpty() && viewModel.series.value.isNullOrEmpty()) {
             binding.txtTitle.text = getString(R.string.no_results)
-            binding.txtDes.text = getString(R.string.for_results) + " \'${viewModel.query.value}\'"
+            binding.txtDes.text = getString(R.string.for_results, viewModel.query.value)
             showIntroView()
         } else {
             showResultView()
@@ -141,7 +139,7 @@ class SearchFragment : Fragment() {
         binding.edtSearch.addTextChangedListener {
             viewModel.query.value = it.toString()
             searchJob?.cancel()
-            searchJob = CoroutineScope(Dispatchers.Main).launch {
+            searchJob = viewLifecycleOwner.lifecycleScope.launch {
                 delay(SEARCH_TIME_DELAY)
                 if (it.toString().isNotEmpty()) {
                     viewModel.searchMovies(it.toString(), 1)
