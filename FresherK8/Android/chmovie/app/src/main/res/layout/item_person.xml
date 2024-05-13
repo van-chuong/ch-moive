@@ -17,6 +17,7 @@
             android:layout_marginStart="20dp"
             android:scaleType="center"
             app:imageUrl="@{cast.profilePath}"
+            android:src="@drawable/profile"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:riv_corner_radius="14dp" />

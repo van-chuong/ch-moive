@@ -37,6 +37,12 @@ interface MovieApiService {
     @GET("movie/upcoming")
     suspend fun getUpcoming(@Query("page") id: Int): MoviesResponse
 
+    @GET("search/movie")
+    suspend fun getMovieSearch(
+        @Query("query") query: String,
+        @Query("page") page: Int = 1,
+    ): MoviesResponse
+
     /*Authen*/
     @GET("authentication/token/new")
     suspend fun getRequestToken(): Response<RequestToken>
@@ -80,16 +86,23 @@ interface MovieApiService {
     @GET("account/{account_id}/watchlist/tv")
     suspend fun getSeriesWatchList(@Path("account_id") accountId: String, @Query("session_id") sessionId: String): SeriesResponse
 
+    @GET("search/tv")
+    suspend fun getSeriesSearch(
+        @Query("query") query: String,
+        @Query("page") page: Int = 1,
+    ): SeriesResponse
+
     /*Provider*/
     @GET("watch/providers/movie")
     suspend fun getPopularProvider(): MoviesProviderResponse
 
-    @GET("person/popular")
-    suspend fun getPopularPerson(): CastsResponse
+    @GET("trending/person/{time_window}")
+    suspend fun getPopularPerson(@Path("time_window") timeWindow: String = "day"): CastsResponse
 
     @GET("person/{person_id}")
     suspend fun getPersonById(
         @Path("person_id") personId: Int,
         @Query("append_to_response") appendToResponse: String = "movie_credits,tv_credits"
     ): Cast
+
 }

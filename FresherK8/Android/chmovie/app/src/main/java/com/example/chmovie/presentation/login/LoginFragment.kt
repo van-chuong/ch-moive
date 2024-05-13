@@ -1,8 +1,10 @@
 package com.example.chmovie.presentation.login
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
@@ -18,6 +20,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class LoginFragment : Fragment() {
+
     companion object {
         fun newInstance() = LoginFragment()
     }
@@ -36,11 +39,15 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-        initView()
-        handleEvent()
-        return root
+        return binding.root
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initView()
+        handleEvent(view)
+    }
+
 
     private fun initView() {
         viewModel.loginResultLiveData.observe(viewLifecycleOwner) { loginResult ->
@@ -62,7 +69,8 @@ class LoginFragment : Fragment() {
         }
     }
 
-    private fun handleEvent() {
+    @SuppressLint("ClickableViewAccessibility")
+    private fun handleEvent(view: View) {
         // Bắt sự kiện click vào nút đăng nhập
         binding.btnLogin.setOnClickListener {
             val username = binding.edtUsername.text.toString().trim()
@@ -74,6 +82,19 @@ class LoginFragment : Fragment() {
                 progressDialog.show()
                 viewModel.login(username, password)
             }
+        }
+
+        view.setOnTouchListener { _, event ->
+            if (event.action == MotionEvent.ACTION_DOWN) {
+                if (binding.edtUsername.isFocused || binding.edtPassword.isFocused) {
+                    val imm: InputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(binding.edtUsername.windowToken, 0)
+                    imm.hideSoftInputFromWindow(binding.edtPassword.windowToken, 0)
+                    binding.edtUsername.clearFocus()
+                    binding.edtPassword.clearFocus()
+                }
+            }
+            true
         }
     }
 

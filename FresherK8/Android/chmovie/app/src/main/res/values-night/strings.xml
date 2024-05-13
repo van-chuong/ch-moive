@@ -48,4 +48,7 @@
     <string name="my_favorite_list_is_emplty">My favorite list is emplty</string>
     <string name="favorite_list_is_empty">Favorite list is empty</string>
     <string name="watchlist_is_empty">Watchlist is empty</string>
+    <string name="enter_keywords">Enter keywords</string>
+    <string name="start_seaching">Start Seaching</string>
+    <string name="search_des">Search all of CH Movie for Movies, Series, ...</string>
 </resources>

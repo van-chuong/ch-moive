@@ -1,5 +1,6 @@
 package com.example.chmovie.data.repositories
 
+import android.util.Log
 import com.example.chmovie.data.models.ErrorResponse
 import com.example.chmovie.data.models.Media
 import com.example.chmovie.data.models.MovieDetail
@@ -9,6 +10,7 @@ import com.example.chmovie.data.source.MovieDataSource
 import com.example.chmovie.shared.scheduler.DataResult
 
 class MovieRepositoryImpl(private val moviesDataSource: MovieDataSource.Remote) : MovieRepository {
+
     override suspend fun getMovieDetails(movieId: Int): DataResult<MovieDetail> {
         return try {
             val movie = moviesDataSource.getMovieDetails(movieId)
@@ -83,4 +85,14 @@ class MovieRepositoryImpl(private val moviesDataSource: MovieDataSource.Remote) 
             DataResult.Error(e)
         }
     }
+
+    override suspend fun getMovieSearch(query: String, page: Int): DataResult<MoviesResponse> {
+        return try {
+            val response = moviesDataSource.getMovieSearch(query, page)
+            DataResult.Success(response)
+        } catch (e: Exception) {
+            DataResult.Error(e)
+        }
+    }
+
 }

@@ -7,6 +7,7 @@ import okhttp3.ResponseBody
 import retrofit2.Response
 
 interface MovieDataSource {
+
     interface Local {
     }
 
@@ -25,5 +26,7 @@ interface MovieDataSource {
         suspend fun getWatchList(accountId: String, sessionId: String): MoviesResponse
 
         suspend fun watchList(accountId: String, sessionId: String, media: Media): Response<ResponseBody>
+
+        suspend fun getMovieSearch(query: String, page: Int): MoviesResponse
     }
 }

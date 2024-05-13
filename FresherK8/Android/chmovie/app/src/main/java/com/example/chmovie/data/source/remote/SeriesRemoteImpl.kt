@@ -10,6 +10,7 @@ import okhttp3.ResponseBody
 import retrofit2.Response
 
 class SeriesRemoteImpl : SeriesDataSource.Remote {
+
     override suspend fun getSeriesDetail(seriesId: Int): Series = MovieApiClient.instance.getSeriesDetail(seriesId)
 
     override suspend fun getAirTodaySeries(page: Int): SeriesResponse = MovieApiClient.instance.getAirTodaySeries(page)
@@ -25,5 +26,7 @@ class SeriesRemoteImpl : SeriesDataSource.Remote {
 
     override suspend fun watchList(accountId: String, sessionId: String, media: Media): Response<ResponseBody> =
         MovieApiClient.instance.watchList(accountId, sessionId, media.toMap())
+
+    override suspend fun getSeriesSearch(query: String, page: Int): SeriesResponse = MovieApiClient.instance.getSeriesSearch(query, page)
 
 }

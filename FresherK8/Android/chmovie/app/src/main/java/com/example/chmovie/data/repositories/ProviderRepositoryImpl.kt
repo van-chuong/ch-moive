@@ -7,6 +7,7 @@ import com.example.chmovie.data.source.ProviderDataSource
 import com.example.chmovie.shared.scheduler.DataResult
 
 class ProviderRepositoryImpl(private val providerDataSource: ProviderDataSource.Remote) : ProviderRepository {
+
     override suspend fun getPopularProvider(): DataResult<MoviesProviderResponse> {
         return try {
             val response = providerDataSource.getPopularProvider()

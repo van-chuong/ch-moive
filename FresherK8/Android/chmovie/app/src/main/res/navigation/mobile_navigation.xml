@@ -40,7 +40,7 @@
         android:id="@+id/nav_my_favorite_list"
         android:name="com.example.chmovie.presentation.my_favorite_list.MyFavoriteListFragment"
         android:label="@string/my_favorite_list"
-        tools:layout="@layout/fragment_my_favorite_list" >
+        tools:layout="@layout/fragment_my_favorite_list">
         <action
             android:id="@+id/action_nav_my_favorite_list_to_nav_movie_detail"
             app:destination="@id/nav_movie_detail" />
@@ -122,6 +122,19 @@
             app:destination="@id/nav_series_detail" />
         <action
             android:id="@+id/action_nav_person_detail_to_nav_movie_detail"
+            app:destination="@id/nav_movie_detail" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_search"
+        android:name="com.example.chmovie.presentation.search.SearchFragment"
+        android:label="@string/search"
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/action_nav_search_to_nav_series_detail"
+            app:destination="@id/nav_series_detail" />
+        <action
+            android:id="@+id/action_nav_search_to_nav_movie_detail"
             app:destination="@id/nav_movie_detail" />
     </fragment>
 </navigation>

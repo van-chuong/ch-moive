@@ -9,6 +9,7 @@ import okhttp3.ResponseBody
 import retrofit2.Response
 
 interface SeriesDataSource {
+
     interface Local {
     }
 
@@ -27,5 +28,7 @@ interface SeriesDataSource {
         suspend fun getWatchList(accountId: String, sessionId: String): SeriesResponse
 
         suspend fun watchList(accountId: String, sessionId: String, media: Media): Response<ResponseBody>
+
+        suspend fun getSeriesSearch(query: String, page: Int): SeriesResponse
     }
 }
