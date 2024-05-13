@@ -22,6 +22,7 @@ class CustomPlayerUiController(
     private val activity: WatchVideoActivity,
     val lifecycle: Lifecycle,
 ) : AbstractYouTubePlayerListener() {
+
     private var playerTracker: YouTubePlayerTracker = YouTubePlayerTracker()
 
     companion object {

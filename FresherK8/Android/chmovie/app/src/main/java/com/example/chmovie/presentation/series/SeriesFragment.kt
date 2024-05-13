@@ -16,8 +16,10 @@ import com.example.chmovie.presentation.series.adapter.TrendingSeriesAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SeriesFragment : Fragment() {
+
     private var _binding: FragmentSeriesBinding? = null
     private val binding get() = _binding!!
+
     private val viewModel: SeriesViewModel by viewModel()
 
     private var trendingAdapter: TrendingSeriesAdapter = TrendingSeriesAdapter(::onClickItem)

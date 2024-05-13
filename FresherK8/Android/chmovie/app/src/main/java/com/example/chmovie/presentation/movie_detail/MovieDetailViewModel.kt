@@ -25,12 +25,12 @@ class MovieDetailViewModel(
     private val favoriteRepository: FavoriteRepository,
     prefManager: PrefManager
 ) : BaseViewModel() {
+
     private val _movieId = MutableLiveData<Int?>()
     val movieId: LiveData<Int?> = _movieId
 
     private val _movieDetail = MutableLiveData<MovieDetail>()
     val movieDetail: LiveData<MovieDetail> = _movieDetail
-
 
     private val _favoriteMovies = MutableLiveData<MutableList<Favorite>>()
     val favoriteMovies: LiveData<MutableList<Favorite>> = _favoriteMovies
@@ -40,6 +40,7 @@ class MovieDetailViewModel(
 
     private val _editWatchListResult = MutableLiveData<DataResult<String>>()
     val editWatchListResult: LiveData<DataResult<String>> = _editWatchListResult
+
     fun setMovieId(data: Int?) {
         _movieId.value = data
     }
@@ -96,7 +97,7 @@ class MovieDetailViewModel(
 
     fun formatMoney(value: Int): String {
         val formatter = NumberFormat.getCurrencyInstance(Locale.US)
-        return '$' + formatter.format(value.toDouble() / 100.0)
+        return formatter.format(value.toDouble() / 100.0)
     }
 
     fun getVideoKey(videos: List<Video>?): String? {

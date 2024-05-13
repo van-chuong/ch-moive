@@ -24,7 +24,9 @@ class LoginFragment : Fragment() {
 
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
+
     private val viewModel: LoginViewModel by viewModel()
+
     private val progressDialog by lazy {
         CustomProgressDialog(requireContext())
     }

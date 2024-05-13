@@ -7,6 +7,7 @@ import com.example.chmovie.data.repositories.SeriesRepository
 import com.example.chmovie.shared.base.BaseViewModel
 
 class SeriesViewModel(private val seriesRepository: SeriesRepository) : BaseViewModel() {
+
     private val _trendingSeries = MutableLiveData<MutableList<Series>>()
     val trendingSeries: LiveData<MutableList<Series>> = _trendingSeries
 

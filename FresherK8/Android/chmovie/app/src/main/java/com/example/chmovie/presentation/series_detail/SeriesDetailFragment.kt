@@ -14,23 +14,30 @@ import com.example.chmovie.data.models.Media
 import com.example.chmovie.data.models.Series
 import com.example.chmovie.databinding.FragmentSeriesDetailBinding
 import com.example.chmovie.presentation.movie_detail.MovieDetailFragment
+import com.example.chmovie.presentation.movie_detail.MovieDetailFragmentDirections
 import com.example.chmovie.presentation.movie_detail.MovieDetailViewModel
 import com.example.chmovie.presentation.movie_detail.adapter.CastsAdapter
 import com.example.chmovie.presentation.series_detail.adapter.SimilarSeriesAdapter
+import com.example.chmovie.presentation.watch_video.WatchVideoActivity.Companion.navigateToWatchVideo
 import com.example.chmovie.shared.scheduler.DataResult
 import com.example.chmovie.shared.widget.showFailedSnackbar
 import com.example.chmovie.shared.widget.showSuccessSnackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SeriesDetailFragment : Fragment() {
+
     private var _binding: FragmentSeriesDetailBinding? = null
     private val binding get() = _binding!!
+
     private val viewModel: SeriesDetailViewModel by viewModel()
     private val movieDetailViewModel: MovieDetailViewModel by viewModel()
     private val args: SeriesDetailFragmentArgs by navArgs()
+
     private var similarSeriesAdapter: SimilarSeriesAdapter = SimilarSeriesAdapter(::onClickItem)
     private var castsAdapter: CastsAdapter = CastsAdapter(::onClickItem)
+
     private var isFavorite = false
+
     private fun onClickItem(item: Any) {
         when (item) {
             is Series -> {
@@ -38,7 +45,7 @@ class SeriesDetailFragment : Fragment() {
             }
 
             is Cast -> {
-
+                findNavController().navigate(SeriesDetailFragmentDirections.actionNavSeriesDetailToNavPersonDetail(item.id))
             }
         }
     }
@@ -123,7 +130,7 @@ class SeriesDetailFragment : Fragment() {
             if (videoKey.isNullOrEmpty()) {
                 requireView().showFailedSnackbar("Something went wrong try again later")
             } else {
-                MovieDetailFragment.navigateToWatchVideo(requireActivity(), videoKey)
+                navigateToWatchVideo(requireActivity(), videoKey)
             }
         }
         binding.btnFavorite.setOnClickListener {

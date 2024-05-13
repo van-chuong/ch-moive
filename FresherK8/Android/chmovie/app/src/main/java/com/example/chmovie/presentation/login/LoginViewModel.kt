@@ -12,6 +12,7 @@ class LoginViewModel(
     private val authRepository: AuthRepository,
     private val prefManager: PrefManager
 ) : BaseViewModel() {
+
     private val _loginResultLiveData = MutableLiveData<DataResult<String>>()
     val loginResultLiveData: LiveData<DataResult<String>> get() = _loginResultLiveData
 

@@ -56,5 +56,7 @@ data class SeriesResponse(
     @SerializedName("total_pages")
     val totalPages: Int,
     @SerializedName("total_results")
-    val totalResults: Int
+    val totalResults: Int,
+    @SerializedName("cast")
+    val cast: List<Series>,
 ) : Parcelable

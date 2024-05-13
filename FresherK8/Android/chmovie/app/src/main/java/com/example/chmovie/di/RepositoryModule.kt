@@ -6,10 +6,11 @@ import com.example.chmovie.data.repositories.FavoriteRepository
 import com.example.chmovie.data.repositories.FavoriteRepositoryImpl
 import com.example.chmovie.data.repositories.MovieRepository
 import com.example.chmovie.data.repositories.MovieRepositoryImpl
+import com.example.chmovie.data.repositories.ProviderRepository
+import com.example.chmovie.data.repositories.ProviderRepositoryImpl
 import com.example.chmovie.data.repositories.SeriesRepository
 import com.example.chmovie.data.repositories.SeriesRepositoryImpl
 import org.koin.dsl.module
-
 
 val repositoryModule = module {
     single<MovieRepository> {
@@ -23,5 +24,8 @@ val repositoryModule = module {
     }
     single<SeriesRepository> {
         SeriesRepositoryImpl(get())
+    }
+    single<ProviderRepository> {
+        ProviderRepositoryImpl(get())
     }
 }

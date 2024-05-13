@@ -1,6 +1,5 @@
-package com.example.chmovie.presentation.movie_detail.adapter
+package com.example.chmovie.presentation.explore.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -8,26 +7,27 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chmovie.R
 import com.example.chmovie.data.models.Cast
-import com.example.chmovie.databinding.ItemPersonBinding
+import com.example.chmovie.databinding.ItemPersonGridBinding
 import com.example.chmovie.shared.utils.CustomDiffCallBack
 
-class CastsAdapter(private var listener: ((Cast) -> Unit)) : ListAdapter<Cast, CastsAdapter.CastViewHolder>(CustomDiffCallBack()) {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CastViewHolder {
-        val binding = DataBindingUtil.inflate<ItemPersonBinding>(
+class PopularPersonAdapter(private var listener: ((Cast) -> Unit)) :
+    ListAdapter<Cast, PopularPersonAdapter.PersonViewHolder>(CustomDiffCallBack()) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PersonViewHolder {
+        val binding = DataBindingUtil.inflate<ItemPersonGridBinding>(
             LayoutInflater.from(parent.context),
-            R.layout.item_person,
+            R.layout.item_person_grid,
             parent,
             false
         )
-        return CastViewHolder(binding)
+        return PersonViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: CastViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: PersonViewHolder, position: Int) {
         holder.bind(currentList[position])
     }
 
-    inner class CastViewHolder(
-        private val binding: ItemPersonBinding,
+    inner class PersonViewHolder(
+        private val binding: ItemPersonGridBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(cast: Cast) {
             binding.cast = cast

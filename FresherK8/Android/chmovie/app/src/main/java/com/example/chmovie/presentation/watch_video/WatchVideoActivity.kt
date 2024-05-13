@@ -18,6 +18,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.loadOrC
 
 
 class WatchVideoActivity : AppCompatActivity() {
+
     companion object {
         private const val ARGUMENT_WATCH_VIDEO = "ARGUMENT_WATCH_VIDEO"
         fun navigateToWatchVideo(activity: Activity, data: String) {
@@ -30,6 +31,7 @@ class WatchVideoActivity : AppCompatActivity() {
     private val binding: ActivityWatchVideoBinding by lazy {
         ActivityWatchVideoBinding.inflate(layoutInflater)
     }
+
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             if (isLandscapeMode) {
@@ -40,7 +42,9 @@ class WatchVideoActivity : AppCompatActivity() {
             }
         }
     }
+
     private var videoId: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
