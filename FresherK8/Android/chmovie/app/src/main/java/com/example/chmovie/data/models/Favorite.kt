@@ -14,10 +14,14 @@ data class Favorite(
     val mediaType: String,
 ) {
     companion object {
+
+        const val TV = "tv"
+        const val MOVIE = "movie"
+
         fun <T> of(currentItem: T): Favorite {
             val mediaType = when (currentItem) {
-                is MovieDetail -> "movie"
-                is Series -> "tv"
+                is MovieDetail -> MOVIE
+                is Series -> TV
                 else -> throw IllegalArgumentException("Unknown type")
             }
 

@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.chmovie.presentation.watch_list.WatchListViewModel" />
+            type="com.example.chmovie.presentation.my_favorite_list.MyFavoriteListViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingHorizontal="20dp"
-            android:text="@string/watch_list"
+            android:text="@string/favorite_list"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingHorizontal="20dp"
-            android:text="@string/watchlist_is_empty"
+            android:text="@string/favorite_list_is_empty"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -42,7 +42,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvWatchlist"
+            android:id="@+id/rvFavorite"
             style="@style/App_RecyclerView_Horizontal"
             android:orientation="vertical"
             android:paddingBottom="?attr/actionBarSize"

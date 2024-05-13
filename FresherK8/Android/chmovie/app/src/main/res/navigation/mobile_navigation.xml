@@ -9,7 +9,7 @@
         android:id="@+id/nav_movies"
         android:name="com.example.chmovie.presentation.movie.MovieFragment"
         android:label="@string/movies"
-        tools:layout="@layout/fragment_movie" >
+        tools:layout="@layout/fragment_movie">
 
         <action
             android:id="@+id/action_nav_movies_to_nav_movie_detail"
@@ -20,7 +20,7 @@
         android:id="@+id/nav_series"
         android:name="com.example.chmovie.presentation.series.SeriesFragment"
         android:label="@string/series"
-        tools:layout="@layout/fragment_series" >
+        tools:layout="@layout/fragment_series">
         <action
             android:id="@+id/action_nav_series_to_nav_series_detail"
             app:destination="@id/nav_series_detail" />
@@ -30,29 +30,30 @@
         android:id="@+id/nav_explore"
         android:name="com.example.chmovie.presentation.explore.ExploreFragment"
         android:label="@string/explore"
-        tools:layout="@layout/fragment_explore" >
+        tools:layout="@layout/fragment_explore">
         <action
             android:id="@+id/action_nav_explore_to_nav_person_detail"
             app:destination="@id/nav_person_detail" />
     </fragment>
 
     <fragment
-        android:id="@+id/nav_my_list"
-        android:name="com.example.chmovie.presentation.my_list.MyListFragment"
-        android:label="@string/my_list"
-        tools:layout="@layout/fragment_my_list" />
-
-    <fragment
-        android:id="@+id/nav_favorite_list"
-        android:name="com.example.chmovie.presentation.favorite.FavoriteFragment"
-        android:label="@string/favorite_list"
-        tools:layout="@layout/fragment_favorite" />
+        android:id="@+id/nav_my_favorite_list"
+        android:name="com.example.chmovie.presentation.my_favorite_list.MyFavoriteListFragment"
+        android:label="@string/my_favorite_list"
+        tools:layout="@layout/fragment_my_favorite_list" >
+        <action
+            android:id="@+id/action_nav_my_favorite_list_to_nav_movie_detail"
+            app:destination="@id/nav_movie_detail" />
+        <action
+            android:id="@+id/action_nav_my_favorite_list_to_nav_series_detail"
+            app:destination="@id/nav_series_detail" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_watch_list"
         android:name="com.example.chmovie.presentation.watch_list.WatchListFragment"
         android:label="@string/favorite_list"
-        tools:layout="@layout/fragment_watch_list" >
+        tools:layout="@layout/fragment_watch_list">
         <action
             android:id="@+id/action_nav_watch_list_to_nav_series_detail"
             app:destination="@id/nav_series_detail" />

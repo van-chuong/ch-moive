@@ -43,4 +43,9 @@
     <string name="popular_person">Popular Person</string>
     <string name="popular_movies">Popular movies</string>
     <string name="popular_series">Popular series</string>
+    <string name="my_favorite_list">My favorite list</string>
+    <string name="sign_out">Sign out</string>
+    <string name="my_favorite_list_is_emplty">My favorite list is emplty</string>
+    <string name="favorite_list_is_empty">Favorite list is empty</string>
+    <string name="watchlist_is_empty">Watchlist is empty</string>
 </resources>

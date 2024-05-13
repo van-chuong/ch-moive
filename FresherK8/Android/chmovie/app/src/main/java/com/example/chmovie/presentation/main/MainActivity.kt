@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
 
     private val appBarConfiguration: AppBarConfiguration by lazy {
         AppBarConfiguration.Builder(
-            R.id.nav_movies, R.id.nav_series, R.id.nav_explore, R.id.nav_my_list
+            R.id.nav_movies, R.id.nav_series, R.id.nav_explore, R.id.nav_my_favorite_list
         ).setOpenableLayout(binding.drawerLayout).build()
     }
 
@@ -51,7 +51,6 @@ class MainActivity : AppCompatActivity() {
         NavigationUI.setupWithNavController(binding.bottomNavView, navController)
         NavigationUI.setupWithNavController(binding.navView, navController)
         binding.navView.menu.getItem(0).subMenu?.getItem(0)?.setActionView(R.layout.nav_item_mage)
-        binding.navView.menu.getItem(0).subMenu?.getItem(1)?.setActionView(R.layout.nav_item_mage)
         binding.navView.menu.getItem(1).subMenu?.getItem(0)?.setActionView(R.layout.nav_item_mage)
     }
 
@@ -65,7 +64,6 @@ class MainActivity : AppCompatActivity() {
                     binding.toolbar.visibility = View.GONE
                 }
 
-                R.id.nav_favorite_list -> binding.bottomNavView.visibility = View.GONE
                 R.id.nav_watch_list -> binding.bottomNavView.visibility = View.GONE
                 R.id.nav_join_room -> binding.bottomNavView.visibility = View.GONE
                 R.id.nav_movie_detail -> binding.bottomNavView.visibility = View.GONE
