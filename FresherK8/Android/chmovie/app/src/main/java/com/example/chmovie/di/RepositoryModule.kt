@@ -10,22 +10,35 @@ import com.example.chmovie.data.repositories.ProviderRepository
 import com.example.chmovie.data.repositories.ProviderRepositoryImpl
 import com.example.chmovie.data.repositories.SeriesRepository
 import com.example.chmovie.data.repositories.SeriesRepositoryImpl
+import com.google.firebase.Firebase
+import com.google.firebase.database.database
 import org.koin.dsl.module
 
+fun realTimeDBRepository() = Firebase.database.reference
+
 val repositoryModule = module {
+
     single<MovieRepository> {
         MovieRepositoryImpl(get())
     }
+
     single<AuthRepository> {
         AuthRepositoryImpl(get())
     }
+
     single<FavoriteRepository> {
         FavoriteRepositoryImpl(get())
     }
+
     single<SeriesRepository> {
         SeriesRepositoryImpl(get())
     }
+
     single<ProviderRepository> {
         ProviderRepositoryImpl(get())
+    }
+
+    single {
+        realTimeDBRepository()
     }
 }

@@ -95,3 +95,7 @@ data class MoviesResponse(
     @SerializedName("cast")
     val cast: List<MovieDetail>,
 ) : Parcelable
+
+fun List<MovieDetail>.filterMoviesWithPosterPath(): MutableList<MovieDetail> {
+    return this.filter { it.posterPath != null && it.posterPath.isNotEmpty() }.toMutableList()
+}

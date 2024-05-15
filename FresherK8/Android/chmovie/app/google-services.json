@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "97841457891",
+    "firebase_url": "https://chmovie-9187d-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "chmovie-9187d",
+    "storage_bucket": "chmovie-9187d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:97841457891:android:61e45c84b7b37ce46ff3d6",
+        "android_client_info": {
+          "package_name": "com.example.chmovie"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWzMStZUw4NvboWvxHQr9Z5_D-SrCHS8g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
