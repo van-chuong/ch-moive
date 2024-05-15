@@ -1,6 +1,6 @@
 package com.example.chmovie.presentation.movie_detail
 
-import android.util.Log
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.chmovie.data.models.Favorite
@@ -8,22 +8,30 @@ import com.example.chmovie.data.models.Genre
 import com.example.chmovie.data.models.Media
 import com.example.chmovie.data.models.MovieDetail
 import com.example.chmovie.data.models.ProductionCountry
+import com.example.chmovie.data.models.Room
+import com.example.chmovie.data.models.RoomResponse
 import com.example.chmovie.data.models.Video
 import com.example.chmovie.data.repositories.FavoriteRepository
 import com.example.chmovie.data.repositories.MovieRepository
 import com.example.chmovie.data.source.local.PrefManager
+import com.example.chmovie.presentation.room.start_room.StartRoomActivity
 import com.example.chmovie.shared.base.BaseViewModel
+import com.example.chmovie.shared.constant.Constant.ROOM_REALTIME_DB
 import com.example.chmovie.shared.constant.Constant.SESSION_KEY
 import com.example.chmovie.shared.constant.Constant.USERNAME_KEY
+import com.example.chmovie.shared.extension.next5DigitId
 import com.example.chmovie.shared.helper.formatRuntime
 import com.example.chmovie.shared.scheduler.DataResult
+import com.google.firebase.database.DatabaseReference
 import java.text.NumberFormat
 import java.util.Locale
+import kotlin.random.Random
 
 class MovieDetailViewModel(
     private val movieRepository: MovieRepository,
     private val favoriteRepository: FavoriteRepository,
-    prefManager: PrefManager
+    prefManager: PrefManager,
+    private val realTimeDbRepository: DatabaseReference
 ) : BaseViewModel() {
 
     private val _movieId = MutableLiveData<Int?>()
@@ -81,6 +89,27 @@ class MovieDetailViewModel(
             onSuccess = { _editWatchListResult.value = DataResult.Success(it) },
             onError = { _editWatchListResult.value = DataResult.Error(it) }
         )
+    }
+
+
+    fun checkRoomCodeExist(videoKey: String, context: Context) {
+        val roomCode = Random.next5DigitId().toString()
+        realTimeDbRepository.child(ROOM_REALTIME_DB).child(roomCode).get().addOnSuccessListener {
+            if (it.exists()) {
+                checkRoomCodeExist(videoKey, context)
+            } else {
+                val roomResponse = RoomResponse(roomCode, Room(0f, 0, accountId.toString(), "play", videoKey))
+                createRoom(roomResponse, context)
+            }
+        }
+    }
+
+    private fun createRoom(roomResponse: RoomResponse, context: Context) {
+        realTimeDbRepository.child(ROOM_REALTIME_DB).child(roomResponse.key).setValue(roomResponse.value).addOnSuccessListener {
+            StartRoomActivity.newInstance(context, roomResponse)
+        }.addOnFailureListener {
+            exception.value = it
+        }
     }
 
     fun formatMovieRuntime(runtime: Int): String {

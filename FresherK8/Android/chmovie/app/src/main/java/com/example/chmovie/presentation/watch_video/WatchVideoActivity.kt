@@ -63,7 +63,7 @@ class WatchVideoActivity : AppCompatActivity() {
         val youtubePlayerListener = object : AbstractYouTubePlayerListener() {
             override fun onReady(youTubePlayer: YouTubePlayer) {
                 super.onReady(youTubePlayer)
-                val controller = CustomPlayerUiController(view, youTubePlayer, this@WatchVideoActivity, lifecycle)
+                val controller = CustomPlayerUiController(view, youTubePlayer, this@WatchVideoActivity, lifecycle,)
                 youTubePlayer.addListener(controller)
                 videoId?.let { youTubePlayer.loadOrCueVideo(lifecycle, it, 0f) }
             }
