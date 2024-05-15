@@ -1,21 +1,22 @@
 package com.example.chmovie.presentation.person_detail
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.example.chmovie.data.models.Cast
 import com.example.chmovie.data.models.MovieDetail
 import com.example.chmovie.data.models.Series
+import com.example.chmovie.data.models.filterMoviesWithPosterPath
+import com.example.chmovie.data.models.filterSeriesWithPosterPath
 import com.example.chmovie.databinding.FragmentPersonDetailBinding
 import com.example.chmovie.presentation.movie.adapter.PopularMoviesAdapter
-import com.example.chmovie.presentation.movie_detail.MovieDetailFragmentDirections
 import com.example.chmovie.presentation.series.adapter.TopRatedSeriesAdapter
-import com.example.chmovie.presentation.series.adapter.TrendingSeriesAdapter
+import com.example.chmovie.shared.widget.dialogManager.DialogManagerImpl
+import com.example.chmovie.shared.widget.dialogManager.hideLoadingWithDelay
+import com.example.chmovie.shared.widget.showFailedSnackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PersonDetailFragment : Fragment() {
@@ -41,17 +42,21 @@ class PersonDetailFragment : Fragment() {
         }
     }
 
+    private val dialogManager by lazy {
+        DialogManagerImpl(context)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        loadData()
         _binding = FragmentPersonDetailBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        loadData()
         setUpView()
         registerLiveData()
         handleEvent()
@@ -77,9 +82,21 @@ class PersonDetailFragment : Fragment() {
     }
 
     private fun registerLiveData() = with(viewModel) {
+        isLoading.observe(viewLifecycleOwner) {
+            if (it)
+                dialogManager.showLoading()
+            else {
+                dialogManager.hideLoadingWithDelay()
+
+                if(isSuccess.value == false){
+                    binding.root.showFailedSnackbar("Lost network connection, failed data download")
+                }
+            }
+        }
+
         personDetail.observe(viewLifecycleOwner) {
-            popularMoviesAdapter.submitList(it.movieCredits.cast)
-            popularSeriesAdapter.submitList(it.tvCredits.cast)
+            popularMoviesAdapter.submitList(it.movieCredits.cast.filterMoviesWithPosterPath())
+            popularSeriesAdapter.submitList(it.tvCredits.cast.filterSeriesWithPosterPath())
         }
     }
 

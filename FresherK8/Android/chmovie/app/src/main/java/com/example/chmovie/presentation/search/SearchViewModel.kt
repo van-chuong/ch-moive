@@ -3,6 +3,8 @@ package com.example.chmovie.presentation.search
 import androidx.lifecycle.MutableLiveData
 import com.example.chmovie.data.models.MovieDetail
 import com.example.chmovie.data.models.Series
+import com.example.chmovie.data.models.filterMoviesWithPosterPath
+import com.example.chmovie.data.models.filterSeriesWithPosterPath
 import com.example.chmovie.data.repositories.MovieRepository
 import com.example.chmovie.data.repositories.SeriesRepository
 import com.example.chmovie.shared.base.BaseViewModel
@@ -24,7 +26,7 @@ class SearchViewModel(
     fun searchMovies(query: String, page: Int) {
         launchTaskSync(
             onRequest = { movieRepository.getMovieSearch(query, page) },
-            onSuccess = { _movies.value = it.results.toMutableList() },
+            onSuccess = { _movies.value = it.results.filterMoviesWithPosterPath() },
             onError = { exception.value = it }
         )
     }
@@ -32,7 +34,7 @@ class SearchViewModel(
     fun searchSeries(query: String, page: Int) {
         launchTaskSync(
             onRequest = { seriesRepository.getSeriesSearch(query, page) },
-            onSuccess = { _series.value = it.results.toMutableList() },
+            onSuccess = { _series.value = it.results.filterSeriesWithPosterPath() },
             onError = { exception.value = it }
         )
     }

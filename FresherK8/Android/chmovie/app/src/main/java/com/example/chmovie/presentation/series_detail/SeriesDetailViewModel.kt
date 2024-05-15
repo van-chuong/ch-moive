@@ -1,23 +1,31 @@
 package com.example.chmovie.presentation.series_detail
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.chmovie.data.models.Genre
 import com.example.chmovie.data.models.Media
 import com.example.chmovie.data.models.ProductionCountry
+import com.example.chmovie.data.models.Room
+import com.example.chmovie.data.models.RoomResponse
 import com.example.chmovie.data.models.Series
 import com.example.chmovie.data.models.Video
 import com.example.chmovie.data.repositories.SeriesRepository
 import com.example.chmovie.data.source.local.PrefManager
+import com.example.chmovie.presentation.room.start_room.StartRoomActivity
 import com.example.chmovie.shared.base.BaseViewModel
 import com.example.chmovie.shared.constant.Constant
+import com.example.chmovie.shared.extension.next5DigitId
 import com.example.chmovie.shared.helper.formatRuntime
 import com.example.chmovie.shared.helper.formatVoteAverage
 import com.example.chmovie.shared.scheduler.DataResult
+import com.google.firebase.database.DatabaseReference
+import kotlin.random.Random
 
 class SeriesDetailViewModel(
     private val seriesRepository: SeriesRepository,
-    prefManager: PrefManager
+    prefManager: PrefManager,
+    private val realTimeDbRepository: DatabaseReference
 ) : BaseViewModel() {
 
     private val _seriesId = MutableLiveData<Int>()
@@ -50,6 +58,26 @@ class SeriesDetailViewModel(
             onSuccess = { _editWatchListResult.value = DataResult.Success(it) },
             onError = { _editWatchListResult.value = DataResult.Error(it) }
         )
+    }
+
+    fun checkRoomCodeExist(videoKey: String, context: Context) {
+        val roomCode = Random.next5DigitId().toString()
+        realTimeDbRepository.child(Constant.ROOM_REALTIME_DB).child(roomCode).get().addOnSuccessListener {
+            if (it.exists()) {
+                checkRoomCodeExist(videoKey, context)
+            } else {
+                val roomResponse = RoomResponse(roomCode, Room(0f, 0, accountId.toString(), "play", videoKey))
+                createRoom(roomResponse, context)
+            }
+        }
+    }
+
+    private fun createRoom(roomResponse: RoomResponse, context: Context) {
+        realTimeDbRepository.child(Constant.ROOM_REALTIME_DB).child(roomResponse.key).setValue(roomResponse.value).addOnSuccessListener {
+            StartRoomActivity.newInstance(context, roomResponse)
+        }.addOnFailureListener {
+            exception.value = it
+        }
     }
 
     fun formatSeriesRuntime(runtimes: List<Int?>?): String {

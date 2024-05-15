@@ -12,14 +12,16 @@ import com.example.chmovie.data.models.Cast
 import com.example.chmovie.data.models.Favorite
 import com.example.chmovie.data.models.Media
 import com.example.chmovie.data.models.Series
+import com.example.chmovie.data.models.filterPersonsWithProfilePath
+import com.example.chmovie.data.models.filterSeriesWithPosterPath
 import com.example.chmovie.databinding.FragmentSeriesDetailBinding
-import com.example.chmovie.presentation.movie_detail.MovieDetailFragment
-import com.example.chmovie.presentation.movie_detail.MovieDetailFragmentDirections
 import com.example.chmovie.presentation.movie_detail.MovieDetailViewModel
 import com.example.chmovie.presentation.movie_detail.adapter.CastsAdapter
 import com.example.chmovie.presentation.series_detail.adapter.SimilarSeriesAdapter
 import com.example.chmovie.presentation.watch_video.WatchVideoActivity.Companion.navigateToWatchVideo
 import com.example.chmovie.shared.scheduler.DataResult
+import com.example.chmovie.shared.widget.dialogManager.DialogManagerImpl
+import com.example.chmovie.shared.widget.dialogManager.hideLoadingWithDelay
 import com.example.chmovie.shared.widget.showFailedSnackbar
 import com.example.chmovie.shared.widget.showSuccessSnackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -37,6 +39,7 @@ class SeriesDetailFragment : Fragment() {
     private var castsAdapter: CastsAdapter = CastsAdapter(::onClickItem)
 
     private var isFavorite = false
+    private var videoKey: String? = null
 
     private fun onClickItem(item: Any) {
         when (item) {
@@ -50,17 +53,22 @@ class SeriesDetailFragment : Fragment() {
         }
     }
 
+    private val dialogManager by lazy {
+        DialogManagerImpl(context)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        getData()
+        loadData()
         _binding = FragmentSeriesDetailBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getData()
         setUpView()
         registerLiveData()
         handleEvent()
@@ -74,7 +82,6 @@ class SeriesDetailFragment : Fragment() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = this@SeriesDetailFragment.viewLifecycleOwner
         bindView()
-        loadData()
     }
 
     private fun loadData() {
@@ -93,10 +100,24 @@ class SeriesDetailFragment : Fragment() {
 
     private fun registerLiveData() {
         with(viewModel) {
-            seriesDetail.observe(viewLifecycleOwner) {
-                castsAdapter.submitList(it.casts.casts.toMutableList())
-                similarSeriesAdapter.submitList(it.similar.results.toMutableList())
+            isLoading.observe(viewLifecycleOwner) {
+                if (it)
+                    dialogManager.showLoading()
+                else {
+                    dialogManager.hideLoadingWithDelay()
+
+                    if(isSuccess.value == false){
+                        binding.root.showFailedSnackbar("Lost network connection, failed data download")
+                    }
+                }
             }
+
+            seriesDetail.observe(viewLifecycleOwner) {
+                videoKey = viewModel.getVideoKey(it.videos.results)
+                castsAdapter.submitList(it.casts.casts.filterPersonsWithProfilePath())
+                similarSeriesAdapter.submitList(it.similar.results.filterSeriesWithPosterPath())
+            }
+
             editWatchListResult.observe(viewLifecycleOwner) {
                 when (it) {
                     is DataResult.Success -> {
@@ -111,6 +132,7 @@ class SeriesDetailFragment : Fragment() {
                 }
             }
         }
+
         with(movieDetailViewModel) {
             favoriteMovies.observe(viewLifecycleOwner) { favorites ->
                 isFavorite = favorites.firstOrNull { it.id == args.seriesId }?.let {
@@ -125,25 +147,32 @@ class SeriesDetailFragment : Fragment() {
         binding.btnBack.setOnClickListener {
             findNavController().navigateUp()
         }
+
         binding.btnPlay.setOnClickListener {
-            val videoKey = viewModel.getVideoKey(viewModel.seriesDetail.value?.videos?.results)
             if (videoKey.isNullOrEmpty()) {
                 requireView().showFailedSnackbar("Something went wrong try again later")
             } else {
-                navigateToWatchVideo(requireActivity(), videoKey)
+                navigateToWatchVideo(requireActivity(), videoKey!!)
             }
         }
+
         binding.btnFavorite.setOnClickListener {
             handleFavorite()
         }
+
         binding.btnAddWatchList.setOnClickListener {
             viewModel.watchList(Media.of(viewModel.seriesDetail.value))
+        }
+
+        binding.btnStarRoom.setOnClickListener {
+            videoKey?.let { it1 -> viewModel.checkRoomCodeExist(it1,requireContext()) }
         }
     }
 
     private fun handleFavorite() {
         viewModel.seriesDetail.value?.let { currentMovie ->
             val favorite = Favorite.of(currentMovie)
+
             movieDetailViewModel.apply {
                 if (isFavorite) {
                     deleteFavoriteMovie(favorite)
@@ -153,6 +182,7 @@ class SeriesDetailFragment : Fragment() {
                     requireView().showSuccessSnackbar("Successfully added to favorites list")
                 }
             }
+
             binding.btnFavorite.setImageResource(if (isFavorite) R.drawable.baseline_favorite_border_24 else R.drawable.baseline_favorite_24)
             isFavorite = !isFavorite
         }

@@ -16,7 +16,13 @@ class LoginViewModel(
     private val _loginResultLiveData = MutableLiveData<DataResult<String>>()
     val loginResultLiveData: LiveData<DataResult<String>> get() = _loginResultLiveData
 
+    init {
+        isLoading.value = false
+    }
+
     fun login(username: String, password: String) {
+        _loginResultLiveData.value = DataResult.Loading
+
         launchTaskSync(
             onRequest = {
                 when (val requestTokenResult = authRepository.getRequestToken()) {
@@ -29,10 +35,12 @@ class LoginViewModel(
                                 val sessionResult = authRepository.createSession(validatedToken)
                                 sessionResult
                             }
+
                             is DataResult.Error -> validatedTokenResult
                             is DataResult.Loading -> TODO()
                         }
                     }
+
                     is DataResult.Error -> requestTokenResult
                     DataResult.Loading -> TODO()
                 }

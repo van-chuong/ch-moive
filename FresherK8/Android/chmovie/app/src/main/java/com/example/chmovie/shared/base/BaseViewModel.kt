@@ -10,7 +10,12 @@ import kotlinx.coroutines.launch
 abstract class BaseViewModel : ViewModel() {
 
     val isLoading = MutableLiveData<Boolean>()
+    val isSuccess = MutableLiveData<Boolean>()
     val exception = MutableLiveData<Exception>()
+
+    init {
+        isLoading.postValue(true)
+    }
 
     protected fun <T> launchTaskSync(
         onRequest: suspend CoroutineScope.() -> DataResult<T>,
@@ -19,8 +24,17 @@ abstract class BaseViewModel : ViewModel() {
     ) = viewModelScope.launch {
         isLoading.postValue(true)
         when (val result = onRequest()) {
-            is DataResult.Success -> onSuccess(result.data)
-            is DataResult.Error -> onError(result.exception)
+            is DataResult.Success -> {
+                isLoading.postValue(false)
+                isSuccess.postValue(true)
+                onSuccess(result.data)
+            }
+
+            is DataResult.Error -> {
+                isSuccess.postValue(false)
+                onError(result.exception)
+            }
+
             is DataResult.Loading -> {}
         }
         isLoading.postValue(false)
@@ -40,6 +54,7 @@ abstract class BaseViewModel : ViewModel() {
                         liveData?.value = asynchronousTasks.data
                     }
                 }
+
                 is DataResult.Error -> {
                     onError?.invoke(asynchronousTasks.exception) ?: kotlin.run {
                         exception.value = asynchronousTasks.exception

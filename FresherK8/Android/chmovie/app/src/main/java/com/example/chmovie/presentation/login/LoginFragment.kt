@@ -2,7 +2,10 @@ package com.example.chmovie.presentation.login
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -13,8 +16,11 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.chmovie.R
 import com.example.chmovie.databinding.FragmentLoginBinding
+import com.example.chmovie.presentation.main.MainActivity
+import com.example.chmovie.shared.constant.Constant.SIGNUP_URL
 import com.example.chmovie.shared.scheduler.DataResult
-import com.example.chmovie.shared.widget.CustomProgressDialog
+import com.example.chmovie.shared.widget.dialogManager.DialogManagerImpl
+import com.example.chmovie.shared.widget.dialogManager.hideLoadingWithDelay
 import com.example.chmovie.shared.widget.showFailedSnackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -30,8 +36,8 @@ class LoginFragment : Fragment() {
 
     private val viewModel: LoginViewModel by viewModel()
 
-    private val progressDialog by lazy {
-        CustomProgressDialog(requireContext())
+    private val dialogManager by lazy {
+        DialogManagerImpl(context)
     }
 
     override fun onCreateView(
@@ -53,36 +59,30 @@ class LoginFragment : Fragment() {
         viewModel.loginResultLiveData.observe(viewLifecycleOwner) { loginResult ->
             when (loginResult) {
                 is DataResult.Success -> {
-                    progressDialog.dismiss()
+                    dialogManager.hideLoadingWithDelay()
                     navigateToMainFragment()
                 }
 
                 is DataResult.Error -> {
-                    progressDialog.dismiss()
+                    dialogManager.hideLoadingWithDelay()
                     loginResult.exception.message?.let {
                         requireView().showFailedSnackbar(it)
                     }
                 }
 
-                is DataResult.Loading -> {}
+                is DataResult.Loading -> {
+                    dialogManager.showLoading()
+                }
             }
+        }
+
+        viewModel.isLoading.observe(viewLifecycleOwner) {
+            (activity as MainActivity).hideLoading(false)
         }
     }
 
-    @SuppressLint("ClickableViewAccessibility")
+    @SuppressLint("ClickableViewAccessibility", "QueryPermissionsNeeded")
     private fun handleEvent(view: View) {
-        // Bắt sự kiện click vào nút đăng nhập
-        binding.btnLogin.setOnClickListener {
-            val username = binding.edtUsername.text.toString().trim()
-            val password = binding.edtPassword.text.toString().trim()
-            hiddenKeyBoard()
-            if (username.isEmpty() || password.isEmpty()) {
-                requireView().showFailedSnackbar("Please enter username and password")
-            } else {
-                progressDialog.show()
-                viewModel.login(username, password)
-            }
-        }
 
         view.setOnTouchListener { _, event ->
             if (event.action == MotionEvent.ACTION_DOWN) {
@@ -95,6 +95,26 @@ class LoginFragment : Fragment() {
                 }
             }
             true
+        }
+
+        binding.btnLogin.setOnClickListener {
+            val username = binding.edtUsername.text.toString().trim()
+            val password = binding.edtPassword.text.toString().trim()
+
+            hiddenKeyBoard()
+
+            if (username.isEmpty() || password.isEmpty()) {
+                requireView().showFailedSnackbar("Please enter username and password")
+            } else {
+                viewModel.login(username, password)
+            }
+        }
+
+        binding.btnSignup.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse(SIGNUP_URL)
+
+            startActivity(intent)
         }
     }
 

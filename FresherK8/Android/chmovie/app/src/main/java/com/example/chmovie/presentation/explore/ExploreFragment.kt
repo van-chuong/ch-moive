@@ -11,6 +11,10 @@ import com.example.chmovie.data.models.MovieProvider
 import com.example.chmovie.databinding.FragmentExploreBinding
 import com.example.chmovie.presentation.explore.adapter.PopularPersonAdapter
 import com.example.chmovie.presentation.explore.adapter.PopularProviderAdapter
+import com.example.chmovie.presentation.main.MainActivity
+import com.example.chmovie.shared.widget.dialogManager.DialogManagerImpl
+import com.example.chmovie.shared.widget.dialogManager.hideLoadingWithDelay
+import com.example.chmovie.shared.widget.showFailedSnackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ExploreFragment : Fragment() {
@@ -22,6 +26,10 @@ class ExploreFragment : Fragment() {
 
     private var featuredAdapter: PopularProviderAdapter = PopularProviderAdapter(::onClickItem)
     private var popularPersonAdapter: PopularPersonAdapter = PopularPersonAdapter(::onClickItem)
+
+    private val dialogManager by lazy {
+        DialogManagerImpl(context)
+    }
 
     private fun onClickItem(item: Any) {
         when (item) {
@@ -64,6 +72,14 @@ class ExploreFragment : Fragment() {
     }
 
     private fun registerLiveData() = with(viewModel) {
+        isLoading.observe(viewLifecycleOwner) {
+            if (it) {
+                (activity as MainActivity).showLoading()
+            } else {
+                (activity as MainActivity).hideLoading(isSuccess.value == false)
+            }
+        }
+
         popularProvider.observe(viewLifecycleOwner) {
             featuredAdapter.submitList(it)
         }

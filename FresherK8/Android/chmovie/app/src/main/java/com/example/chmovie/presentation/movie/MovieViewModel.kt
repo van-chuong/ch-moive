@@ -3,6 +3,7 @@ package com.example.chmovie.presentation.movie
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.chmovie.data.models.MovieDetail
+import com.example.chmovie.data.models.filterMoviesWithPosterPath
 import com.example.chmovie.data.repositories.MovieRepository
 import com.example.chmovie.shared.base.BaseViewModel
 
@@ -23,7 +24,7 @@ class MovieViewModel(private val movieRepository: MovieRepository) : BaseViewMod
     fun loadTrendingMovies(page: Int) {
         launchTaskSync(
             onRequest = { movieRepository.getPopularMovies(page) },
-            onSuccess = { _trendingMovies.value = it.results.toMutableList() },
+            onSuccess = { _trendingMovies.value = it.results.filterMoviesWithPosterPath() },
             onError = { exception.value = it }
         )
     }
@@ -31,7 +32,7 @@ class MovieViewModel(private val movieRepository: MovieRepository) : BaseViewMod
     fun loadPopularMovies(page: Int) {
         launchTaskSync(
             onRequest = { movieRepository.getTopRated(page) },
-            onSuccess = { _topRatedMovies.value = it.results.toMutableList() },
+            onSuccess = { _topRatedMovies.value = it.results.filterMoviesWithPosterPath()  },
             onError = { exception.value = it }
         )
     }
@@ -39,7 +40,7 @@ class MovieViewModel(private val movieRepository: MovieRepository) : BaseViewMod
     fun loadInTheaterMovies(page: Int) {
         launchTaskSync(
             onRequest = { movieRepository.getNowPlaying(page) },
-            onSuccess = { _inTheaterMovies.value = it.results.toMutableList() },
+            onSuccess = { _inTheaterMovies.value = it.results.filterMoviesWithPosterPath()  },
             onError = { exception.value = it }
         )
     }
@@ -47,7 +48,7 @@ class MovieViewModel(private val movieRepository: MovieRepository) : BaseViewMod
     fun loadComingSoonMovies(page: Int) {
         launchTaskSync(
             onRequest = { movieRepository.getUpcoming(page) },
-            onSuccess = { _comingSoonMovies.value = it.results.toMutableList() },
+            onSuccess = { _comingSoonMovies.value = it.results.filterMoviesWithPosterPath()  },
             onError = { exception.value = it }
         )
     }
