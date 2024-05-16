@@ -8,11 +8,10 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Lifecycle
 import com.example.chmovie.R
 import com.example.chmovie.data.models.RoomResponse
+import com.example.chmovie.data.source.remote.firebase.FirebaseManager
 import com.example.chmovie.presentation.room.start_room.StartRoomActivity
-import com.example.chmovie.shared.constant.Constant.ROOM_REALTIME_DB
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.customui.utils.FadeViewHelper
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.customui.views.YouTubePlayerSeekBar
@@ -30,10 +29,10 @@ class CustomRoomPlayerUiController(
     val youtubePlayer: YouTubePlayer,
     private val activity: StartRoomActivity,
     val lifecycle: Lifecycle,
-    private var realTimeDbRepository: DatabaseReference,
     private val room: RoomResponse?,
 ) : AbstractYouTubePlayerListener() {
 
+    private val roomRef = FirebaseManager.roomRef.child(room?.key.toString())
     private var playerTracker: YouTubePlayerTracker = YouTubePlayerTracker()
 
     private val btnPause: ImageButton = view.findViewById(R.id.btnPause)
@@ -51,7 +50,6 @@ class CustomRoomPlayerUiController(
     }
 
     init {
-        realTimeDbRepository = realTimeDbRepository.child(ROOM_REALTIME_DB).child(room?.key.toString())
         youtubePlayer.addListener(playerTracker)
         setUpYoutubePlayer()
     }
@@ -63,7 +61,7 @@ class CustomRoomPlayerUiController(
     }
 
     private fun initView() {
-        realTimeDbRepository.child("status").addValueEventListener(object : ValueEventListener {
+        roomRef.child("status").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val status = snapshot.getValue(String::class.java)
                 if (status == "play") {
@@ -78,7 +76,7 @@ class CustomRoomPlayerUiController(
             override fun onCancelled(error: DatabaseError) {}
         })
 
-        realTimeDbRepository.child("currentDuration").addValueEventListener(object : ValueEventListener {
+        roomRef.child("currentDuration").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val currentDuration = snapshot.getValue(Float::class.java)
 
@@ -112,7 +110,7 @@ class CustomRoomPlayerUiController(
         }
 
         btnPause.setOnClickListener {
-            realTimeDbRepository.addValueEventListener(object : ValueEventListener {
+            roomRef.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val currentDuration = snapshot.child("currentDuration").getValue(Float::class.java)
                     if (currentDuration != null) {
@@ -127,9 +125,9 @@ class CustomRoomPlayerUiController(
             }
 
             if (playerTracker.state == PlayerConstants.PlayerState.PLAYING) {
-                realTimeDbRepository.child("status").setValue("pause")
+                roomRef.child("status").setValue("pause")
             } else {
-                realTimeDbRepository.child("status").setValue("play")
+                roomRef.child("status").setValue("play")
             }
         }
 
@@ -160,7 +158,7 @@ class CustomRoomPlayerUiController(
     }
 
     private fun saveCurrentDuration(time: Float) {
-        realTimeDbRepository.child("currentDuration").setValue(time)
+        roomRef.child("currentDuration").setValue(time)
     }
 
 }

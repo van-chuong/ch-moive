@@ -8,6 +8,10 @@ import androidx.lifecycle.MutableLiveData
 import com.example.chmovie.data.models.Message
 import com.example.chmovie.data.models.RoomResponse
 import com.example.chmovie.data.source.local.PrefManager
+import com.example.chmovie.data.source.remote.firebase.FirebaseManager
+import com.example.chmovie.data.source.remote.firebase.FirebaseManager.chatRef
+import com.example.chmovie.data.source.remote.firebase.FirebaseManager.roomRef
+import com.example.chmovie.data.source.remote.firebase.FirebaseManager.usersRef
 import com.example.chmovie.shared.base.BaseViewModel
 import com.example.chmovie.shared.constant.Constant
 import com.example.chmovie.shared.scheduler.DataResult
@@ -18,14 +22,10 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 
-class StartRoomViewModel(val realTimeDbRepository: DatabaseReference, private val prefManager: PrefManager) : BaseViewModel() {
+class StartRoomViewModel(private val prefManager: PrefManager) : BaseViewModel() {
 
     private val _room = MutableLiveData<RoomResponse>()
     val room: LiveData<RoomResponse> = _room
-
-    private val roomRef = realTimeDbRepository.child(Constant.ROOM_REALTIME_DB)
-    private val chatRef = realTimeDbRepository.child(Constant.CHAT_REALTIME_DB)
-    private val usersRef = realTimeDbRepository.child(Constant.USERS_REALTIME_DB)
 
     private val _membersCount = MutableLiveData<Int>()
     val membersCount: LiveData<Int> = _membersCount

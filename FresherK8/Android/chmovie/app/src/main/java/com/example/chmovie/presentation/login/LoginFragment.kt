@@ -5,16 +5,13 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.example.chmovie.R
 import com.example.chmovie.databinding.FragmentLoginBinding
 import com.example.chmovie.presentation.main.MainActivity
 import com.example.chmovie.shared.constant.Constant.SIGNUP_URL
@@ -60,7 +57,7 @@ class LoginFragment : Fragment() {
             when (loginResult) {
                 is DataResult.Success -> {
                     dialogManager.hideLoadingWithDelay()
-                    navigateToMainFragment()
+                    findNavController().navigate(LoginFragmentDirections.actionNavLoginToNavMovies())
                 }
 
                 is DataResult.Error -> {
@@ -101,8 +98,6 @@ class LoginFragment : Fragment() {
             val username = binding.edtUsername.text.toString().trim()
             val password = binding.edtPassword.text.toString().trim()
 
-            hiddenKeyBoard()
-
             if (username.isEmpty() || password.isEmpty()) {
                 requireView().showFailedSnackbar("Please enter username and password")
             } else {
@@ -116,20 +111,5 @@ class LoginFragment : Fragment() {
 
             startActivity(intent)
         }
-    }
-
-    private fun hiddenKeyBoard() {
-        try {
-            val imm =
-                ContextCompat.getSystemService(requireContext(), InputMethodManager::class.java)
-            imm?.hideSoftInputFromWindow(view?.windowToken, 0)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    private fun navigateToMainFragment() {
-        val navController = findNavController()
-        navController.navigate(R.id.nav_movies)
     }
 }

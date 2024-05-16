@@ -14,15 +14,14 @@ import com.example.chmovie.data.models.Video
 import com.example.chmovie.data.repositories.FavoriteRepository
 import com.example.chmovie.data.repositories.MovieRepository
 import com.example.chmovie.data.source.local.PrefManager
+import com.example.chmovie.data.source.remote.firebase.FirebaseManager.roomRef
 import com.example.chmovie.presentation.room.start_room.StartRoomActivity
 import com.example.chmovie.shared.base.BaseViewModel
-import com.example.chmovie.shared.constant.Constant.ROOM_REALTIME_DB
 import com.example.chmovie.shared.constant.Constant.SESSION_KEY
 import com.example.chmovie.shared.constant.Constant.USERNAME_KEY
 import com.example.chmovie.shared.extension.next5DigitId
 import com.example.chmovie.shared.helper.formatRuntime
 import com.example.chmovie.shared.scheduler.DataResult
-import com.google.firebase.database.DatabaseReference
 import java.text.NumberFormat
 import java.util.Locale
 import kotlin.random.Random
@@ -31,7 +30,6 @@ class MovieDetailViewModel(
     private val movieRepository: MovieRepository,
     private val favoriteRepository: FavoriteRepository,
     prefManager: PrefManager,
-    private val realTimeDbRepository: DatabaseReference
 ) : BaseViewModel() {
 
     private val _movieId = MutableLiveData<Int?>()
@@ -94,7 +92,7 @@ class MovieDetailViewModel(
 
     fun checkRoomCodeExist(videoKey: String, context: Context) {
         val roomCode = Random.next5DigitId().toString()
-        realTimeDbRepository.child(ROOM_REALTIME_DB).child(roomCode).get().addOnSuccessListener {
+        roomRef.child(roomCode).get().addOnSuccessListener {
             if (it.exists()) {
                 checkRoomCodeExist(videoKey, context)
             } else {
@@ -105,7 +103,7 @@ class MovieDetailViewModel(
     }
 
     private fun createRoom(roomResponse: RoomResponse, context: Context) {
-        realTimeDbRepository.child(ROOM_REALTIME_DB).child(roomResponse.key).setValue(roomResponse.value).addOnSuccessListener {
+        roomRef.child(roomResponse.key).setValue(roomResponse.value).addOnSuccessListener {
             StartRoomActivity.newInstance(context, roomResponse)
         }.addOnFailureListener {
             exception.value = it
