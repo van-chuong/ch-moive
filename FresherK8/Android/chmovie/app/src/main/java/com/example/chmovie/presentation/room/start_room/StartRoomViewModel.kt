@@ -2,6 +2,7 @@ package com.example.chmovie.presentation.room.start_room
 
 import android.content.Intent
 import android.os.Build
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.chmovie.data.models.Message
@@ -10,6 +11,7 @@ import com.example.chmovie.data.source.local.PrefManager
 import com.example.chmovie.shared.base.BaseViewModel
 import com.example.chmovie.shared.constant.Constant
 import com.example.chmovie.shared.scheduler.DataResult
+import com.example.chmovie.shared.widget.showAlertSnackbar
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -23,6 +25,7 @@ class StartRoomViewModel(val realTimeDbRepository: DatabaseReference, private va
 
     private val roomRef = realTimeDbRepository.child(Constant.ROOM_REALTIME_DB)
     private val chatRef = realTimeDbRepository.child(Constant.CHAT_REALTIME_DB)
+    private val usersRef = realTimeDbRepository.child(Constant.USERS_REALTIME_DB)
 
     private val _membersCount = MutableLiveData<Int>()
     val membersCount: LiveData<Int> = _membersCount
@@ -44,46 +47,55 @@ class StartRoomViewModel(val realTimeDbRepository: DatabaseReference, private va
     }
 
     fun getMembersCount(roomCode: String) {
-        roomRef.child(roomCode).addValueEventListener(object : ValueEventListener {
+        usersRef.child(roomCode).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                _membersCount.value = snapshot.child("members").getValue(Int::class.java)
+                _membersCount.value = snapshot.childrenCount.toInt()
             }
 
             override fun onCancelled(error: DatabaseError) {}
         })
     }
 
-    fun handleOutRoom(roomCode: String) {
-        roomRef.child(roomCode).child("members").get().addOnSuccessListener { dataSnapshot ->
-            val currentMembers = dataSnapshot.getValue(Int::class.java) ?: 0
+    fun addRoomUserListener(roomCode: String, view: View) {
+        usersRef.child(roomCode).addChildEventListener(object : ChildEventListener {
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                roomRef.child(roomCode).child("status").setValue("pause")
 
-            if (currentMembers > 1) {
-                roomRef.child(roomCode).child("members").setValue(currentMembers - 1)
-            } else {
-                roomRef.child(roomCode).removeValue().addOnFailureListener {
-                    exception.value = it
-                }
-
-                chatRef.child(roomCode).removeValue().addOnFailureListener {
-                    exception.value = it
+                if (snapshot.key.toString() != username) {
+                    view.showAlertSnackbar("${snapshot.key} has joined the room")
                 }
             }
 
-        }.addOnFailureListener {
-            exception.value = it
-        }
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+            }
+
+            override fun onChildRemoved(snapshot: DataSnapshot) {
+                usersRef.child(roomCode).get().addOnSuccessListener {
+                    if (it.childrenCount.toInt() == 0) {
+                        it.ref.removeValue()
+                        roomRef.child(roomCode).removeValue()
+                    }
+                }
+
+                if (snapshot.key.toString() != username) {
+                    view.showAlertSnackbar("${snapshot.key} has left the room")
+                }
+            }
+
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
+    }
+
+    fun handleOutRoom(roomCode: String) {
+        usersRef.child(roomCode).child(username.toString()).removeValue()
     }
 
     fun addMember(roomCode: String) {
-        roomRef.child(roomCode).child("members").get().addOnSuccessListener {
-            if (it.exists()) {
-                roomRef.child(roomCode).child("members")
-                    .setValue(it.getValue(Int::class.java)?.plus(1))
-            }
-
-        }.addOnFailureListener {
-            exception.value = it
-        }
+        usersRef.child(roomCode).child(username.toString()).setValue("")
     }
 
     fun addMessage(roomCode: String, message: String) {
@@ -108,32 +120,31 @@ class StartRoomViewModel(val realTimeDbRepository: DatabaseReference, private va
     }
 
     fun addMessageListener(roomCode: String) {
-        chatRef.child(roomCode)
-            .addChildEventListener(object : ChildEventListener {
-                override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                    snapshot.getValue(Message::class.java)?.let { message ->
-                        val updatedMessages = _messages.value ?: mutableListOf()
-                        updatedMessages.add(message)
-                        _messages.value = updatedMessages
-                    }
+        chatRef.child(roomCode).addChildEventListener(object : ChildEventListener {
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                snapshot.getValue(Message::class.java)?.let { message ->
+                    val updatedMessages = _messages.value ?: mutableListOf()
+                    updatedMessages.add(message)
+                    _messages.value = updatedMessages
                 }
+            }
 
-                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                }
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+            }
 
-                override fun onChildRemoved(snapshot: DataSnapshot) {
-                    snapshot.getValue(Message::class.java)?.let { message ->
-                        val updatedMessages = _messages.value ?: mutableListOf()
-                        updatedMessages.remove(message)
-                        _messages.value = updatedMessages
-                    }
+            override fun onChildRemoved(snapshot: DataSnapshot) {
+                snapshot.getValue(Message::class.java)?.let { message ->
+                    val updatedMessages = _messages.value ?: mutableListOf()
+                    updatedMessages.remove(message)
+                    _messages.value = updatedMessages
                 }
+            }
 
-                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-                }
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+            }
 
-                override fun onCancelled(error: DatabaseError) {
-                }
-            })
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
     }
 }

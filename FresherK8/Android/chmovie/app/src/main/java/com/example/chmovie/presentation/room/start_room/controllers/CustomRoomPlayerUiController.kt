@@ -89,15 +89,6 @@ class CustomRoomPlayerUiController(
 
             override fun onCancelled(error: DatabaseError) {}
         })
-
-        realTimeDbRepository.child("members").addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                realTimeDbRepository.child("status").setValue("pause")
-            }
-
-            override fun onCancelled(error: DatabaseError) {}
-        })
-
     }
 
     private fun addFadeView() {

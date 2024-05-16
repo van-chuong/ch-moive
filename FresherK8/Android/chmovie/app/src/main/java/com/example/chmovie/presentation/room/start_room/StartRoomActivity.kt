@@ -99,10 +99,11 @@ class StartRoomActivity : BaseActivity<ActivityStartRoomBinding, StartRoomViewMo
         room.observe(this@StartRoomActivity) {
             viewBinding.txtRoomCode.text = getString(R.string.room_code, room.value?.key)
 
-            viewModel.addMember(it.key)
-            viewModel.getMembersCount(it.key)
-            viewModel.loadMessage(it.key)
-            viewModel.addMessageListener(it.key)
+            addRoomUserListener(it.key, viewBinding.root)
+            addMember(it.key)
+            getMembersCount(it.key)
+            loadMessage(it.key)
+            addMessageListener(it.key)
         }
 
         messages.observe(this@StartRoomActivity) {
