@@ -32,7 +32,7 @@ class MovieViewModel(private val movieRepository: MovieRepository) : BaseViewMod
     fun loadPopularMovies(page: Int) {
         launchTaskSync(
             onRequest = { movieRepository.getTopRated(page) },
-            onSuccess = { _topRatedMovies.value = it.results.filterMoviesWithPosterPath()  },
+            onSuccess = { _topRatedMovies.value = it.results.filterMoviesWithPosterPath() },
             onError = { exception.value = it }
         )
     }
@@ -40,7 +40,7 @@ class MovieViewModel(private val movieRepository: MovieRepository) : BaseViewMod
     fun loadInTheaterMovies(page: Int) {
         launchTaskSync(
             onRequest = { movieRepository.getNowPlaying(page) },
-            onSuccess = { _inTheaterMovies.value = it.results.filterMoviesWithPosterPath()  },
+            onSuccess = { _inTheaterMovies.value = it.results.filterMoviesWithPosterPath() },
             onError = { exception.value = it }
         )
     }
@@ -48,7 +48,7 @@ class MovieViewModel(private val movieRepository: MovieRepository) : BaseViewMod
     fun loadComingSoonMovies(page: Int) {
         launchTaskSync(
             onRequest = { movieRepository.getUpcoming(page) },
-            onSuccess = { _comingSoonMovies.value = it.results.filterMoviesWithPosterPath()  },
+            onSuccess = { _comingSoonMovies.value = it.results.filterMoviesWithPosterPath() },
             onError = { exception.value = it }
         )
     }

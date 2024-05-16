@@ -8,7 +8,6 @@ import androidx.lifecycle.MutableLiveData
 import com.example.chmovie.data.models.Message
 import com.example.chmovie.data.models.RoomResponse
 import com.example.chmovie.data.source.local.PrefManager
-import com.example.chmovie.data.source.remote.firebase.FirebaseManager
 import com.example.chmovie.data.source.remote.firebase.FirebaseManager.chatRef
 import com.example.chmovie.data.source.remote.firebase.FirebaseManager.roomRef
 import com.example.chmovie.data.source.remote.firebase.FirebaseManager.usersRef
@@ -19,7 +18,6 @@ import com.example.chmovie.shared.widget.showAlertSnackbar
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 
 class StartRoomViewModel(private val prefManager: PrefManager) : BaseViewModel() {

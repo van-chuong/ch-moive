@@ -1,6 +1,5 @@
 package com.example.chmovie.presentation.movie_detail.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -12,6 +11,7 @@ import com.example.chmovie.databinding.ItemPersonBinding
 import com.example.chmovie.shared.utils.CustomDiffCallBack
 
 class CastsAdapter(private var listener: ((Cast) -> Unit)) : ListAdapter<Cast, CastsAdapter.CastViewHolder>(CustomDiffCallBack()) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CastViewHolder {
         val binding = DataBindingUtil.inflate<ItemPersonBinding>(
             LayoutInflater.from(parent.context),

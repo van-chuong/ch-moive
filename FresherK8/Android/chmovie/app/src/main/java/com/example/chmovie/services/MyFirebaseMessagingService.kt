@@ -1,4 +1,3 @@
 package com.example.chmovie.services
 
-class MyFirebaseMessagingService {
-}
+class MyFirebaseMessagingService

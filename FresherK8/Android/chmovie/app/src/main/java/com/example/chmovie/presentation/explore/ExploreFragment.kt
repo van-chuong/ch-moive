@@ -13,8 +13,6 @@ import com.example.chmovie.presentation.explore.adapter.PopularPersonAdapter
 import com.example.chmovie.presentation.explore.adapter.PopularProviderAdapter
 import com.example.chmovie.presentation.main.MainActivity
 import com.example.chmovie.shared.widget.dialogManager.DialogManagerImpl
-import com.example.chmovie.shared.widget.dialogManager.hideLoadingWithDelay
-import com.example.chmovie.shared.widget.showFailedSnackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ExploreFragment : Fragment() {

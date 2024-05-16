@@ -1,14 +1,10 @@
 package com.example.chmovie.presentation.room
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.chmovie.databinding.FragmentJoinRoomBinding
@@ -77,16 +73,6 @@ class JoinRoomFragment : Fragment() {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun handleEvent(view: View) {
-        view.setOnTouchListener { _, event ->
-            if (event.action == MotionEvent.ACTION_DOWN) {
-                if (binding.edtRoomCode.isFocused) {
-                    val imm: InputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.hideSoftInputFromWindow(binding.edtRoomCode.windowToken, 0)
-                    binding.edtRoomCode.clearFocus()
-                }
-            }
-            true
-        }
 
         binding.btnBack.setOnClickListener {
             findNavController().navigateUp()
@@ -94,21 +80,12 @@ class JoinRoomFragment : Fragment() {
 
         binding.btnJoinRoom.setOnClickListener {
             val roomCode = binding.edtRoomCode.text.toString().trim()
-            hiddenKeyBoard()
+
             if (roomCode.isEmpty()) {
                 requireView().showFailedSnackbar("Please enter valid room code")
             } else {
                 viewModel.checkRoomCodeExist(roomCode)
             }
-        }
-    }
-
-    private fun hiddenKeyBoard() {
-        try {
-            val imm = ContextCompat.getSystemService(requireContext(), InputMethodManager::class.java)
-            imm?.hideSoftInputFromWindow(view?.windowToken, 0)
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
     }
 

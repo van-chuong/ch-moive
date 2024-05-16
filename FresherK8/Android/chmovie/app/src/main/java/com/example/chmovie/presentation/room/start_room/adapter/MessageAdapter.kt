@@ -10,7 +10,8 @@ import com.example.chmovie.data.models.Message
 import com.example.chmovie.databinding.ItemMessageBinding
 import com.example.chmovie.shared.utils.CustomDiffCallBack
 
-class MessageAdapter() : ListAdapter<Message, MessageAdapter.MessageViewHolder>(CustomDiffCallBack()) {
+class MessageAdapter : ListAdapter<Message, MessageAdapter.MessageViewHolder>(CustomDiffCallBack()) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
         val binding = DataBindingUtil.inflate<ItemMessageBinding>(
             LayoutInflater.from(parent.context),

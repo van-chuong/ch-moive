@@ -1,7 +1,6 @@
 package com.example.chmovie.presentation.movie_detail
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -107,7 +106,7 @@ class MovieDetailFragment : Fragment() {
         }
 
         binding.btnStarRoom.setOnClickListener {
-            videoKey?.let { it1 -> viewModel.checkRoomCodeExist(it1,requireContext()) }
+            videoKey?.let { it1 -> viewModel.checkRoomCodeExist(it1, requireContext()) }
         }
     }
 
@@ -127,7 +126,7 @@ class MovieDetailFragment : Fragment() {
             else {
                 dialogManager.hideLoadingWithDelay()
 
-                if(isSuccess.value == false){
+                if (isSuccess.value == false) {
                     binding.root.showFailedSnackbar("Lost network connection, failed data download")
                 }
             }
@@ -135,7 +134,7 @@ class MovieDetailFragment : Fragment() {
 
         movieDetail.observe(viewLifecycleOwner) {
             videoKey = viewModel.getVideoKey(it.videos.results)
-            castsAdapter.submitList(it.casts.casts.filterPersonsWithProfilePath() )
+            castsAdapter.submitList(it.casts.casts.filterPersonsWithProfilePath())
             similarMoviesAdapter.submitList(it.similar.results.filterMoviesWithPosterPath())
         }
 

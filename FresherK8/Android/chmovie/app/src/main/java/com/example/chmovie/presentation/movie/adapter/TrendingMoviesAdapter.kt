@@ -10,9 +10,10 @@ import com.example.chmovie.data.models.MovieDetail
 import com.example.chmovie.databinding.ItemTrendingNowBinding
 import com.example.chmovie.shared.utils.CustomDiffCallBack
 
-class TrendingMoviesAdapter(private var listener: ((MovieDetail) -> Unit)) : ListAdapter<MovieDetail, TrendingMoviesAdapter.TrendingViewHolder>(
-    CustomDiffCallBack()
-) {
+class TrendingMoviesAdapter(private var listener: ((MovieDetail) -> Unit)) :
+    ListAdapter<MovieDetail, TrendingMoviesAdapter.TrendingViewHolder>(
+        CustomDiffCallBack()
+    ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrendingViewHolder {
         val binding = DataBindingUtil.inflate<ItemTrendingNowBinding>(
             LayoutInflater.from(parent.context),
