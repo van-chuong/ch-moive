@@ -75,7 +75,7 @@ class PersonDetailFragment : Fragment() {
     }
 
     private fun bindView() {
-        with(binding){
+        with(binding) {
             rvPopularMovie.adapter = popularMoviesAdapter
             rvPopularSeries.adapter = popularSeriesAdapter
         }
@@ -88,7 +88,7 @@ class PersonDetailFragment : Fragment() {
             else {
                 dialogManager.hideLoadingWithDelay()
 
-                if(isSuccess.value == false){
+                if (isSuccess.value == false) {
                     binding.root.showFailedSnackbar("Lost network connection, failed data download")
                 }
             }

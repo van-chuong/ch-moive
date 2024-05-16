@@ -1,7 +1,6 @@
 package com.example.chmovie.data.repositories
 
 import com.example.chmovie.data.models.Media
-import com.example.chmovie.data.models.MoviesResponse
 import com.example.chmovie.data.models.Series
 import com.example.chmovie.data.models.SeriesResponse
 import com.example.chmovie.shared.scheduler.DataResult

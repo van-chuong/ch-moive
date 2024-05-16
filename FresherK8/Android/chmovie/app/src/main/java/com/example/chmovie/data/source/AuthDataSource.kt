@@ -6,8 +6,7 @@ import retrofit2.Response
 
 interface AuthDataSource {
 
-    interface Local {
-    }
+    interface Local
 
     interface Remote {
 

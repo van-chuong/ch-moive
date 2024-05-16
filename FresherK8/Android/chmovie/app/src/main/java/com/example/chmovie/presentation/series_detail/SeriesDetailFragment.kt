@@ -108,7 +108,7 @@ class SeriesDetailFragment : Fragment() {
                 else {
                     dialogManager.hideLoadingWithDelay()
 
-                    if(isSuccess.value == false){
+                    if (isSuccess.value == false) {
                         binding.root.showFailedSnackbar("Lost network connection, failed data download")
                     }
                 }
@@ -168,7 +168,7 @@ class SeriesDetailFragment : Fragment() {
         }
 
         binding.btnStarRoom.setOnClickListener {
-            videoKey?.let { it1 -> viewModel.checkRoomCodeExist(it1,requireContext()) }
+            videoKey?.let { it1 -> viewModel.checkRoomCodeExist(it1, requireContext()) }
         }
     }
 

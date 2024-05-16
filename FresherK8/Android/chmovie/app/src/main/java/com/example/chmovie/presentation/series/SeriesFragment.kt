@@ -13,8 +13,6 @@ import com.example.chmovie.presentation.series.adapter.AirTodaySeriesAdapter
 import com.example.chmovie.presentation.series.adapter.OnTheAirSeriesAdapter
 import com.example.chmovie.presentation.series.adapter.TopRatedSeriesAdapter
 import com.example.chmovie.presentation.series.adapter.TrendingSeriesAdapter
-import com.example.chmovie.shared.widget.dialogManager.DialogManagerImpl
-import com.example.chmovie.shared.widget.dialogManager.hideLoadingWithDelay
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.random.Random
 

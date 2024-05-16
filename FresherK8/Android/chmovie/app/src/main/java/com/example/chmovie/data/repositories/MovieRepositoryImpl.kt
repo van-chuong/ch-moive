@@ -1,6 +1,5 @@
 package com.example.chmovie.data.repositories
 
-import android.util.Log
 import com.example.chmovie.data.models.ErrorResponse
 import com.example.chmovie.data.models.Media
 import com.example.chmovie.data.models.MovieDetail

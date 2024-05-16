@@ -8,8 +8,7 @@ import retrofit2.Response
 
 interface MovieDataSource {
 
-    interface Local {
-    }
+    interface Local
 
     interface Remote {
 

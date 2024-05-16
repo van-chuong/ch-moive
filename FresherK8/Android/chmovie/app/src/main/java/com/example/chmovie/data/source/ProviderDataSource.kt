@@ -5,8 +5,7 @@ import com.example.chmovie.data.models.CastsResponse
 import com.example.chmovie.data.models.MoviesProviderResponse
 
 interface ProviderDataSource {
-    interface Local {
-    }
+    interface Local
 
     interface Remote {
 

@@ -14,4 +14,4 @@ data class Genre(
     @SerializedName("name")
     @Expose
     val name: String = ""
-): Parcelable
+) : Parcelable

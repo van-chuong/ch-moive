@@ -11,7 +11,6 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.activity.OnBackPressedCallback
-import androidx.recyclerview.widget.RecyclerView
 import com.example.chmovie.R
 import com.example.chmovie.data.models.RoomResponse
 import com.example.chmovie.databinding.ActivityStartRoomBinding

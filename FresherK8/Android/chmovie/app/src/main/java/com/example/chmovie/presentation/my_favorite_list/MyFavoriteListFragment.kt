@@ -12,7 +12,6 @@ import com.example.chmovie.data.models.Favorite
 import com.example.chmovie.databinding.FragmentMyFavoriteListBinding
 import com.example.chmovie.presentation.main.MainActivity
 import com.example.chmovie.presentation.my_favorite_list.adapter.FavoriteAdapter
-import com.example.chmovie.shared.widget.dialogManager.DialogManagerImpl
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MyFavoriteListFragment : Fragment() {
