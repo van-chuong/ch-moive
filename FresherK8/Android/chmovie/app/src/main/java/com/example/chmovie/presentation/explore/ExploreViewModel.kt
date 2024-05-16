@@ -9,16 +9,15 @@ import com.example.chmovie.data.models.Series
 import com.example.chmovie.data.models.filterPersonsWithProfilePath
 import com.example.chmovie.data.repositories.ProviderRepository
 import com.example.chmovie.data.source.local.PrefManager
+import com.example.chmovie.data.source.remote.firebase.FirebaseManager.recommendRef
 import com.example.chmovie.shared.base.BaseViewModel
 import com.example.chmovie.shared.constant.Constant
-import com.google.firebase.database.DatabaseReference
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 class ExploreViewModel(
     private val providerRepository: ProviderRepository,
     private val prefManager: PrefManager,
-    private val realTimeDbRepository: DatabaseReference
 ) : BaseViewModel() {
 
     private val _popularProvider = MutableLiveData<MutableList<MovieProvider>>()
@@ -35,8 +34,8 @@ class ExploreViewModel(
 
     private val accountId = prefManager.getString(Constant.USERNAME_KEY, "")
 
-    private val moviesRef = realTimeDbRepository.child(Constant.RECOMMEND_REALTIME_DB).child(accountId.toString()).child("movies")
-    private val seriesRef = realTimeDbRepository.child(Constant.RECOMMEND_REALTIME_DB).child(accountId.toString()).child("series")
+    private val moviesRef = recommendRef.child(accountId.toString()).child("movies")
+    private val seriesRef = recommendRef.child(Constant.RECOMMEND_REALTIME_DB).child(accountId.toString()).child("series")
 
 
     fun loadPopularProvider() {
