@@ -1,7 +1,6 @@
 package com.example.chmovie.presentation.movie_detail
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.chmovie.data.models.Favorite
@@ -17,7 +16,6 @@ import com.example.chmovie.data.repositories.MovieRepository
 import com.example.chmovie.data.source.local.PrefManager
 import com.example.chmovie.presentation.room.start_room.StartRoomActivity
 import com.example.chmovie.shared.base.BaseViewModel
-import com.example.chmovie.shared.constant.Constant.RECOMMEND_REALTIME_DB
 import com.example.chmovie.shared.constant.Constant.ROOM_REALTIME_DB
 import com.example.chmovie.shared.constant.Constant.SESSION_KEY
 import com.example.chmovie.shared.constant.Constant.USERNAME_KEY
@@ -38,7 +36,6 @@ class MovieDetailViewModel(
     private val movieRepository: MovieRepository,
     private val favoriteRepository: FavoriteRepository,
     prefManager: PrefManager,
-    private val realTimeDbRepository: DatabaseReference
 ) : BaseViewModel() {
 
     private val _movieId = MutableLiveData<Int?>()
@@ -183,5 +180,4 @@ class MovieDetailViewModel(
         val firstTrailer = videos?.firstOrNull { it.type == "Trailer" }
         return firstTrailer?.key
     }
-
 }

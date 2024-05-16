@@ -2,7 +2,10 @@ package com.example.chmovie.presentation.main
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -131,6 +134,28 @@ class MainActivity : AppCompatActivity() {
             delay(500)
             binding.loadingLayout.visibility = View.GONE
         }
+    }
 
+    @SuppressWarnings("ComplexCondition")
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+        val v = currentFocus
+        if (v is EditText) {
+            val scoops = IntArray(2)
+            v.getLocationOnScreen(scoops)
+            val x = event.rawX + v.getLeft() - scoops[0]
+            val y = event.rawY + v.getTop() - scoops[1]
+            if (event.action == MotionEvent.ACTION_UP &&
+                (x < v.getLeft() || x >= v.getRight() || y < v.getTop() || y > v.getBottom())
+            ) {
+                v.clearFocus()
+                hideSoftKeyboard(v)
+            }
+        }
+        return super.dispatchTouchEvent(event)
+    }
+
+    private fun hideSoftKeyboard(view: View) {
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }

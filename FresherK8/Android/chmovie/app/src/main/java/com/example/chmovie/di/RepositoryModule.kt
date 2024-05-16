@@ -14,8 +14,6 @@ import com.google.firebase.Firebase
 import com.google.firebase.database.database
 import org.koin.dsl.module
 
-fun realTimeDBRepository() = Firebase.database.reference
-
 val repositoryModule = module {
 
     single<MovieRepository> {
@@ -36,9 +34,5 @@ val repositoryModule = module {
 
     single<ProviderRepository> {
         ProviderRepositoryImpl(get())
-    }
-
-    single {
-        realTimeDBRepository()
     }
 }

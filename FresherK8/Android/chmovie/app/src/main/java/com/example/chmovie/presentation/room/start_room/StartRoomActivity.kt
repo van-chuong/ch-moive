@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import androidx.activity.OnBackPressedCallback
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chmovie.R
@@ -77,7 +78,6 @@ class StartRoomActivity : BaseActivity<ActivityStartRoomBinding, StartRoomViewMo
                     youTubePlayer,
                     this@StartRoomActivity,
                     lifecycle,
-                    viewModel.realTimeDbRepository,
                     viewModel.room.value,
                 )
 
@@ -99,10 +99,11 @@ class StartRoomActivity : BaseActivity<ActivityStartRoomBinding, StartRoomViewMo
         room.observe(this@StartRoomActivity) {
             viewBinding.txtRoomCode.text = getString(R.string.room_code, room.value?.key)
 
-            viewModel.addMember(it.key)
-            viewModel.getMembersCount(it.key)
-            viewModel.loadMessage(it.key)
-            viewModel.addMessageListener(it.key)
+            addRoomUserListener(it.key, viewBinding.root)
+            addMember(it.key)
+            getMembersCount(it.key)
+            loadMessage(it.key)
+            addMessageListener(it.key)
         }
 
         messages.observe(this@StartRoomActivity) {
@@ -143,20 +144,9 @@ class StartRoomActivity : BaseActivity<ActivityStartRoomBinding, StartRoomViewMo
 
     @SuppressLint("ClickableViewAccessibility")
     private fun handleEvent(view: View) {
-
         onBackPressedDispatcher.addCallback(onBackPressedCallback)
 
-        view.setOnTouchListener { _, event ->
-            if (event.action == MotionEvent.ACTION_DOWN) {
-                if (viewBinding.edtMessage.isFocused) {
-                    hiddenKeyBoard()
-                }
-            }
-            true
-        }
-
         viewBinding.btnSendMessage.setOnClickListener {
-            hiddenKeyBoard()
             val message = viewBinding.edtMessage.text.toString().trim()
 
             if (message.isEmpty()) {
@@ -166,26 +156,29 @@ class StartRoomActivity : BaseActivity<ActivityStartRoomBinding, StartRoomViewMo
                 viewModel.room.value?.let { it1 -> viewModel.addMessage(it1.key, message) }
             }
         }
-
-        viewBinding.rvMessage.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
-            override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
-                if (e.action == MotionEvent.ACTION_DOWN) {
-                    hiddenKeyBoard()
-                }
-
-                return false
-            }
-
-            override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
-
-            override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
-        })
     }
 
-    private fun hiddenKeyBoard() {
-        viewBinding.edtMessage.clearFocus()
-        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(viewBinding.edtMessage.windowToken, 0)
+    @SuppressWarnings("ComplexCondition")
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+        val v = currentFocus
+        if (v is EditText) {
+            val scoops = IntArray(2)
+            v.getLocationOnScreen(scoops)
+            val x = event.rawX + v.getLeft() - scoops[0]
+            val y = event.rawY + v.getTop() - scoops[1]
+            if (event.action == MotionEvent.ACTION_UP &&
+                (x < v.getLeft() || x >= v.getRight() || y < v.getTop() || y > v.getBottom())
+            ) {
+                v.clearFocus()
+                hideSoftKeyboard(v)
+            }
+        }
+        return super.dispatchTouchEvent(event)
+    }
+
+    private fun hideSoftKeyboard(view: View) {
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     override fun onDestroy() {

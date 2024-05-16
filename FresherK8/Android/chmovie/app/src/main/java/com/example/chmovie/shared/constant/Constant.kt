@@ -16,4 +16,6 @@ object Constant {
     const val ROOM_REALTIME_DB: String = "room"
     const val CHAT_REALTIME_DB: String = "chat"
     const val RECOMMEND_REALTIME_DB: String = "recommend"
+    const val USERS_REALTIME_DB: String = "users"
+    const val DEVICE_REALTIME_DB: String = "devices"
 }
