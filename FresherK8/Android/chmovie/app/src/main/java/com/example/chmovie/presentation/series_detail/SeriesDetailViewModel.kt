@@ -13,6 +13,8 @@ import com.example.chmovie.data.models.Series
 import com.example.chmovie.data.models.Video
 import com.example.chmovie.data.repositories.SeriesRepository
 import com.example.chmovie.data.source.local.PrefManager
+import com.example.chmovie.data.source.remote.firebase.FirebaseManager.recommendRef
+import com.example.chmovie.data.source.remote.firebase.FirebaseManager.roomRef
 import com.example.chmovie.presentation.room.start_room.StartRoomActivity
 import com.example.chmovie.shared.base.BaseViewModel
 import com.example.chmovie.shared.constant.Constant
@@ -23,7 +25,6 @@ import com.example.chmovie.shared.scheduler.DataResult
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlin.random.Random
@@ -31,7 +32,6 @@ import kotlin.random.Random
 class SeriesDetailViewModel(
     private val seriesRepository: SeriesRepository,
     private val prefManager: PrefManager,
-    private val realTimeDbRepository: DatabaseReference
 ) : BaseViewModel() {
 
     private val _seriesId = MutableLiveData<Int>()
@@ -45,8 +45,6 @@ class SeriesDetailViewModel(
 
     private val _editWatchListResult = MutableLiveData<DataResult<String>>()
     val editWatchListResult: LiveData<DataResult<String>> = _editWatchListResult
-
-    private val recommendRef = realTimeDbRepository.child(Constant.RECOMMEND_REALTIME_DB)
 
     fun setSeriesId(data: Int) {
         _seriesId.value = data
@@ -70,7 +68,7 @@ class SeriesDetailViewModel(
 
     fun checkRoomCodeExist(videoKey: String, context: Context) {
         val roomCode = Random.next5DigitId().toString()
-        realTimeDbRepository.child(Constant.ROOM_REALTIME_DB).child(roomCode).get().addOnSuccessListener {
+        roomRef.child(roomCode).get().addOnSuccessListener {
             if (it.exists()) {
                 checkRoomCodeExist(videoKey, context)
             } else {
@@ -81,7 +79,7 @@ class SeriesDetailViewModel(
     }
 
     private fun createRoom(roomResponse: RoomResponse, context: Context) {
-        realTimeDbRepository.child(Constant.ROOM_REALTIME_DB).child(roomResponse.key).setValue(roomResponse.value).addOnSuccessListener {
+        roomRef.child(Constant.ROOM_REALTIME_DB).child(roomResponse.key).setValue(roomResponse.value).addOnSuccessListener {
             StartRoomActivity.newInstance(context, roomResponse)
         }.addOnFailureListener {
             exception.value = it
