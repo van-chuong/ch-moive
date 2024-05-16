@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.chmovie.data.models.Cast
 import com.example.chmovie.data.models.MovieProvider
+import com.example.chmovie.data.models.filterPersonsWithProfilePath
 import com.example.chmovie.data.repositories.ProviderRepository
 import com.example.chmovie.shared.base.BaseViewModel
 
@@ -26,10 +27,7 @@ class ExploreViewModel(private val providerRepository: ProviderRepository) : Bas
     fun loadPopularPerson() {
         launchTaskSync(
             onRequest = { providerRepository.getPopularPerson() },
-            onSuccess = { response ->
-                val filteredList = response.results.filter { it.profilePath != null && it.profilePath.isNotEmpty() }
-                _popularPerson.value = filteredList.toMutableList()
-            },
+            onSuccess = { _popularPerson.value = it.results.filterPersonsWithProfilePath() },
             onError = { exception.value = it }
         )
     }

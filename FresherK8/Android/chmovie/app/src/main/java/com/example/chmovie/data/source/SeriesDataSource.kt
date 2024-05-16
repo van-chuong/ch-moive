@@ -1,8 +1,6 @@
 package com.example.chmovie.data.source
 
 import com.example.chmovie.data.models.Media
-import com.example.chmovie.data.models.MovieDetail
-import com.example.chmovie.data.models.MoviesResponse
 import com.example.chmovie.data.models.Series
 import com.example.chmovie.data.models.SeriesResponse
 import okhttp3.ResponseBody
@@ -10,8 +8,7 @@ import retrofit2.Response
 
 interface SeriesDataSource {
 
-    interface Local {
-    }
+    interface Local
 
     interface Remote {
 

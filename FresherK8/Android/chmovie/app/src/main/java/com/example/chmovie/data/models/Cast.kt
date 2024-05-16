@@ -37,3 +37,7 @@ data class CastsResponse(
     val results: List<Cast>,
 ) : Parcelable
 
+fun List<Cast>.filterPersonsWithProfilePath(): MutableList<Cast> {
+    return this.filter { it.profilePath != null && it.profilePath.isNotEmpty() }.toMutableList()
+}
+

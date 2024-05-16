@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chmovie.data.models.Favorite
 import com.example.chmovie.databinding.FragmentMyFavoriteListBinding
+import com.example.chmovie.presentation.main.MainActivity
 import com.example.chmovie.presentation.my_favorite_list.adapter.FavoriteAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -65,6 +66,14 @@ class MyFavoriteListFragment : Fragment() {
     }
 
     private fun registerLiveData() = with(viewModel) {
+        isLoading.observe(viewLifecycleOwner) {
+            if (it) {
+                (activity as MainActivity).showLoading()
+            } else {
+                (activity as MainActivity).hideLoading(isSuccess.value == false)
+            }
+        }
+
         favoriteList.observe(viewLifecycleOwner) {
             if (it.size > 0) {
                 with(binding) {
@@ -77,6 +86,7 @@ class MyFavoriteListFragment : Fragment() {
                     txtEmpty.visibility = View.VISIBLE
                 }
             }
+
             favoriteAdapter.submitList(it)
         }
     }

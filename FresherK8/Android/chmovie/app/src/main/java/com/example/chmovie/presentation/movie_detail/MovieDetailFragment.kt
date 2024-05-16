@@ -1,7 +1,5 @@
 package com.example.chmovie.presentation.movie_detail
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,12 +12,15 @@ import com.example.chmovie.data.models.Cast
 import com.example.chmovie.data.models.Favorite
 import com.example.chmovie.data.models.Media
 import com.example.chmovie.data.models.MovieDetail
+import com.example.chmovie.data.models.filterMoviesWithPosterPath
+import com.example.chmovie.data.models.filterPersonsWithProfilePath
 import com.example.chmovie.databinding.FragmentMovieDetailBinding
 import com.example.chmovie.presentation.movie_detail.adapter.CastsAdapter
 import com.example.chmovie.presentation.movie_detail.adapter.SimilarMoviesAdapter
-import com.example.chmovie.presentation.watch_video.WatchVideoActivity
 import com.example.chmovie.presentation.watch_video.WatchVideoActivity.Companion.navigateToWatchVideo
 import com.example.chmovie.shared.scheduler.DataResult
+import com.example.chmovie.shared.widget.dialogManager.DialogManagerImpl
+import com.example.chmovie.shared.widget.dialogManager.hideLoadingWithDelay
 import com.example.chmovie.shared.widget.showFailedSnackbar
 import com.example.chmovie.shared.widget.showSuccessSnackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -36,7 +37,12 @@ class MovieDetailFragment : Fragment() {
     private var similarMoviesAdapter: SimilarMoviesAdapter = SimilarMoviesAdapter(::onClickItem)
     private var castsAdapter: CastsAdapter = CastsAdapter(::onClickItem)
 
+    private var videoKey: String? = null
     private var isFavorite = false
+
+    private val dialogManager by lazy {
+        DialogManagerImpl(context)
+    }
 
     private fun onClickItem(item: Any) {
         when (item) {
@@ -54,13 +60,15 @@ class MovieDetailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        getData()
+        loadData()
         _binding = FragmentMovieDetailBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getData()
+
         setUpView()
         registerLiveData()
         handleEvent()
@@ -74,26 +82,31 @@ class MovieDetailFragment : Fragment() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = this@MovieDetailFragment.viewLifecycleOwner
         bindView()
-        loadData()
     }
 
     private fun handleEvent() {
         binding.btnBack.setOnClickListener {
             findNavController().navigateUp()
         }
+
         binding.btnPlay.setOnClickListener {
-            val videoKey = viewModel.getVideoKey(viewModel.movieDetail.value?.videos?.results)
             if (videoKey.isNullOrEmpty()) {
                 requireView().showFailedSnackbar("Something went wrong try again later")
             } else {
-                navigateToWatchVideo(requireActivity(), videoKey)
+                navigateToWatchVideo(requireActivity(), videoKey!!)
             }
         }
+
         binding.btnFavorite.setOnClickListener {
             handleFavorite()
         }
+
         binding.btnAddWatchList.setOnClickListener {
             viewModel.watchList(Media.of(viewModel.movieDetail.value))
+        }
+
+        binding.btnStarRoom.setOnClickListener {
+            videoKey?.let { it1 -> viewModel.checkRoomCodeExist(it1, requireContext()) }
         }
     }
 
@@ -107,16 +120,31 @@ class MovieDetailFragment : Fragment() {
     }
 
     private fun registerLiveData() = with(viewModel) {
-        movieDetail.observe(viewLifecycleOwner) {
-            castsAdapter.submitList(it.casts.casts.toMutableList())
-            similarMoviesAdapter.submitList(it.similar.results.toMutableList())
+        isLoading.observe(viewLifecycleOwner) {
+            if (it)
+                dialogManager.showLoading()
+            else {
+                dialogManager.hideLoadingWithDelay()
+
+                if (isSuccess.value == false) {
+                    binding.root.showFailedSnackbar("Lost network connection, failed data download")
+                }
+            }
         }
+
+        movieDetail.observe(viewLifecycleOwner) {
+            videoKey = viewModel.getVideoKey(it.videos.results)
+            castsAdapter.submitList(it.casts.casts.filterPersonsWithProfilePath())
+            similarMoviesAdapter.submitList(it.similar.results.filterMoviesWithPosterPath())
+        }
+
         favoriteMovies.observe(viewLifecycleOwner) { favoriteMovies ->
             isFavorite = favoriteMovies.firstOrNull { it.id == args.movieId }?.let {
                 binding.btnFavorite.setImageResource(R.drawable.baseline_favorite_24)
                 true
             } ?: false
         }
+
         editWatchListResult.observe(viewLifecycleOwner) {
             when (it) {
                 is DataResult.Success -> {
@@ -151,6 +179,7 @@ class MovieDetailFragment : Fragment() {
                     requireView().showSuccessSnackbar("Successfully added to favorites list")
                 }
             }
+
             binding.btnFavorite.setImageResource(if (isFavorite) R.drawable.baseline_favorite_border_24 else R.drawable.baseline_favorite_24)
             isFavorite = !isFavorite
         }

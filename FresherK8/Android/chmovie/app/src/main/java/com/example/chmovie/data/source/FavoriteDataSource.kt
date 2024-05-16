@@ -13,6 +13,5 @@ interface FavoriteDataSource {
         suspend fun deleteFavoriteMovie(favorite: Favorite): Any
     }
 
-    interface Remote {
-    }
+    interface Remote
 }

@@ -13,18 +13,23 @@ import com.example.chmovie.data.repositories.SeriesRepositoryImpl
 import org.koin.dsl.module
 
 val repositoryModule = module {
+
     single<MovieRepository> {
         MovieRepositoryImpl(get())
     }
+
     single<AuthRepository> {
         AuthRepositoryImpl(get())
     }
+
     single<FavoriteRepository> {
         FavoriteRepositoryImpl(get())
     }
+
     single<SeriesRepository> {
         SeriesRepositoryImpl(get())
     }
+
     single<ProviderRepository> {
         ProviderRepositoryImpl(get())
     }

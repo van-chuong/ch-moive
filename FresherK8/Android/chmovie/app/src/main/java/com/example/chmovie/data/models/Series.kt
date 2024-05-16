@@ -60,3 +60,7 @@ data class SeriesResponse(
     @SerializedName("cast")
     val cast: List<Series>,
 ) : Parcelable
+
+fun List<Series>.filterSeriesWithPosterPath(): MutableList<Series> {
+    return this.filter { it.posterPath != null && it.posterPath.isNotEmpty() }.toMutableList()
+}

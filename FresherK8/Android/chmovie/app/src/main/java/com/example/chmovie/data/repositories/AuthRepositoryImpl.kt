@@ -4,12 +4,10 @@ import com.example.chmovie.data.models.ErrorResponse
 import com.example.chmovie.data.models.RequestToken
 import com.example.chmovie.data.models.toErrorResponse
 import com.example.chmovie.data.source.AuthDataSource
-import com.example.chmovie.data.source.MovieDataSource
-import com.example.chmovie.data.source.remote.api.MovieApiClient
 import com.example.chmovie.shared.scheduler.DataResult
 import org.json.JSONObject
 
-class AuthRepositoryImpl(private val authDataSource: AuthDataSource.Remote):AuthRepository {
+class AuthRepositoryImpl(private val authDataSource: AuthDataSource.Remote) : AuthRepository {
     override suspend fun getRequestToken(): DataResult<RequestToken> {
         return try {
             val response = authDataSource.getRequestToken()
@@ -34,7 +32,7 @@ class AuthRepositoryImpl(private val authDataSource: AuthDataSource.Remote):Auth
         requestToken: RequestToken
     ): DataResult<RequestToken> {
         return try {
-            val response = authDataSource.validateWithLogin(username,password,requestToken)
+            val response = authDataSource.validateWithLogin(username, password, requestToken)
             if (response.isSuccessful) {
                 if (response.body() != null) {
                     DataResult.Success(response.body()!!)

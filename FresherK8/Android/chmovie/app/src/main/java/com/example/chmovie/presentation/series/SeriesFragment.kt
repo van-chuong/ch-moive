@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.chmovie.data.models.Series
 import com.example.chmovie.databinding.FragmentSeriesBinding
-import com.example.chmovie.presentation.movie.MovieFragmentDirections
+import com.example.chmovie.presentation.main.MainActivity
 import com.example.chmovie.presentation.series.adapter.AirTodaySeriesAdapter
 import com.example.chmovie.presentation.series.adapter.OnTheAirSeriesAdapter
 import com.example.chmovie.presentation.series.adapter.TopRatedSeriesAdapter
@@ -65,15 +65,26 @@ class SeriesFragment : Fragment() {
     }
 
     private fun registerLiveData() = with(viewModel) {
+        isLoading.observe(viewLifecycleOwner) {
+            if (it) {
+                (activity as MainActivity).showLoading()
+            } else {
+                (activity as MainActivity).hideLoading(isSuccess.value == false)
+            }
+        }
+
         trendingSeries.observe(viewLifecycleOwner) {
             trendingAdapter.submitList(it)
         }
+
         topRatedSeries.observe(viewLifecycleOwner) {
             topRatedAdapter.submitList(it)
         }
+
         airTodaySeries.observe(viewLifecycleOwner) {
             airTodayAdapter.submitList(it)
         }
+
         onTheAirSeries.observe(viewLifecycleOwner) {
             onTheAirAdapter.submitList(it)
         }

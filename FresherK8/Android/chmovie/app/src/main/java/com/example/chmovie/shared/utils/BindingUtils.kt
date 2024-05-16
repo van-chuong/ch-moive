@@ -1,6 +1,5 @@
 package com.example.chmovie.shared.utils
 
-import android.util.Log
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.example.chmovie.shared.extension.loadImageWithUrl

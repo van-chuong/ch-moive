@@ -1,12 +1,10 @@
 package com.example.chmovie.data.repositories
 
-import android.util.Log
 import com.example.chmovie.data.models.Favorite
 import com.example.chmovie.data.source.FavoriteDataSource
-import com.example.chmovie.data.source.local.FavoriteDao
 import com.example.chmovie.shared.scheduler.DataResult
 
-class FavoriteRepositoryImpl(private val favoriteDataSource: FavoriteDataSource.Local):FavoriteRepository {
+class FavoriteRepositoryImpl(private val favoriteDataSource: FavoriteDataSource.Local) : FavoriteRepository {
 
     override suspend fun getFavoriteMovies(): DataResult<MutableList<Favorite>> {
         return try {

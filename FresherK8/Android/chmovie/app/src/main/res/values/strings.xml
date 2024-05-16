@@ -62,5 +62,14 @@
     <string name="start_seaching">Start Seaching</string>
     <string name="search_des">Search all of CH Movie for Movies, Series, ...</string>
     <string name="no_results">No Results</string>
-    <string name="for_results">For %s</string>
+    <string name="for_results">For \'%s\'</string>
+    <string name="enter_room_code">Enter room code</string>
+    <string name="enjoy_movies_together_with_your_friends">Enjoy Movies Together with Your Friends</string>
+    <string name="gather_your_friends_for_an_unforgettable_movie_experience">Gather your friends for an unforgettable movie experience!</string>
+    <string name="members">Members: &#160;</string>
+    <string name="enter_your_message">Enter your message</string>
+    <string name="room_code">Room code: %1$s</string>
+    <string name="chat_channel">Chat channel</string>
+    <string name="network_error_please_try_again_later">Network error. Please try again later !</string>
+    <string name="signup">Signup</string>
 </resources>

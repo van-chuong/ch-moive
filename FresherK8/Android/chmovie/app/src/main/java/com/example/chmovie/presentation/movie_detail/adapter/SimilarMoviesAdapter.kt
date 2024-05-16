@@ -10,9 +10,10 @@ import com.example.chmovie.data.models.MovieDetail
 import com.example.chmovie.databinding.ItemCommonHomeBinding
 import com.example.chmovie.shared.utils.CustomDiffCallBack
 
-class SimilarMoviesAdapter(private var listener: ((MovieDetail) -> Unit)) : ListAdapter<MovieDetail, SimilarMoviesAdapter.SimilarViewHolder>(
-    CustomDiffCallBack()
-) {
+class SimilarMoviesAdapter(private var listener: ((MovieDetail) -> Unit)) :
+    ListAdapter<MovieDetail, SimilarMoviesAdapter.SimilarViewHolder>(
+        CustomDiffCallBack()
+    ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SimilarViewHolder {
         val binding = DataBindingUtil.inflate<ItemCommonHomeBinding>(
             LayoutInflater.from(parent.context),

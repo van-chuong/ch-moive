@@ -3,6 +3,7 @@ package com.example.chmovie.presentation.series
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.chmovie.data.models.Series
+import com.example.chmovie.data.models.filterSeriesWithPosterPath
 import com.example.chmovie.data.repositories.SeriesRepository
 import com.example.chmovie.shared.base.BaseViewModel
 
@@ -23,7 +24,7 @@ class SeriesViewModel(private val seriesRepository: SeriesRepository) : BaseView
     fun loadTrendingSeries(page: Int) {
         launchTaskSync(
             onRequest = { seriesRepository.getPopularSeries(page) },
-            onSuccess = { _trendingSeries.value = it.results.toMutableList() },
+            onSuccess = { _trendingSeries.value = it.results.filterSeriesWithPosterPath() },
             onError = { exception.value = it }
         )
     }
@@ -31,7 +32,7 @@ class SeriesViewModel(private val seriesRepository: SeriesRepository) : BaseView
     fun loadAirTodaySeries(page: Int) {
         launchTaskSync(
             onRequest = { seriesRepository.getAirTodaySeries(page) },
-            onSuccess = { _airTodaySeries.value = it.results.toMutableList() },
+            onSuccess = { _airTodaySeries.value = it.results.filterSeriesWithPosterPath() },
             onError = { exception.value = it }
         )
     }
@@ -39,7 +40,7 @@ class SeriesViewModel(private val seriesRepository: SeriesRepository) : BaseView
     fun loadTopRatedSeries(page: Int) {
         launchTaskSync(
             onRequest = { seriesRepository.getTopRatedSeries(page) },
-            onSuccess = { _topRatedSeries.value = it.results.toMutableList() },
+            onSuccess = { _topRatedSeries.value = it.results.filterSeriesWithPosterPath() },
             onError = { exception.value = it }
         )
     }
@@ -47,7 +48,7 @@ class SeriesViewModel(private val seriesRepository: SeriesRepository) : BaseView
     fun loadOnTheAirSeries(page: Int) {
         launchTaskSync(
             onRequest = { seriesRepository.getOnTheAirSeries(page) },
-            onSuccess = { _onTheAirSeries.value = it.results.toMutableList() },
+            onSuccess = { _onTheAirSeries.value = it.results.filterSeriesWithPosterPath() },
             onError = { exception.value = it }
         )
     }

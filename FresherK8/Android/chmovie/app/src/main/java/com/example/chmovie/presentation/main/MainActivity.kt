@@ -2,11 +2,15 @@ package com.example.chmovie.presentation.main
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.GravityCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
@@ -14,6 +18,8 @@ import com.example.chmovie.R
 import com.example.chmovie.data.source.local.PrefManager
 import com.example.chmovie.databinding.ActivityMainBinding
 import com.example.chmovie.shared.constant.Constant
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -31,8 +37,6 @@ class MainActivity : AppCompatActivity() {
         ).setOpenableLayout(binding.drawerLayout).build()
     }
 
-    companion object {
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -112,5 +116,46 @@ class MainActivity : AppCompatActivity() {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
             return@setNavigationItemSelectedListener true
         }
+    }
+
+    fun showLoading() {
+        binding.loadingLayout.visibility = View.VISIBLE
+    }
+
+    fun hideLoading(isError: Boolean) {
+        if (isError) {
+            binding.errorLayout.visibility = View.VISIBLE
+        } else {
+            binding.errorLayout.visibility = View.GONE
+            binding.include.root.visibility = View.VISIBLE
+        }
+
+        lifecycleScope.launch {
+            delay(500)
+            binding.loadingLayout.visibility = View.GONE
+        }
+    }
+
+    @SuppressWarnings("ComplexCondition")
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+        val v = currentFocus
+        if (v is EditText) {
+            val scoops = IntArray(2)
+            v.getLocationOnScreen(scoops)
+            val x = event.rawX + v.getLeft() - scoops[0]
+            val y = event.rawY + v.getTop() - scoops[1]
+            if (event.action == MotionEvent.ACTION_UP &&
+                (x < v.getLeft() || x >= v.getRight() || y < v.getTop() || y > v.getBottom())
+            ) {
+                v.clearFocus()
+                hideSoftKeyboard(v)
+            }
+        }
+        return super.dispatchTouchEvent(event)
+    }
+
+    private fun hideSoftKeyboard(view: View) {
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }

@@ -16,6 +16,7 @@ import com.example.chmovie.R
 import com.example.chmovie.data.models.MovieDetail
 import com.example.chmovie.data.models.Series
 import com.example.chmovie.databinding.FragmentSearchBinding
+import com.example.chmovie.presentation.main.MainActivity
 import com.example.chmovie.presentation.movie.adapter.PopularMoviesAdapter
 import com.example.chmovie.presentation.series.adapter.OnTheAirSeriesAdapter
 import kotlinx.coroutines.Job
@@ -78,6 +79,10 @@ class SearchFragment : Fragment() {
     }
 
     private fun registerLiveData() = with(viewModel) {
+        isLoading.observe(viewLifecycleOwner) {
+            (activity as MainActivity).hideLoading(false)
+        }
+
         movies.observe(viewLifecycleOwner) {
             checkExistResults()
             moviesAdapter.submitList(it)
