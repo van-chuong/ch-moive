@@ -25,7 +25,6 @@ abstract class BaseViewModel : ViewModel() {
         isLoading.postValue(true)
         when (val result = onRequest()) {
             is DataResult.Success -> {
-                isLoading.postValue(false)
                 isSuccess.postValue(true)
                 onSuccess(result.data)
             }

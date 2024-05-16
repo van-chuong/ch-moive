@@ -40,9 +40,9 @@ class StartRoomViewModel(val realTimeDbRepository: DatabaseReference, private va
 
     fun getRoom(intent: Intent) {
         _room.value = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getParcelableExtra(StartRoomActivity.EXTRA_ROOM_RESPONSE, RoomResponse::class.java)!!
+            intent.getParcelableExtra(StartRoomActivity.EXTRA_ROOM_RESPONSE, RoomResponse::class.java)
         } else {
-            intent.getParcelableExtra(StartRoomActivity.EXTRA_ROOM_RESPONSE)!!
+            intent.getParcelableExtra(StartRoomActivity.EXTRA_ROOM_RESPONSE)
         }
     }
 
