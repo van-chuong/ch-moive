@@ -43,7 +43,7 @@
     <string name="overview">Overview</string>
     <string name="add_rating">Add Rating</string>
     <string name="add_watch_list">Add Watch List</string>
-    <string name="star_room">Star Room</string>
+    <string name="star_room">Start Room</string>
     <string name="actors">Actors</string>
     <string name="on_the_air">On the Air</string>
     <string name="airing_today">Airing Today</string>
@@ -72,4 +72,6 @@
     <string name="chat_channel">Chat channel</string>
     <string name="network_error_please_try_again_later">Network error. Please try again later !</string>
     <string name="signup">Signup</string>
+    <string name="recommend_today">Recommend Today</string>
+    <string name="series_for_you">Series For You</string>
 </resources>
