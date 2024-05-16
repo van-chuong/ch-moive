@@ -14,9 +14,10 @@ import com.example.chmovie.data.models.Video
 import com.example.chmovie.data.repositories.FavoriteRepository
 import com.example.chmovie.data.repositories.MovieRepository
 import com.example.chmovie.data.source.local.PrefManager
+import com.example.chmovie.data.source.remote.firebase.FirebaseManager.recommendRef
+import com.example.chmovie.data.source.remote.firebase.FirebaseManager.roomRef
 import com.example.chmovie.presentation.room.start_room.StartRoomActivity
 import com.example.chmovie.shared.base.BaseViewModel
-import com.example.chmovie.shared.constant.Constant.ROOM_REALTIME_DB
 import com.example.chmovie.shared.constant.Constant.SESSION_KEY
 import com.example.chmovie.shared.constant.Constant.USERNAME_KEY
 import com.example.chmovie.shared.extension.next5DigitId
@@ -25,7 +26,6 @@ import com.example.chmovie.shared.scheduler.DataResult
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.text.NumberFormat
@@ -52,9 +52,6 @@ class MovieDetailViewModel(
 
     private val _editWatchListResult = MutableLiveData<DataResult<String>>()
     val editWatchListResult: LiveData<DataResult<String>> = _editWatchListResult
-
-    private val roomRef = realTimeDbRepository.child(ROOM_REALTIME_DB)
-    private val recommendRef = realTimeDbRepository.child(RECOMMEND_REALTIME_DB)
 
     fun setMovieId(data: Int?) {
         _movieId.value = data
