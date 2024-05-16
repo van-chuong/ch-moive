@@ -16,6 +16,7 @@ import com.example.chmovie.presentation.series.adapter.TrendingSeriesAdapter
 import com.example.chmovie.shared.widget.dialogManager.DialogManagerImpl
 import com.example.chmovie.shared.widget.dialogManager.hideLoadingWithDelay
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlin.random.Random
 
 class SeriesFragment : Fragment() {
 
@@ -50,10 +51,10 @@ class SeriesFragment : Fragment() {
 
     private fun loadData() {
         with(viewModel) {
-            loadAirTodaySeries(1)
-            loadTrendingSeries(1)
-            loadOnTheAirSeries(1)
-            loadTopRatedSeries(1)
+            loadAirTodaySeries(Random.nextInt(1,3))
+            loadTrendingSeries(Random.nextInt(1,3))
+            loadOnTheAirSeries(Random.nextInt(1,3))
+            loadTopRatedSeries(Random.nextInt(1,3))
         }
     }
 

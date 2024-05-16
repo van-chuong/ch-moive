@@ -14,6 +14,7 @@ import com.example.chmovie.presentation.movie.adapter.InTheaterMoviesAdapter
 import com.example.chmovie.presentation.movie.adapter.PopularMoviesAdapter
 import com.example.chmovie.presentation.movie.adapter.TrendingMoviesAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlin.random.Random
 
 class MovieFragment : Fragment() {
 
@@ -48,10 +49,10 @@ class MovieFragment : Fragment() {
 
     private fun loadData() {
         with(viewModel) {
-            loadTrendingMovies(1)
-            loadPopularMovies(1)
-            loadInTheaterMovies(1)
-            loadComingSoonMovies(1)
+            loadTrendingMovies(Random.nextInt(1,3))
+            loadPopularMovies(Random.nextInt(1,3))
+            loadInTheaterMovies(Random.nextInt(1,3))
+            loadComingSoonMovies(Random.nextInt(1,3))
         }
     }
 
