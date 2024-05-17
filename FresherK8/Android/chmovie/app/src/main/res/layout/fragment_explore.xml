@@ -4,10 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.example.chmovie.presentation.explore.ExploreViewModel" />
     </data>
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -15,9 +17,11 @@
         android:layout_marginBottom="?attr/actionBarSize"
         android:background="@color/background_primary"
         tools:context=".presentation.explore.ExploreFragment">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <TextView
                 android:id="@+id/textView3"
                 style="@style/Text_Heading"
@@ -41,6 +45,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvFeaturedProvider"
                 style="@style/App_RecyclerView_Horizontal"
@@ -51,31 +56,107 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView2"
                 tools:listitem="@layout/item_provider" />
 
-            <TextView
-                android:id="@+id/textView4"
-                style="@style/Text_Heading2"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/recommend_movie_layout"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:paddingHorizontal="20dp"
-                android:text="@string/popular_person"
-                android:textColor="@color/tint_secondary"
-                android:textStyle="normal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rvFeaturedProvider" />
+                app:layout_constraintTop_toBottomOf="@+id/rvFeaturedProvider">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvPopularPerson"
+                <TextView
+                    android:id="@+id/textView4"
+                    style="@style/Text_Heading2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="20dp"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/recommend_today"
+                    android:textColor="@color/tint_secondary"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvRecommendMovies"
+                    style="@style/App_RecyclerView_Horizontal"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView4"
+                    tools:listitem="@layout/item_common_home" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/recommend_series_layout"
+                android:visibility="gone"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/recommend_movie_layout">
+
+                <TextView
+                    android:id="@+id/textView5"
+                    style="@style/Text_Heading2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="20dp"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/series_for_you"
+                    android:textColor="@color/tint_secondary"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvRecommendSeries"
+                    style="@style/App_RecyclerView_Horizontal"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView5"
+                    tools:listitem="@layout/item_common_home" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView4"
-                app:spanCount="2"
-                tools:listitem="@layout/item_person_grid" />
+                app:layout_constraintTop_toBottomOf="@+id/recommend_series_layout">
+
+                <TextView
+                    android:id="@+id/textView6"
+                    style="@style/Text_Heading2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:paddingHorizontal="20dp"
+                    android:text="@string/popular_person"
+                    android:textColor="@color/tint_secondary"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvPopularPerson"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView6"
+                    app:spanCount="2"
+                    tools:listitem="@layout/item_person_grid" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 

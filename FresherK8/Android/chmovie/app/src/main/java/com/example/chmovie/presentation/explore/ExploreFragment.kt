@@ -7,12 +7,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.chmovie.data.models.Cast
-import com.example.chmovie.data.models.MovieProvider
+import com.example.chmovie.data.models.MovieDetail
+import com.example.chmovie.data.models.Series
 import com.example.chmovie.databinding.FragmentExploreBinding
 import com.example.chmovie.presentation.explore.adapter.PopularPersonAdapter
 import com.example.chmovie.presentation.explore.adapter.PopularProviderAdapter
 import com.example.chmovie.presentation.main.MainActivity
-import com.example.chmovie.shared.widget.dialogManager.DialogManagerImpl
+import com.example.chmovie.presentation.movie.adapter.PopularMoviesAdapter
+import com.example.chmovie.presentation.series.adapter.TopRatedSeriesAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ExploreFragment : Fragment() {
@@ -24,14 +26,17 @@ class ExploreFragment : Fragment() {
 
     private var featuredAdapter: PopularProviderAdapter = PopularProviderAdapter(::onClickItem)
     private var popularPersonAdapter: PopularPersonAdapter = PopularPersonAdapter(::onClickItem)
-
-    private val dialogManager by lazy {
-        DialogManagerImpl(context)
-    }
+    private var seriesAdapter: TopRatedSeriesAdapter = TopRatedSeriesAdapter(::onClickItem)
+    private var moviesAdapter: PopularMoviesAdapter = PopularMoviesAdapter(::onClickItem)
 
     private fun onClickItem(item: Any) {
         when (item) {
-            is MovieProvider -> {
+            is MovieDetail -> {
+                findNavController().navigate(ExploreFragmentDirections.actionNavExploreToNavMovieDetail(item.id))
+            }
+
+            is Series -> {
+                findNavController().navigate(ExploreFragmentDirections.actionNavExploreToNavSeriesDetail(item.id))
             }
 
             is Cast -> {
@@ -59,6 +64,8 @@ class ExploreFragment : Fragment() {
         with(viewModel) {
             loadPopularProvider()
             loadPopularPerson()
+            loadRecommendMovies()
+            loadRecommendSeries()
         }
     }
 
@@ -66,6 +73,8 @@ class ExploreFragment : Fragment() {
         with(binding) {
             rvFeaturedProvider.adapter = featuredAdapter
             rvPopularPerson.adapter = popularPersonAdapter
+            rvRecommendMovies.adapter = moviesAdapter
+            rvRecommendSeries.adapter = seriesAdapter
         }
     }
 
@@ -81,9 +90,29 @@ class ExploreFragment : Fragment() {
         popularProvider.observe(viewLifecycleOwner) {
             featuredAdapter.submitList(it)
         }
+
         popularPerson.observe(viewLifecycleOwner) {
             popularPersonAdapter.submitList(it)
         }
+
+        recommendMovies.observe(viewLifecycleOwner) {
+            if (it.size > 0) {
+                moviesAdapter.submitList(it)
+                binding.recommendMovieLayout.visibility = View.VISIBLE
+            } else {
+                binding.recommendMovieLayout.visibility = View.GONE
+            }
+        }
+
+        recommendSeries.observe(viewLifecycleOwner) {
+            if (it.size > 0) {
+                seriesAdapter.submitList(it)
+                binding.recommendSeriesLayout.visibility = View.VISIBLE
+            } else {
+                binding.recommendSeriesLayout.visibility = View.GONE
+            }
+        }
+
     }
 
     override fun onDestroyView() {

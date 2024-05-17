@@ -90,6 +90,7 @@ class StartRoomViewModel(private val prefManager: PrefManager) : BaseViewModel()
 
     fun handleOutRoom(roomCode: String) {
         usersRef.child(roomCode).child(username.toString()).removeValue()
+        chatRef.child(roomCode).child(username.toString()).removeValue()
     }
 
     fun addMember(roomCode: String) {

@@ -26,7 +26,7 @@ data class Series(
     val overview: String,
     @SerializedName("popularity")
     val popularity: Double,
-    @SerializedName("poster_path")
+    @SerializedName("poster_path", alternate = ["posterPath"])
     val posterPath: String,
     @SerializedName("production_companies")
     val productionCompanies: List<ProductionCompany>,
@@ -63,4 +63,10 @@ data class SeriesResponse(
 
 fun List<Series>.filterSeriesWithPosterPath(): MutableList<Series> {
     return this.filter { it.posterPath != null && it.posterPath.isNotEmpty() }.toMutableList()
+}
+
+fun List<Series>.randomSubList(size: Int): List<Series> {
+    val subsetSize = size.coerceAtMost(this.size)
+    val shuffledList = this.shuffled()
+    return shuffledList.take(subsetSize)
 }

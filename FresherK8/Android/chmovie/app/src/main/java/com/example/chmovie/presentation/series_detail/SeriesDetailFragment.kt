@@ -12,8 +12,10 @@ import com.example.chmovie.data.models.Cast
 import com.example.chmovie.data.models.Favorite
 import com.example.chmovie.data.models.Media
 import com.example.chmovie.data.models.Series
+import com.example.chmovie.data.models.filterMoviesWithPosterPath
 import com.example.chmovie.data.models.filterPersonsWithProfilePath
 import com.example.chmovie.data.models.filterSeriesWithPosterPath
+import com.example.chmovie.data.models.randomSubList
 import com.example.chmovie.databinding.FragmentSeriesDetailBinding
 import com.example.chmovie.presentation.movie_detail.MovieDetailViewModel
 import com.example.chmovie.presentation.movie_detail.adapter.CastsAdapter
@@ -153,6 +155,7 @@ class SeriesDetailFragment : Fragment() {
                 requireView().showFailedSnackbar("Something went wrong try again later")
             } else {
                 navigateToWatchVideo(requireActivity(), videoKey!!)
+                viewModel.seriesDetail.value?.similar?.results?.let { it1 -> viewModel.saveRecommendSeries(it1.filterSeriesWithPosterPath().toList().randomSubList(2)) }
             }
         }
 

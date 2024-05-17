@@ -35,7 +35,7 @@ data class MovieDetail(
     @SerializedName("popularity")
     @Expose
     val popularity: Double = 0.0,
-    @SerializedName("poster_path")
+    @SerializedName("poster_path", alternate = ["posterPath"])
     @Expose
     val posterPath: String = "",
     @SerializedName("production_companies")
@@ -98,4 +98,10 @@ data class MoviesResponse(
 
 fun List<MovieDetail>.filterMoviesWithPosterPath(): MutableList<MovieDetail> {
     return this.filter { it.posterPath != null && it.posterPath.isNotEmpty() }.toMutableList()
+}
+
+fun List<MovieDetail>.randomSubList(size: Int): List<MovieDetail> {
+    val subsetSize = size.coerceAtMost(this.size)
+    val shuffledList = this.shuffled()
+    return shuffledList.take(subsetSize)
 }

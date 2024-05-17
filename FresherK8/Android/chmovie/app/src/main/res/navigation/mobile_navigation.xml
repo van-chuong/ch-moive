@@ -34,6 +34,12 @@
         <action
             android:id="@+id/action_nav_explore_to_nav_person_detail"
             app:destination="@id/nav_person_detail" />
+        <action
+            android:id="@+id/action_nav_explore_to_nav_series_detail"
+            app:destination="@id/nav_series_detail" />
+        <action
+            android:id="@+id/action_nav_explore_to_nav_movie_detail"
+            app:destination="@id/nav_movie_detail" />
     </fragment>
 
     <fragment

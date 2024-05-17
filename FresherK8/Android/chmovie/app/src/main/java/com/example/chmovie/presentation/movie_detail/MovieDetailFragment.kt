@@ -14,6 +14,7 @@ import com.example.chmovie.data.models.Media
 import com.example.chmovie.data.models.MovieDetail
 import com.example.chmovie.data.models.filterMoviesWithPosterPath
 import com.example.chmovie.data.models.filterPersonsWithProfilePath
+import com.example.chmovie.data.models.randomSubList
 import com.example.chmovie.databinding.FragmentMovieDetailBinding
 import com.example.chmovie.presentation.movie_detail.adapter.CastsAdapter
 import com.example.chmovie.presentation.movie_detail.adapter.SimilarMoviesAdapter
@@ -94,6 +95,7 @@ class MovieDetailFragment : Fragment() {
                 requireView().showFailedSnackbar("Something went wrong try again later")
             } else {
                 navigateToWatchVideo(requireActivity(), videoKey!!)
+                viewModel.movieDetail.value?.similar?.results?.let { it1 -> viewModel.saveRecommendMovie(it1.filterMoviesWithPosterPath().toList().randomSubList(2)) }
             }
         }
 
