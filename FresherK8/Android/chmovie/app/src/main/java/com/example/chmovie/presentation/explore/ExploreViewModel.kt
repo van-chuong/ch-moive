@@ -35,7 +35,7 @@ class ExploreViewModel(
     private val accountId = prefManager.getString(Constant.USERNAME_KEY, "")
 
     private val moviesRef = recommendRef.child(accountId.toString()).child("movies")
-    private val seriesRef = recommendRef.child(Constant.RECOMMEND_REALTIME_DB).child(accountId.toString()).child("series")
+    private val seriesRef = recommendRef.child(accountId.toString()).child("series")
 
 
     fun loadPopularProvider() {

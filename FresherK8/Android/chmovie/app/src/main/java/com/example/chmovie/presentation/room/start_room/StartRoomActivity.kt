@@ -44,7 +44,7 @@ class StartRoomActivity : BaseActivity<ActivityStartRoomBinding, StartRoomViewMo
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        handleEvent(viewBinding.root)
+        handleEvent()
     }
 
     override fun inflateViewBinding(inflater: LayoutInflater) = ActivityStartRoomBinding.inflate(inflater)
@@ -141,8 +141,7 @@ class StartRoomActivity : BaseActivity<ActivityStartRoomBinding, StartRoomViewMo
         }
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    private fun handleEvent(view: View) {
+    private fun handleEvent() {
         onBackPressedDispatcher.addCallback(onBackPressedCallback)
 
         viewBinding.btnSendMessage.setOnClickListener {
@@ -151,7 +150,6 @@ class StartRoomActivity : BaseActivity<ActivityStartRoomBinding, StartRoomViewMo
             if (message.isEmpty()) {
                 viewBinding.root.showFailedSnackbar("The message is empty")
             } else {
-
                 viewModel.room.value?.let { it1 -> viewModel.addMessage(it1.key, message) }
             }
         }

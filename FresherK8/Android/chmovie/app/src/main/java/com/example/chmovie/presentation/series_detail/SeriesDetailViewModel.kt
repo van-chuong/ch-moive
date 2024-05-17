@@ -79,7 +79,7 @@ class SeriesDetailViewModel(
     }
 
     private fun createRoom(roomResponse: RoomResponse, context: Context) {
-        roomRef.child(Constant.ROOM_REALTIME_DB).child(roomResponse.key).setValue(roomResponse.value).addOnSuccessListener {
+        roomRef.child(roomResponse.key).setValue(roomResponse.value).addOnSuccessListener {
             StartRoomActivity.newInstance(context, roomResponse)
         }.addOnFailureListener {
             exception.value = it
