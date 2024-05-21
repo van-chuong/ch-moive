@@ -28,7 +28,6 @@ class RouteFragment : Fragment() {
     }
 
     private fun navigateBasedOnArgs() {
-        Log.d("DOADAKOSDKASD",args.type.toString())
         with(findNavController()) {
             when {
                 args.id == 0 -> navigate(RouteFragmentDirections.actionNavRouteToNavMovies())
