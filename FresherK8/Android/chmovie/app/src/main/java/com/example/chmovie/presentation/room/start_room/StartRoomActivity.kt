@@ -17,6 +17,7 @@ import com.example.chmovie.databinding.ActivityStartRoomBinding
 import com.example.chmovie.presentation.room.start_room.adapter.MessageAdapter
 import com.example.chmovie.presentation.room.start_room.controllers.CustomRoomPlayerUiController
 import com.example.chmovie.shared.base.BaseActivity
+import com.example.chmovie.shared.constant.Constant.DEEPLINK_JOIN_ROOM_URL
 import com.example.chmovie.shared.scheduler.DataResult
 import com.example.chmovie.shared.widget.showFailedSnackbar
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
@@ -24,6 +25,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.Abs
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.loadOrCueVideo
 import org.koin.androidx.viewmodel.ext.android.viewModel
+
 
 class StartRoomActivity : BaseActivity<ActivityStartRoomBinding, StartRoomViewModel>() {
 
@@ -151,6 +153,19 @@ class StartRoomActivity : BaseActivity<ActivityStartRoomBinding, StartRoomViewMo
                 viewBinding.root.showFailedSnackbar("The message is empty")
             } else {
                 viewModel.room.value?.let { it1 -> viewModel.addMessage(it1.key, message) }
+            }
+        }
+
+        viewBinding.btnShare.setOnClickListener {
+            if (viewModel.room.value != null) {
+                val sendIntent = Intent()
+                sendIntent.setAction(Intent.ACTION_SEND)
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "${DEEPLINK_JOIN_ROOM_URL}?id=${viewModel.room.value!!.key}&type=room")
+                sendIntent.setType("text/plain")
+
+                startActivity(Intent.createChooser(sendIntent, "Share by"))
+            } else {
+                viewBinding.root.showFailedSnackbar("Unable to initialize roomroom link, please try again later")
             }
         }
     }

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.chmovie.databinding.FragmentJoinRoomBinding
 import com.example.chmovie.presentation.main.MainActivity
 import com.example.chmovie.presentation.room.start_room.StartRoomActivity
@@ -21,6 +22,7 @@ class JoinRoomFragment : Fragment() {
     private var _binding: FragmentJoinRoomBinding? = null
     private val binding get() = _binding!!
 
+    private val args: JoinRoomFragmentArgs by navArgs()
     private val viewModel: JoinRoomViewModel by viewModel()
 
     private val dialogManager by lazy {
@@ -37,8 +39,15 @@ class JoinRoomFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initView()
         handleEvent(view)
         registerLiveData()
+    }
+
+    private fun initView() {
+        if (args.roomId != 0) {
+            binding.edtRoomCode.setText(args.roomId.toString())
+        }
     }
 
     private fun registerLiveData() = with(viewModel) {
@@ -73,9 +82,13 @@ class JoinRoomFragment : Fragment() {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun handleEvent(view: View) {
-
         binding.btnBack.setOnClickListener {
-            findNavController().navigateUp()
+            if (args.isFromDeeplink) {
+                findNavController().navigate(JoinRoomFragmentDirections.actionNavJoinRoomToNavMovies())
+            } else {
+                findNavController().navigateUp()
+            }
+
         }
 
         binding.btnJoinRoom.setOnClickListener {

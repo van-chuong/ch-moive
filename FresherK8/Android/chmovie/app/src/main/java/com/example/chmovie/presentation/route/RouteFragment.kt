@@ -31,8 +31,10 @@ class RouteFragment : Fragment() {
         with(findNavController()) {
             when {
                 args.id == 0 -> navigate(RouteFragmentDirections.actionNavRouteToNavMovies())
-                args.type == Media.MOVIE -> navigate(RouteFragmentDirections.actionNavRouteToNavMovieDetail(args.id,true))
-                args.type == Media.TV -> navigate(RouteFragmentDirections.actionNavRouteToNavSeriesDetail(args.id,true))
+                args.type == Media.MOVIE -> navigate(RouteFragmentDirections.actionNavRouteToNavMovieDetail(args.id, true))
+                args.type == Media.TV -> navigate(RouteFragmentDirections.actionNavRouteToNavSeriesDetail(args.id, true))
+                args.type == "room" -> navigate(RouteFragmentDirections.actionNavRouteToNavJoinRoom(args.id, true))
+                else -> navigate(RouteFragmentDirections.actionNavRouteToNavMovies())
             }
         }
     }

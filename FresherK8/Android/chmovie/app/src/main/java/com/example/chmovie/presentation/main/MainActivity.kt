@@ -26,6 +26,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
+
 class MainActivity : AppCompatActivity() {
 
     private val binding: ActivityMainBinding by lazy {
@@ -56,6 +57,21 @@ class MainActivity : AppCompatActivity() {
         initView()
         registerLiveData()
         handleEvent()
+        handleDeepLink(intent)
+    }
+
+    private fun handleDeepLink(intent: Intent) {
+        if (Intent.ACTION_VIEW == intent.action && intent.data != null) {
+            val id = intent.data!!.getQueryParameter("id")
+            val type = intent.data!!.getQueryParameter("type")
+
+            if (id != null && type != null) {
+                val startDestinationArgs = Bundle()
+                startDestinationArgs.putInt("id", id.toInt())
+                startDestinationArgs.putString("type", type)
+                navController.setGraph(R.navigation.mobile_navigation, startDestinationArgs)
+            }
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -186,7 +202,11 @@ class MainActivity : AppCompatActivity() {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         // Handle intent data if activity receives a new intent while already running
-        intent?.let { handleIntentData(it) }
+        intent?.let {
+            handleIntentData(it)
+            handleDeepLink(it)
+        }
+
     }
 
     private fun handleIntentData(intent: Intent) {
