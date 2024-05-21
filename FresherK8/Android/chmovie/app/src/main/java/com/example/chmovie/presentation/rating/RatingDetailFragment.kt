@@ -1,12 +1,15 @@
 package com.example.chmovie.presentation.rating
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.chmovie.R
 import com.example.chmovie.databinding.FragmentRatingDetailBinding
 import com.example.chmovie.presentation.rating.adapter.RatingButtonAdapter
 import com.example.chmovie.shared.scheduler.DataResult
@@ -100,6 +103,26 @@ class RatingDetailFragment : Fragment() {
                     }
                 }
             }
+
+            edtComment.addTextChangedListener(textWatcher)
         }
+    }
+
+    private val textWatcher = object : TextWatcher {
+        override fun afterTextChanged(s: Editable?) {
+            val comment = binding.edtComment.text.toString().trim()
+
+            if (comment.isNotEmpty() && rating !=0) {
+                binding.btnSubmit.setBackgroundResource(R.drawable.button_primary_bg)
+                binding.btnSubmit.setTextColor(resources.getColor(R.color.tint_primary))
+            } else {
+                binding.btnSubmit.setBackgroundResource(R.drawable.button_bg)
+                binding.btnSubmit.setTextColor(resources.getColor(R.color.tint_secondary))
+            }
+        }
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
     }
 }
