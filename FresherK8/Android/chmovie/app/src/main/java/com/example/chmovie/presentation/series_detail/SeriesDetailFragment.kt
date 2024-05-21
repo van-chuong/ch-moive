@@ -44,6 +44,7 @@ class SeriesDetailFragment : Fragment() {
     private var castsAdapter: CastsAdapter = CastsAdapter(::onClickItem)
 
     private var isFavorite = false
+    private var isExpanded = false
     private var videoKey: String? = null
 
     private fun onClickItem(item: Any) {
@@ -129,6 +130,10 @@ class SeriesDetailFragment : Fragment() {
 
                 castsAdapter.submitList(it.casts.casts.filterPersonsWithProfilePath())
                 similarSeriesAdapter.submitList(it.similar.results.filterSeriesWithPosterPath())
+
+                if(it.overview.isEmpty()){
+                    binding.txtReadMore.visibility = View.GONE
+                }
             }
 
             editWatchListResult.observe(viewLifecycleOwner) {
@@ -211,6 +216,16 @@ class SeriesDetailFragment : Fragment() {
                 binding.view.showAlertSnackbar("You have already rated this movie !")
             }
         }
+
+        binding.txtReadMore.setOnClickListener {
+            handleReadMore()
+        }
+    }
+
+    private fun handleReadMore() {
+        binding.txtSynopsis.maxLines = if (isExpanded) 4 else Integer.MAX_VALUE
+        binding.txtReadMore.text = getString(if (isExpanded) R.string.read_more else R.string.read_less)
+        isExpanded = !isExpanded
     }
 
     private fun handleFavorite() {
