@@ -1,15 +1,13 @@
 package com.example.chmovie.presentation.login
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.chmovie.databinding.FragmentLoginBinding
@@ -80,19 +78,10 @@ class LoginFragment : Fragment() {
 
     @SuppressLint("ClickableViewAccessibility", "QueryPermissionsNeeded")
     private fun handleEvent(view: View) {
-
-        view.setOnTouchListener { _, event ->
-            if (event.action == MotionEvent.ACTION_DOWN) {
-                if (binding.edtUsername.isFocused || binding.edtPassword.isFocused) {
-                    val imm: InputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.hideSoftInputFromWindow(binding.edtUsername.windowToken, 0)
-                    imm.hideSoftInputFromWindow(binding.edtPassword.windowToken, 0)
-                    binding.edtUsername.clearFocus()
-                    binding.edtPassword.clearFocus()
-                }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
             }
-            true
-        }
+        })
 
         binding.btnLogin.setOnClickListener {
             val username = binding.edtUsername.text.toString().trim()

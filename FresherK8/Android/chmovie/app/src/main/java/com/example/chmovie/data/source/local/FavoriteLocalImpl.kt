@@ -8,5 +8,5 @@ class FavoriteLocalImpl(private val favoriteDao: FavoriteDao) : FavoriteDataSour
     override suspend fun getFavoriteMovies(): MutableList<Favorite> = favoriteDao.getAllFavorites()
     override suspend fun saveFavoriteMovie(favorite: Favorite): Any = favoriteDao.insertFavorite(favorite)
     override suspend fun deleteFavoriteMovie(favorite: Favorite): Any = favoriteDao.deleteFavorite(favorite)
-
+    override suspend fun deleteAllFavorites(): Any = favoriteDao.deleteAllFavorites()
 }

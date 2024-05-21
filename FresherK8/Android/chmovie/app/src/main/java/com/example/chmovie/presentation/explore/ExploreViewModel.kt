@@ -37,7 +37,6 @@ class ExploreViewModel(
     private val moviesRef = recommendRef.child(accountId.toString()).child("movies")
     private val seriesRef = recommendRef.child(Constant.RECOMMEND_REALTIME_DB).child(accountId.toString()).child("series")
 
-
     fun loadPopularProvider() {
         launchTaskSync(
             onRequest = { providerRepository.getPopularProvider() },
