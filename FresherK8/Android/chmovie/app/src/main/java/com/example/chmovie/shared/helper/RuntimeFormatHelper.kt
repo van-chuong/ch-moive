@@ -1,6 +1,8 @@
 package com.example.chmovie.shared.helper
 
 import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.Locale
 
 fun Int.formatRuntime(): String {
     require(this >= 0) { "Invalid duration" }
@@ -15,6 +17,11 @@ fun Int.formatRuntime(): String {
 }
 
 fun Double.formatVoteAverage(): String {
-    val df = DecimalFormat("#.#")
-    return df.format(this).toDouble().toString()
+    val symbols = DecimalFormatSymbols(Locale.US).apply {
+        decimalSeparator = '.'
+    }
+    val df = DecimalFormat("#.#", symbols).apply {
+        roundingMode = java.math.RoundingMode.HALF_UP
+    }
+    return df.format(this)
 }

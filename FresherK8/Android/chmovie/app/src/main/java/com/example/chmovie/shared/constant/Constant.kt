@@ -8,8 +8,11 @@ object Constant {
     const val POSTER_BASE_URL: String = "https://image.tmdb.org/t/p/w500/"
     const val SIGNUP_URL: String = "https://www.themoviedb.org/signup"
 
+    const val NOTI_URL: String = "https://vrkkx8x2-3000.asse.devtunnels.ms/"
+
     const val SESSION_KEY: String = "session_id"
     const val USERNAME_KEY: String = "username"
+    const val DEVICE_TOKEN: String = "device_token"
 
     const val FAVORITE_DATABASE: String = "FAVORITE_DATABASE"
 
@@ -18,4 +21,5 @@ object Constant {
     const val RECOMMEND_REALTIME_DB: String = "recommend"
     const val USERS_REALTIME_DB: String = "users"
     const val DEVICE_REALTIME_DB: String = "devices"
+    const val RATING_REALTIME_DB: String = "rating"
 }
