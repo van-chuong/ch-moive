@@ -44,6 +44,7 @@ class MovieDetailFragment : Fragment() {
 
     private var videoKey: String? = null
     private var isFavorite = false
+    private var isExpanded = false
 
     private val dialogManager by lazy {
         DialogManagerImpl(context)
@@ -146,6 +147,16 @@ class MovieDetailFragment : Fragment() {
                 binding.view.showAlertSnackbar("You have already rated this movie !")
             }
         }
+
+        binding.txtReadMore.setOnClickListener {
+            handleReadMore()
+        }
+    }
+
+    private fun handleReadMore() {
+        binding.txtSynopsis.maxLines = if (isExpanded) 4 else Integer.MAX_VALUE
+        binding.txtReadMore.text = getString(if (isExpanded) R.string.read_more else R.string.read_less)
+        isExpanded = !isExpanded
     }
 
     private fun loadData() {
@@ -177,6 +188,10 @@ class MovieDetailFragment : Fragment() {
 
             castsAdapter.submitList(it.casts.casts.filterPersonsWithProfilePath())
             similarMoviesAdapter.submitList(it.similar.results.filterMoviesWithPosterPath())
+
+            if(it.overview.isEmpty()){
+                binding.txtReadMore.visibility = View.GONE
+            }
         }
 
         favoriteMovies.observe(viewLifecycleOwner) { favoriteMovies ->

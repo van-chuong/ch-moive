@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.chmovie.R
 import com.example.chmovie.data.models.MovieDetail
 import com.example.chmovie.data.models.Series
 import com.example.chmovie.data.models.filterMoviesWithPosterPath
@@ -35,6 +36,7 @@ class PersonDetailFragment : Fragment() {
     private var popularSeriesAdapter: TopRatedSeriesAdapter = TopRatedSeriesAdapter(::onClickItem)
 
     private val handler = Handler(Looper.getMainLooper())
+    private var isExpanded = false
 
     private fun onClickItem(item: Any) {
         when (item) {
@@ -103,6 +105,10 @@ class PersonDetailFragment : Fragment() {
         personDetail.observe(viewLifecycleOwner) {
             popularMoviesAdapter.submitList(it.movieCredits.cast.filterMoviesWithPosterPath())
             popularSeriesAdapter.submitList(it.tvCredits.cast.filterSeriesWithPosterPath())
+
+            if(it.biography.isEmpty()){
+                binding.txtReadMore.visibility = View.GONE
+            }
         }
     }
 
@@ -125,5 +131,14 @@ class PersonDetailFragment : Fragment() {
             }
             false
         }
+        binding.txtReadMore.setOnClickListener {
+            handleReadMore()
+        }
+    }
+
+    private fun handleReadMore() {
+        binding.txtBiography.maxLines = if (isExpanded) 6 else Integer.MAX_VALUE
+        binding.txtReadMore.text = getString(if (isExpanded) R.string.read_more else R.string.read_less)
+        isExpanded = !isExpanded
     }
 }
