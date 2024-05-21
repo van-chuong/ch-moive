@@ -6,6 +6,7 @@ import com.example.chmovie.data.models.MoviesResponse
 import com.example.chmovie.data.models.toMap
 import com.example.chmovie.data.source.MovieDataSource
 import com.example.chmovie.data.source.remote.api.MovieApiClient
+import com.example.chmovie.data.source.remote.api.NotificationApiClient
 import okhttp3.ResponseBody
 import retrofit2.Response
 
@@ -28,5 +29,8 @@ class MovieRemoteImpl : MovieDataSource.Remote {
         MovieApiClient.instance.watchList(accountId, sessionId, media.toMap())
 
     override suspend fun getMovieSearch(query: String, page: Int): MoviesResponse = MovieApiClient.instance.getMovieSearch(query, page)
+
+    override suspend fun reviewNotification(id: String, username: String, type: String): Response<ResponseBody> =
+        NotificationApiClient.instance.reviewNotification(id, username, type)
 
 }

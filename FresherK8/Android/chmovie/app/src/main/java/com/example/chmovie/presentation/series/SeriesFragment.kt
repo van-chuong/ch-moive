@@ -49,10 +49,10 @@ class SeriesFragment : Fragment() {
 
     private fun loadData() {
         with(viewModel) {
-            loadAirTodaySeries(Random.nextInt(1,3))
-            loadTrendingSeries(Random.nextInt(1,3))
-            loadOnTheAirSeries(Random.nextInt(1,3))
-            loadTopRatedSeries(Random.nextInt(1,3))
+            loadAirTodaySeries(Random.nextInt(1, 3))
+            loadTrendingSeries(Random.nextInt(1, 3))
+            loadOnTheAirSeries(Random.nextInt(1, 3))
+            loadTopRatedSeries(Random.nextInt(1, 3))
         }
     }
 

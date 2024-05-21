@@ -1,7 +1,11 @@
 package com.example.chmovie.presentation.person_detail
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -29,6 +33,8 @@ class PersonDetailFragment : Fragment() {
 
     private var popularMoviesAdapter: PopularMoviesAdapter = PopularMoviesAdapter(::onClickItem)
     private var popularSeriesAdapter: TopRatedSeriesAdapter = TopRatedSeriesAdapter(::onClickItem)
+
+    private val handler = Handler(Looper.getMainLooper())
 
     private fun onClickItem(item: Any) {
         when (item) {
@@ -100,9 +106,24 @@ class PersonDetailFragment : Fragment() {
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun handleEvent() {
         binding.btnBack.setOnClickListener {
             findNavController().navigateUp()
+        }
+
+        binding.btnBack.setOnLongClickListener {
+            handler.postDelayed({
+                findNavController().navigate(PersonDetailFragmentDirections.actionNavPersonDetailToNavMovies())
+            }, 1000)
+            true
+        }
+
+        binding.btnBack.setOnTouchListener { _, motionEvent ->
+            if (motionEvent.action == MotionEvent.ACTION_UP || motionEvent.action == MotionEvent.ACTION_CANCEL) {
+                handler.removeCallbacksAndMessages(null)
+            }
+            false
         }
     }
 }

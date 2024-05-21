@@ -8,12 +8,14 @@ import com.example.chmovie.data.models.Genre
 import com.example.chmovie.data.models.Media
 import com.example.chmovie.data.models.MovieDetail
 import com.example.chmovie.data.models.ProductionCountry
+import com.example.chmovie.data.models.Rating
 import com.example.chmovie.data.models.Room
 import com.example.chmovie.data.models.RoomResponse
 import com.example.chmovie.data.models.Video
 import com.example.chmovie.data.repositories.FavoriteRepository
 import com.example.chmovie.data.repositories.MovieRepository
 import com.example.chmovie.data.source.local.PrefManager
+import com.example.chmovie.data.source.remote.firebase.FirebaseManager.ratingRef
 import com.example.chmovie.data.source.remote.firebase.FirebaseManager.recommendRef
 import com.example.chmovie.data.source.remote.firebase.FirebaseManager.roomRef
 import com.example.chmovie.presentation.room.start_room.StartRoomActivity
@@ -47,11 +49,17 @@ class MovieDetailViewModel(
     private val _favoriteMovies = MutableLiveData<MutableList<Favorite>>()
     val favoriteMovies: LiveData<MutableList<Favorite>> = _favoriteMovies
 
+    private val _rating = MutableLiveData<MutableList<Rating>>()
+    val rating: LiveData<MutableList<Rating>> = _rating
+
     private val accountId = prefManager.getString(USERNAME_KEY, "")
     private val sessionId = prefManager.getString(SESSION_KEY, "")
 
     private val _editWatchListResult = MutableLiveData<DataResult<String>>()
     val editWatchListResult: LiveData<DataResult<String>> = _editWatchListResult
+
+    private val _checkRatingExists = MutableLiveData<Boolean>()
+    val checkRatingExists: LiveData<Boolean> = _checkRatingExists
 
     fun setMovieId(data: Int?) {
         _movieId.value = data
@@ -156,6 +164,24 @@ class MovieDetailViewModel(
         })
     }
 
+    fun loadRating(movieId: Int) {
+        ratingRef.child(movieId.toString()).get().addOnSuccessListener {
+            if (it.exists()) {
+                _rating.value = it.children.mapNotNull { it.getValue(Rating::class.java) }.toMutableList()
+            } else {
+                _rating.value = mutableListOf()
+            }
+        }
+    }
+
+    fun checkRatingExists(movieId: Int) {
+        ratingRef.child(movieId.toString()).child(accountId.toString()).get().addOnSuccessListener {
+            _checkRatingExists.value = it.exists()
+        }
+    }
+
+
+    /*Format*/
     fun formatMovieRuntime(runtime: Int): String {
         return runtime.formatRuntime()
     }

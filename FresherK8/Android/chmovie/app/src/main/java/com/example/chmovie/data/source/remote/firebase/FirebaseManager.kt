@@ -2,6 +2,7 @@ package com.example.chmovie.data.source.remote.firebase
 
 import com.example.chmovie.shared.constant.Constant.CHAT_REALTIME_DB
 import com.example.chmovie.shared.constant.Constant.DEVICE_REALTIME_DB
+import com.example.chmovie.shared.constant.Constant.RATING_REALTIME_DB
 import com.example.chmovie.shared.constant.Constant.RECOMMEND_REALTIME_DB
 import com.example.chmovie.shared.constant.Constant.ROOM_REALTIME_DB
 import com.example.chmovie.shared.constant.Constant.USERS_REALTIME_DB
@@ -16,4 +17,5 @@ object FirebaseManager {
     val usersRef = originalRef.child(USERS_REALTIME_DB)
     val recommendRef = originalRef.child(RECOMMEND_REALTIME_DB)
     val devicesRef = originalRef.child(DEVICE_REALTIME_DB)
+    val ratingRef = originalRef.child(RATING_REALTIME_DB)
 }
