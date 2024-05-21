@@ -25,4 +25,6 @@ interface MovieRepository {
 
     suspend fun getMovieSearch(query: String, page: Int): DataResult<MoviesResponse>
 
+    suspend fun reviewNotification(id: String, username: String, type: String): DataResult<Boolean>
+
 }

@@ -1,7 +1,11 @@
 package com.example.chmovie.presentation.series_detail
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -10,9 +14,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.chmovie.R
 import com.example.chmovie.data.models.Cast
 import com.example.chmovie.data.models.Favorite
-import com.example.chmovie.data.models.Media
 import com.example.chmovie.data.models.Series
-import com.example.chmovie.data.models.filterMoviesWithPosterPath
 import com.example.chmovie.data.models.filterPersonsWithProfilePath
 import com.example.chmovie.data.models.filterSeriesWithPosterPath
 import com.example.chmovie.data.models.randomSubList
@@ -24,6 +26,7 @@ import com.example.chmovie.presentation.watch_video.WatchVideoActivity.Companion
 import com.example.chmovie.shared.scheduler.DataResult
 import com.example.chmovie.shared.widget.dialogManager.DialogManagerImpl
 import com.example.chmovie.shared.widget.dialogManager.hideLoadingWithDelay
+import com.example.chmovie.shared.widget.showAlertSnackbar
 import com.example.chmovie.shared.widget.showFailedSnackbar
 import com.example.chmovie.shared.widget.showSuccessSnackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -59,6 +62,8 @@ class SeriesDetailFragment : Fragment() {
         DialogManagerImpl(context)
     }
 
+    private val handler = Handler(Looper.getMainLooper())
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -88,8 +93,12 @@ class SeriesDetailFragment : Fragment() {
 
     private fun loadData() {
         with(viewModel) {
-            viewModel.seriesId.value?.let { loadSeriesDetail(it) }
+            viewModel.seriesId.value?.let {
+                loadSeriesDetail(it)
+                movieDetailViewModel.loadRating(it)
+            }
         }
+
         movieDetailViewModel.getFavoriteMovies()
     }
 
@@ -115,7 +124,9 @@ class SeriesDetailFragment : Fragment() {
             }
 
             seriesDetail.observe(viewLifecycleOwner) {
+                movieDetailViewModel.checkRatingExists(it.id)
                 videoKey = viewModel.getVideoKey(it.videos.results)
+
                 castsAdapter.submitList(it.casts.casts.filterPersonsWithProfilePath())
                 similarSeriesAdapter.submitList(it.similar.results.filterSeriesWithPosterPath())
             }
@@ -145,17 +156,36 @@ class SeriesDetailFragment : Fragment() {
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun handleEvent() {
         binding.btnBack.setOnClickListener {
             findNavController().navigateUp()
         }
 
+        binding.btnBack.setOnLongClickListener {
+            handler.postDelayed({
+                findNavController().navigate(SeriesDetailFragmentDirections.actionNavSeriesDetailToNavMovies())
+            }, 1000)
+            true
+        }
+
+        binding.btnBack.setOnTouchListener { _, motionEvent ->
+            if (motionEvent.action == MotionEvent.ACTION_UP || motionEvent.action == MotionEvent.ACTION_CANCEL) {
+                handler.removeCallbacksAndMessages(null)
+            }
+            false
+        }
+
         binding.btnPlay.setOnClickListener {
             if (videoKey.isNullOrEmpty()) {
-                requireView().showFailedSnackbar("Something went wrong try again later")
+                requireView().showFailedSnackbar("Video is not available, being updated, please try again later!")
             } else {
                 navigateToWatchVideo(requireActivity(), videoKey!!)
-                viewModel.seriesDetail.value?.similar?.results?.let { it1 -> viewModel.saveRecommendSeries(it1.filterSeriesWithPosterPath().toList().randomSubList(2)) }
+                viewModel.seriesDetail.value?.similar?.results?.let { it1 ->
+                    viewModel.saveRecommendSeries(
+                        it1.filterSeriesWithPosterPath().toList().randomSubList(2)
+                    )
+                }
             }
         }
 
@@ -163,12 +193,23 @@ class SeriesDetailFragment : Fragment() {
             handleFavorite()
         }
 
-        binding.btnAddWatchList.setOnClickListener {
-            viewModel.watchList(Media.of(viewModel.seriesDetail.value))
-        }
 
         binding.btnStarRoom.setOnClickListener {
-            videoKey?.let { it1 -> viewModel.checkRoomCodeExist(it1, requireContext()) }
+            if (videoKey.isNullOrEmpty()) {
+                view?.showFailedSnackbar("Video is not available, being updated, please try again later!")
+            } else {
+                viewModel.checkRoomCodeExist(videoKey!!, requireContext())
+            }
+        }
+
+        binding.btnAddRating.setOnClickListener {
+            if (movieDetailViewModel.checkRatingExists.value == false) {
+                viewModel.seriesId.value?.let { id ->
+                    findNavController().navigate(SeriesDetailFragmentDirections.actionNavSeriesDetailToNavRatingDetail(id))
+                }
+            } else {
+                binding.view.showAlertSnackbar("You have already rated this movie !")
+            }
         }
     }
 
