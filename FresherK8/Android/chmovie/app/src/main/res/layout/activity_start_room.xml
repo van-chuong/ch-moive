@@ -63,13 +63,24 @@
         <TextView
             android:id="@+id/textView4"
             style="@style/Text_Body"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/chat_channel"
             android:paddingHorizontal="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@string/chat_channel"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+
+        <ImageButton
+            android:id="@+id/btnShare"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="20dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:scaleType="fitCenter"
+            android:src="@drawable/baseline_share_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textView4"
+            app:tint="@color/tint_primary" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvMessage"
