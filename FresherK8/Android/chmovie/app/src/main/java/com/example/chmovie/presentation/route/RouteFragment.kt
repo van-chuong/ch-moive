@@ -1,5 +1,6 @@
 package com.example.chmovie.presentation.route
 
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -27,11 +28,12 @@ class RouteFragment : Fragment() {
     }
 
     private fun navigateBasedOnArgs() {
+        Log.d("DOADAKOSDKASD",args.type.toString())
         with(findNavController()) {
             when {
                 args.id == 0 -> navigate(RouteFragmentDirections.actionNavRouteToNavMovies())
-                args.type == Media.MOVIE -> navigate(RouteFragmentDirections.actionNavRouteToNavMovieDetail(args.id))
-                args.type == Media.TV -> navigate(RouteFragmentDirections.actionNavRouteToNavSeriesDetail(args.id))
+                args.type == Media.MOVIE -> navigate(RouteFragmentDirections.actionNavRouteToNavMovieDetail(args.id,true))
+                args.type == Media.TV -> navigate(RouteFragmentDirections.actionNavRouteToNavSeriesDetail(args.id,true))
             }
         }
     }

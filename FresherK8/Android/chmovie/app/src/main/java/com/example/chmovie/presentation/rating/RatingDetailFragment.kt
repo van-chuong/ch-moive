@@ -96,7 +96,7 @@ class RatingDetailFragment : Fragment() {
                     if (comment.isEmpty()) {
                         requireView().showFailedSnackbar("Comments cannot be left blank")
                     } else {
-                        viewModel.addRating(rating, comment)
+                        viewModel.addRating(rating, comment, args.type)
                     }
                 }
             }

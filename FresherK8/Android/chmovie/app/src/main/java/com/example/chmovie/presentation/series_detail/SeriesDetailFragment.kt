@@ -14,6 +14,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.chmovie.R
 import com.example.chmovie.data.models.Cast
 import com.example.chmovie.data.models.Favorite
+import com.example.chmovie.data.models.Media
 import com.example.chmovie.data.models.Series
 import com.example.chmovie.data.models.filterPersonsWithProfilePath
 import com.example.chmovie.data.models.filterSeriesWithPosterPath
@@ -21,6 +22,7 @@ import com.example.chmovie.data.models.randomSubList
 import com.example.chmovie.databinding.FragmentSeriesDetailBinding
 import com.example.chmovie.presentation.movie_detail.MovieDetailViewModel
 import com.example.chmovie.presentation.movie_detail.adapter.CastsAdapter
+import com.example.chmovie.presentation.movie_detail.adapter.RatingAdapter
 import com.example.chmovie.presentation.series_detail.adapter.SimilarSeriesAdapter
 import com.example.chmovie.presentation.watch_video.WatchVideoActivity.Companion.navigateToWatchVideo
 import com.example.chmovie.shared.scheduler.DataResult
@@ -42,6 +44,7 @@ class SeriesDetailFragment : Fragment() {
 
     private var similarSeriesAdapter: SimilarSeriesAdapter = SimilarSeriesAdapter(::onClickItem)
     private var castsAdapter: CastsAdapter = CastsAdapter(::onClickItem)
+    private var ratingAdapter: RatingAdapter = RatingAdapter()
 
     private var isFavorite = false
     private var isExpanded = false
@@ -107,6 +110,7 @@ class SeriesDetailFragment : Fragment() {
         with(binding) {
             rvCasts.adapter = castsAdapter
             rvSimilar.adapter = similarSeriesAdapter
+            rvRating.adapter = ratingAdapter
         }
     }
 
@@ -159,12 +163,27 @@ class SeriesDetailFragment : Fragment() {
                 } ?: false
             }
         }
+
+        movieDetailViewModel.rating.observe(viewLifecycleOwner) {
+            if (it.isNullOrEmpty()) {
+                binding.rvRating.visibility = View.GONE
+                binding.txtRatingBeingUpdate.visibility = View.VISIBLE
+            } else {
+                ratingAdapter.submitList(it)
+                binding.rvRating.visibility = View.VISIBLE
+                binding.txtRatingBeingUpdate.visibility = View.GONE
+            }
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private fun handleEvent() {
         binding.btnBack.setOnClickListener {
-            findNavController().navigateUp()
+            if (args.isFromNotification){
+                findNavController().navigate(R.id.nav_series)
+            }else{
+                findNavController().navigateUp()
+            }
         }
 
         binding.btnBack.setOnLongClickListener {
@@ -210,7 +229,7 @@ class SeriesDetailFragment : Fragment() {
         binding.btnAddRating.setOnClickListener {
             if (movieDetailViewModel.checkRatingExists.value == false) {
                 viewModel.seriesId.value?.let { id ->
-                    findNavController().navigate(SeriesDetailFragmentDirections.actionNavSeriesDetailToNavRatingDetail(id))
+                    findNavController().navigate(SeriesDetailFragmentDirections.actionNavSeriesDetailToNavRatingDetail(id,Media.TV))
                 }
             } else {
                 binding.view.showAlertSnackbar("You have already rated this movie !")

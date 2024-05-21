@@ -122,6 +122,10 @@
         <argument
             android:name="movieId"
             app:argType="integer" />
+        <argument
+            android:name="isFromNotification"
+            android:defaultValue="false"
+            app:argType="boolean" />
         <action
             android:id="@+id/action_nav_movie_detail_self"
             app:destination="@id/nav_movie_detail" />
@@ -144,6 +148,10 @@
         <argument
             android:name="seriesId"
             app:argType="integer" />
+        <argument
+            android:name="isFromNotification"
+            android:defaultValue="false"
+            app:argType="boolean" />
         <action
             android:id="@+id/action_nav_series_detail_self"
             app:destination="@id/nav_series_detail" />
@@ -202,5 +210,10 @@
         <argument
             android:name="id"
             app:argType="integer" />
+
+        <argument
+            android:name="type"
+            android:defaultValue="movie"
+            app:argType="string" />
     </fragment>
 </navigation>

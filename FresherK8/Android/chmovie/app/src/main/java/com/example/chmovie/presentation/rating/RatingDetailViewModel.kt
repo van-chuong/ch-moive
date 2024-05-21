@@ -24,17 +24,17 @@ class RatingDetailViewModel(private val prefManager: PrefManager, private val mo
         _id.value = id
     }
 
-    fun addRating(rating: Int, comment: String) {
+    fun addRating(rating: Int, comment: String,type: String) {
         _addRatingResult.value = DataResult.Loading
+
         ratingRef.child(id.value.toString()).child(accountId).setValue(Rating(accountId, comment, rating.toDouble())).addOnSuccessListener {
-            reviewNotification(id.value.toString(), "movie")
+            reviewNotification(id.value.toString(), type)
         }.addOnFailureListener {
             _addRatingResult.value = DataResult.Error(it)
         }
     }
 
     private fun reviewNotification(id: String, type: String) {
-
         launchTaskSync(
             onRequest = { movieRepository.reviewNotification(id, accountId, type) },
             onSuccess = { _addRatingResult.value = DataResult.Success(true) },

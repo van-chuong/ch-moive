@@ -14,6 +14,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.chmovie.R
 import com.example.chmovie.data.models.Cast
 import com.example.chmovie.data.models.Favorite
+import com.example.chmovie.data.models.Media
 import com.example.chmovie.data.models.MovieDetail
 import com.example.chmovie.data.models.filterMoviesWithPosterPath
 import com.example.chmovie.data.models.filterPersonsWithProfilePath
@@ -95,7 +96,11 @@ class MovieDetailFragment : Fragment() {
     @SuppressLint("ClickableViewAccessibility")
     private fun handleEvent() {
         binding.btnBack.setOnClickListener {
-            findNavController().navigateUp()
+            if (args.isFromNotification) {
+                findNavController().navigate(R.id.nav_movies)
+            } else {
+                findNavController().navigateUp()
+            }
         }
 
         binding.btnBack.setOnLongClickListener {
@@ -141,7 +146,7 @@ class MovieDetailFragment : Fragment() {
         binding.btnAddRating.setOnClickListener {
             if (viewModel.checkRatingExists.value == false) {
                 viewModel.movieId.value?.let { id ->
-                    findNavController().navigate(MovieDetailFragmentDirections.actionNavMovieDetailToNavRatingDetail(id))
+                    findNavController().navigate(MovieDetailFragmentDirections.actionNavMovieDetailToNavRatingDetail(id, Media.MOVIE))
                 }
             } else {
                 binding.view.showAlertSnackbar("You have already rated this movie !")
@@ -189,7 +194,7 @@ class MovieDetailFragment : Fragment() {
             castsAdapter.submitList(it.casts.casts.filterPersonsWithProfilePath())
             similarMoviesAdapter.submitList(it.similar.results.filterMoviesWithPosterPath())
 
-            if(it.overview.isEmpty()){
+            if (it.overview.isEmpty()) {
                 binding.txtReadMore.visibility = View.GONE
             }
         }
