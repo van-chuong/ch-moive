@@ -49,10 +49,10 @@ class MovieFragment : Fragment() {
 
     private fun loadData() {
         with(viewModel) {
-            loadTrendingMovies(Random.nextInt(1,3))
-            loadPopularMovies(Random.nextInt(1,3))
-            loadInTheaterMovies(Random.nextInt(1,3))
-            loadComingSoonMovies(Random.nextInt(1,3))
+            loadTrendingMovies(Random.nextInt(1, 3))
+            loadPopularMovies(Random.nextInt(1, 3))
+            loadInTheaterMovies(Random.nextInt(1, 3))
+            loadComingSoonMovies(Random.nextInt(1, 3))
         }
     }
 

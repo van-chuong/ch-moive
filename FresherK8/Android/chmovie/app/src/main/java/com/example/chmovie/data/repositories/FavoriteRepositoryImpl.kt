@@ -33,4 +33,13 @@ class FavoriteRepositoryImpl(private val favoriteDataSource: FavoriteDataSource.
         }
     }
 
+    override suspend fun deleteAllFavorites(): DataResult<Any> {
+        return try {
+            val response = favoriteDataSource.deleteAllFavorites()
+            DataResult.Success(response)
+        } catch (e: Exception) {
+            DataResult.Error(e)
+        }
+    }
+
 }

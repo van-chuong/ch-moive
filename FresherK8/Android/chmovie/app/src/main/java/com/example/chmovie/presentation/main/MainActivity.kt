@@ -1,13 +1,17 @@
 package com.example.chmovie.presentation.main
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.lifecycleScope
@@ -15,11 +19,12 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import com.example.chmovie.R
-import com.example.chmovie.data.source.local.PrefManager
 import com.example.chmovie.databinding.ActivityMainBinding
-import com.example.chmovie.shared.constant.Constant
+import com.example.chmovie.shared.scheduler.DataResult
+import com.example.chmovie.shared.widget.showFailedSnackbar
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,6 +42,7 @@ class MainActivity : AppCompatActivity() {
         ).setOpenableLayout(binding.drawerLayout).build()
     }
 
+    private val viewModel: MainViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,14 +50,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // Get the navigation graph
-        val navGraph = navController.navInflater.inflate(R.navigation.mobile_navigation)
-        val sessionId = PrefManager.with(this).getString(Constant.SESSION_KEY, "")
-        if (sessionId.isNullOrEmpty()) {
-            navGraph.setStartDestination(R.id.nav_login)
-        }
-        navController.graph = navGraph
+        navController.setGraph(R.navigation.mobile_navigation)
 
+        checkPostNotificationPermission()
         initView()
+        registerLiveData()
         handleEvent()
     }
 
@@ -63,9 +66,22 @@ class MainActivity : AppCompatActivity() {
 
         binding.navView.menu.getItem(0).subMenu?.getItem(0)?.setActionView(R.layout.nav_item_mage)
         binding.navView.menu.getItem(1).setActionView(R.layout.nav_item_mage)
+    }
 
-        val txtUsername: TextView = binding.navView.getHeaderView(0).findViewById(R.id.txtUsername)
-        txtUsername.text = "@${PrefManager.with(baseContext).getString(Constant.USERNAME_KEY, "")}"
+    private fun registerLiveData() = with(viewModel) {
+        signOutResult.observe(this@MainActivity) {
+            when (it) {
+                is DataResult.Success -> {
+                    navController.navigate(R.id.nav_login)
+                }
+
+                is DataResult.Error -> {
+                    binding.root.showFailedSnackbar("An error occurred. Please try again later!")
+                }
+
+                is DataResult.Loading -> {}
+            }
+        }
     }
 
     private fun handleEvent() {
@@ -79,12 +95,8 @@ class MainActivity : AppCompatActivity() {
                     binding.toolbar.visibility = View.GONE
                 }
 
-                R.id.nav_watch_list -> binding.bottomNavView.visibility = View.GONE
-                R.id.nav_join_room -> binding.bottomNavView.visibility = View.GONE
-                R.id.nav_movie_detail -> binding.bottomNavView.visibility = View.GONE
-                R.id.nav_series_detail -> binding.bottomNavView.visibility = View.GONE
-                R.id.nav_person_detail -> binding.bottomNavView.visibility = View.GONE
-                R.id.nav_search -> binding.bottomNavView.visibility = View.GONE
+                R.id.nav_watch_list, R.id.nav_join_room, R.id.nav_movie_detail, R.id.nav_series_detail, R.id.nav_person_detail,
+                R.id.nav_search, R.id.nav_rating_detail -> binding.bottomNavView.visibility = View.GONE
 
                 else -> {
                     binding.bottomNavView.visibility = View.VISIBLE
@@ -104,8 +116,7 @@ class MainActivity : AppCompatActivity() {
         binding.navView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.nav_sign_out -> {
-                    PrefManager.with(baseContext).clear()
-                    navController.navigate(R.id.nav_login)
+                    viewModel.signOut()
                 }
 
                 R.id.nav_join_room -> {
@@ -115,6 +126,11 @@ class MainActivity : AppCompatActivity() {
 
             binding.drawerLayout.closeDrawer(GravityCompat.START)
             return@setNavigationItemSelectedListener true
+        }
+
+        binding.navView.getHeaderView(0).setOnClickListener {
+            navController.navigate(R.id.nav_route)
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
         }
     }
 
@@ -133,6 +149,14 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             delay(500)
             binding.loadingLayout.visibility = View.GONE
+        }
+    }
+
+    private fun checkPostNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.POST_NOTIFICATIONS), 100)
+            }
         }
     }
 
@@ -157,5 +181,23 @@ class MainActivity : AppCompatActivity() {
     private fun hideSoftKeyboard(view: View) {
         val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        // Handle intent data if activity receives a new intent while already running
+        intent?.let { handleIntentData(it) }
+    }
+
+    private fun handleIntentData(intent: Intent) {
+        if (intent.hasExtra("id") && intent.hasExtra("type")) {
+            val id = intent.getIntExtra("id", 0)
+            val type = intent.getStringExtra("type")
+            val startDestinationArgs = Bundle()
+
+            startDestinationArgs.putInt("id", id)
+            startDestinationArgs.putString("type", type)
+            navController.setGraph(R.navigation.mobile_navigation, startDestinationArgs)
+        }
     }
 }

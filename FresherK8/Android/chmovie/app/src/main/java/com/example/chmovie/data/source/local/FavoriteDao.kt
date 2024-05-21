@@ -18,4 +18,7 @@ interface FavoriteDao {
 
     @Delete
     suspend fun deleteFavorite(favorite: Favorite)
+
+    @Query("DELETE FROM favorites")
+    suspend fun deleteAllFavorites()
 }

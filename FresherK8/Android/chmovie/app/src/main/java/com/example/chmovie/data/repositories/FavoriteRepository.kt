@@ -8,4 +8,5 @@ interface FavoriteRepository {
     suspend fun getFavoriteMovies(): DataResult<MutableList<Favorite>>
     suspend fun saveFavoriteMovie(favorite: Favorite): DataResult<Any>
     suspend fun deleteFavoriteMovie(favorite: Favorite): DataResult<Any>
+    suspend fun deleteAllFavorites(): DataResult<Any>
 }
