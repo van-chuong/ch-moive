@@ -51,7 +51,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="www.chmovie.com"
+                    android:host="vrkkx8x2-3000.asse.devtunnels.ms"
                     android:scheme="https"
                     android:pathPrefix="/join-room" />
             </intent-filter>

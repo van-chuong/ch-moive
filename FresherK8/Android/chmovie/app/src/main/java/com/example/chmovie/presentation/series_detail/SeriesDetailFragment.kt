@@ -180,7 +180,7 @@ class SeriesDetailFragment : Fragment() {
     private fun handleEvent() {
         binding.btnBack.setOnClickListener {
             if (args.isFromNotification){
-                findNavController().navigate(R.id.nav_series)
+                findNavController().navigate(SeriesDetailFragmentDirections.actionNavSeriesDetailToNavSeries())
             }else{
                 findNavController().navigateUp()
             }
@@ -188,7 +188,7 @@ class SeriesDetailFragment : Fragment() {
 
         binding.btnBack.setOnLongClickListener {
             handler.postDelayed({
-                findNavController().navigate(SeriesDetailFragmentDirections.actionNavSeriesDetailToNavMovies())
+                findNavController().navigate(SeriesDetailFragmentDirections.actionNavSeriesDetailToNavSeries())
             }, 1000)
             true
         }

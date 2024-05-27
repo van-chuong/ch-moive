@@ -9,7 +9,7 @@ object Constant {
     const val SIGNUP_URL: String = "https://www.themoviedb.org/signup"
 
     const val NOTI_URL: String = "https://vrkkx8x2-3000.asse.devtunnels.ms/"
-    const val DEEPLINK_JOIN_ROOM_URL: String = "https://www.chmovie.com/join-room"
+    const val DEEPLINK_JOIN_ROOM_URL: String = "https://vrkkx8x2-3000.asse.devtunnels.ms/join-room"
 
     const val SESSION_KEY: String = "session_id"
     const val USERNAME_KEY: String = "username"
