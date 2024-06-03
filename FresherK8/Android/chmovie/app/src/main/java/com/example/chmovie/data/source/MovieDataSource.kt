@@ -27,5 +27,7 @@ interface MovieDataSource {
         suspend fun watchList(accountId: String, sessionId: String, media: Media): Response<ResponseBody>
 
         suspend fun getMovieSearch(query: String, page: Int): MoviesResponse
+
+        suspend fun reviewNotification(id: String, username: String, type: String): Response<ResponseBody>
     }
 }

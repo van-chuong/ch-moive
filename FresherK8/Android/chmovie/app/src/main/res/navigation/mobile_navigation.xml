@@ -3,7 +3,40 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_movies">
+    app:startDestination="@+id/nav_route">
+
+    <fragment
+        android:id="@+id/nav_route"
+        android:name="com.example.chmovie.presentation.route.RouteFragment"
+        tools:layout="@layout/fragment_route">
+
+        <argument
+            android:name="id"
+            android:defaultValue="0"
+            app:argType="integer" />
+
+        <argument
+            android:name="type"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+
+        <action
+            android:id="@+id/action_nav_route_to_nav_login"
+            app:destination="@id/nav_login" />
+        <action
+            android:id="@+id/action_nav_route_to_nav_movies"
+            app:destination="@id/nav_movies" />
+        <action
+            android:id="@+id/action_nav_route_to_nav_movie_detail"
+            app:destination="@id/nav_movie_detail" />
+        <action
+            android:id="@+id/action_nav_route_to_nav_series_detail"
+            app:destination="@id/nav_series_detail" />
+        <action
+            android:id="@+id/action_nav_route_to_nav_join_room"
+            app:destination="@id/nav_join_room" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_movies"
@@ -72,13 +105,26 @@
         android:id="@+id/nav_join_room"
         android:name="com.example.chmovie.presentation.room.JoinRoomFragment"
         android:label="@string/join_room"
-        tools:layout="@layout/fragment_join_room" />
+        tools:layout="@layout/fragment_join_room">
+        <argument
+            android:name="roomId"
+            android:defaultValue="0"
+            app:argType="integer" />
+        <argument
+            android:name="isFromDeeplink"
+            android:defaultValue="false"
+            app:argType="boolean" />
+        <action
+            android:id="@+id/action_nav_join_room_to_nav_movies"
+            app:destination="@id/nav_movies" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_login"
         android:name="com.example.chmovie.presentation.login.LoginFragment"
         android:label="@string/log_in"
-        tools:layout="@layout/fragment_login" >
+        tools:layout="@layout/fragment_login">
+
         <action
             android:id="@+id/action_nav_login_to_nav_movies"
             app:destination="@id/nav_movies" />
@@ -92,12 +138,22 @@
         <argument
             android:name="movieId"
             app:argType="integer" />
+        <argument
+            android:name="isFromNotification"
+            android:defaultValue="false"
+            app:argType="boolean" />
         <action
             android:id="@+id/action_nav_movie_detail_self"
             app:destination="@id/nav_movie_detail" />
         <action
             android:id="@+id/action_nav_movie_detail_to_nav_person_detail"
             app:destination="@id/nav_person_detail" />
+        <action
+            android:id="@+id/action_nav_movie_detail_to_nav_rating_detail"
+            app:destination="@id/nav_rating_detail" />
+        <action
+            android:id="@+id/action_nav_movie_detail_to_nav_movies"
+            app:destination="@id/nav_movies" />
     </fragment>
 
     <fragment
@@ -108,12 +164,25 @@
         <argument
             android:name="seriesId"
             app:argType="integer" />
+        <argument
+            android:name="isFromNotification"
+            android:defaultValue="false"
+            app:argType="boolean" />
         <action
             android:id="@+id/action_nav_series_detail_self"
             app:destination="@id/nav_series_detail" />
         <action
             android:id="@+id/action_nav_series_detail_to_nav_person_detail"
             app:destination="@id/nav_person_detail" />
+        <action
+            android:id="@+id/action_nav_series_detail_to_nav_rating_detail"
+            app:destination="@id/nav_rating_detail" />
+        <action
+            android:id="@+id/action_nav_series_detail_to_nav_movies"
+            app:destination="@id/nav_movies" />
+        <action
+            android:id="@+id/action_nav_series_detail_to_nav_series"
+            app:destination="@id/nav_series" />
     </fragment>
 
     <fragment
@@ -133,6 +202,9 @@
         <action
             android:id="@+id/action_nav_person_detail_to_nav_movie_detail"
             app:destination="@id/nav_movie_detail" />
+        <action
+            android:id="@+id/action_nav_person_detail_to_nav_movies"
+            app:destination="@id/nav_movies" />
     </fragment>
 
     <fragment
@@ -146,5 +218,21 @@
         <action
             android:id="@+id/action_nav_search_to_nav_movie_detail"
             app:destination="@id/nav_movie_detail" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_rating_detail"
+        android:name="com.example.chmovie.presentation.rating.RatingDetailFragment"
+        android:label="@string/rating_detail"
+        tools:layout="@layout/fragment_rating_detail">
+
+        <argument
+            android:name="id"
+            app:argType="integer" />
+
+        <argument
+            android:name="type"
+            android:defaultValue="movie"
+            app:argType="string" />
     </fragment>
 </navigation>

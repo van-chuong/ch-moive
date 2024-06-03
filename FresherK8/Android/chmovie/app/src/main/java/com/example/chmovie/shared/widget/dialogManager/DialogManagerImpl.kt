@@ -1,6 +1,7 @@
 package com.example.chmovie.shared.widget.dialogManager
 
 import android.content.Context
+import android.graphics.Bitmap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -11,6 +12,7 @@ class DialogManagerImpl(ctx: Context?) : DialogManager {
 
     private var context: WeakReference<Context?>? = null
     private var progressDialog: ProgressDialog? = null
+    private var qrCodeDialog: QRCodeDialog? = null
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
     init {
@@ -33,5 +35,17 @@ class DialogManagerImpl(ctx: Context?) : DialogManager {
 
     override fun onRelease() {
         progressDialog = null
+    }
+
+    fun showImageDialog(bitmap: Bitmap) {
+        val ctx = context?.get()
+        if (ctx != null) {
+            qrCodeDialog = QRCodeDialog(ctx, bitmap)
+            qrCodeDialog?.show()
+        }
+    }
+
+    fun hideImageDialog() {
+        qrCodeDialog?.dismiss()
     }
 }

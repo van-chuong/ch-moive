@@ -1,7 +1,11 @@
 package com.example.chmovie.presentation.movie_detail
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -17,15 +21,15 @@ import com.example.chmovie.data.models.filterPersonsWithProfilePath
 import com.example.chmovie.data.models.randomSubList
 import com.example.chmovie.databinding.FragmentMovieDetailBinding
 import com.example.chmovie.presentation.movie_detail.adapter.CastsAdapter
+import com.example.chmovie.presentation.movie_detail.adapter.RatingAdapter
 import com.example.chmovie.presentation.movie_detail.adapter.SimilarMoviesAdapter
 import com.example.chmovie.presentation.watch_video.WatchVideoActivity.Companion.navigateToWatchVideo
-import com.example.chmovie.shared.scheduler.DataResult
 import com.example.chmovie.shared.widget.dialogManager.DialogManagerImpl
 import com.example.chmovie.shared.widget.dialogManager.hideLoadingWithDelay
+import com.example.chmovie.shared.widget.showAlertSnackbar
 import com.example.chmovie.shared.widget.showFailedSnackbar
 import com.example.chmovie.shared.widget.showSuccessSnackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
-
 
 class MovieDetailFragment : Fragment() {
 
@@ -37,13 +41,17 @@ class MovieDetailFragment : Fragment() {
 
     private var similarMoviesAdapter: SimilarMoviesAdapter = SimilarMoviesAdapter(::onClickItem)
     private var castsAdapter: CastsAdapter = CastsAdapter(::onClickItem)
+    private var ratingAdapter: RatingAdapter = RatingAdapter()
 
     private var videoKey: String? = null
     private var isFavorite = false
+    private var isExpanded = false
 
     private val dialogManager by lazy {
         DialogManagerImpl(context)
     }
+
+    private val handler = Handler(Looper.getMainLooper())
 
     private fun onClickItem(item: Any) {
         when (item) {
@@ -85,17 +93,41 @@ class MovieDetailFragment : Fragment() {
         bindView()
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun handleEvent() {
         binding.btnBack.setOnClickListener {
-            findNavController().navigateUp()
+            if (args.isFromNotification) {
+                findNavController().navigate(R.id.nav_movies)
+            } else {
+                findNavController().navigateUp()
+            }
+        }
+
+        binding.btnBack.setOnLongClickListener {
+            handler.postDelayed({
+                findNavController().navigate(MovieDetailFragmentDirections.actionNavMovieDetailToNavMovies())
+            }, 1000)
+            true
+        }
+
+        binding.btnBack.setOnTouchListener { _, motionEvent ->
+            if (motionEvent.action == MotionEvent.ACTION_UP || motionEvent.action == MotionEvent.ACTION_CANCEL) {
+                handler.removeCallbacksAndMessages(null)
+            }
+            false
         }
 
         binding.btnPlay.setOnClickListener {
             if (videoKey.isNullOrEmpty()) {
-                requireView().showFailedSnackbar("Something went wrong try again later")
+                requireView().showFailedSnackbar("Video is not available, being updated, please try again later!")
             } else {
                 navigateToWatchVideo(requireActivity(), videoKey!!)
-                viewModel.movieDetail.value?.similar?.results?.let { it1 -> viewModel.saveRecommendMovie(it1.filterMoviesWithPosterPath().toList().randomSubList(2)) }
+
+                viewModel.movieDetail.value?.similar?.results?.let { it1 ->
+                    viewModel.saveRecommendMovie(
+                        it1.filterMoviesWithPosterPath().toList().randomSubList(2)
+                    )
+                }
             }
         }
 
@@ -103,13 +135,33 @@ class MovieDetailFragment : Fragment() {
             handleFavorite()
         }
 
-        binding.btnAddWatchList.setOnClickListener {
-            viewModel.watchList(Media.of(viewModel.movieDetail.value))
+        binding.btnStarRoom.setOnClickListener {
+            if (videoKey.isNullOrEmpty()) {
+                view?.showFailedSnackbar("Video is not available, being updated, please try again later!")
+            } else {
+                viewModel.checkRoomCodeExist(videoKey!!, requireContext())
+            }
         }
 
-        binding.btnStarRoom.setOnClickListener {
-            videoKey?.let { it1 -> viewModel.checkRoomCodeExist(it1, requireContext()) }
+        binding.btnAddRating.setOnClickListener {
+            if (viewModel.checkRatingExists.value == false) {
+                viewModel.movieId.value?.let { id ->
+                    findNavController().navigate(MovieDetailFragmentDirections.actionNavMovieDetailToNavRatingDetail(id, Media.MOVIE))
+                }
+            } else {
+                binding.view.showAlertSnackbar("You have already rated this movie !")
+            }
         }
+
+        binding.txtReadMore.setOnClickListener {
+            handleReadMore()
+        }
+    }
+
+    private fun handleReadMore() {
+        binding.txtSynopsis.maxLines = if (isExpanded) 4 else Integer.MAX_VALUE
+        binding.txtReadMore.text = getString(if (isExpanded) R.string.read_more else R.string.read_less)
+        isExpanded = !isExpanded
     }
 
     private fun loadData() {
@@ -117,6 +169,7 @@ class MovieDetailFragment : Fragment() {
             movieId.value?.let {
                 loadMovieDetail(it)
                 getFavoriteMovies()
+                loadRating(it)
             }
         }
     }
@@ -136,8 +189,14 @@ class MovieDetailFragment : Fragment() {
 
         movieDetail.observe(viewLifecycleOwner) {
             videoKey = viewModel.getVideoKey(it.videos.results)
+            viewModel.checkRatingExists(it.id)
+
             castsAdapter.submitList(it.casts.casts.filterPersonsWithProfilePath())
             similarMoviesAdapter.submitList(it.similar.results.filterMoviesWithPosterPath())
+
+            if (it.overview.isEmpty()) {
+                binding.txtReadMore.visibility = View.GONE
+            }
         }
 
         favoriteMovies.observe(viewLifecycleOwner) { favoriteMovies ->
@@ -147,17 +206,14 @@ class MovieDetailFragment : Fragment() {
             } ?: false
         }
 
-        editWatchListResult.observe(viewLifecycleOwner) {
-            when (it) {
-                is DataResult.Success -> {
-                    requireView().showSuccessSnackbar(it.data)
-                }
-
-                is DataResult.Error -> {
-                    requireView().showFailedSnackbar(it.exception.message.toString())
-                }
-
-                DataResult.Loading -> {}
+        rating.observe(viewLifecycleOwner) {
+            if (it.isNullOrEmpty()) {
+                binding.rvRating.visibility = View.GONE
+                binding.txtRatingBeingUpdate.visibility = View.VISIBLE
+            } else {
+                ratingAdapter.submitList(it)
+                binding.rvRating.visibility = View.VISIBLE
+                binding.txtRatingBeingUpdate.visibility = View.GONE
             }
         }
     }
@@ -166,6 +222,7 @@ class MovieDetailFragment : Fragment() {
         with(binding) {
             rvCasts.adapter = castsAdapter
             rvSimilar.adapter = similarMoviesAdapter
+            rvRating.adapter = ratingAdapter
         }
     }
 
@@ -186,6 +243,7 @@ class MovieDetailFragment : Fragment() {
             isFavorite = !isFavorite
         }
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

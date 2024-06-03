@@ -11,14 +11,16 @@
     </data>
 
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/shadow_primary"
+        android:background="@color/background_primary"
         tools:context=".presentation.movie_detail.MovieDetailFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:paddingBottom="20dp">
 
             <ImageButton
                 android:id="@+id/btnBack"
@@ -113,22 +115,6 @@
                 app:layout_constraintTop_toTopOf="@+id/btnBack"
                 app:tint="@color/primary" />
 
-            <Button
-                android:id="@+id/btnAddWatchList"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginVertical="20dp"
-                android:background="@drawable/button_primary_bg"
-                android:paddingVertical="16dp"
-                android:text="@string/add_watch_list"
-                android:textAllCaps="false"
-                android:textColor="@color/tint_primary"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtReleaseDate" />
-
             <LinearLayout
                 android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
@@ -137,7 +123,7 @@
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnAddWatchList">
+                app:layout_constraintTop_toBottomOf="@+id/txtReleaseDate">
 
                 <Button
                     android:id="@+id/btnAddRating"
@@ -162,12 +148,12 @@
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginVertical="20dp"
                     android:layout_weight="1"
-                    android:background="@drawable/button_bg"
+                    android:background="@drawable/button_primary_bg"
                     android:paddingHorizontal="20dp"
                     android:paddingVertical="16dp"
                     android:text="@string/star_room"
                     android:textAllCaps="false"
-                    android:textColor="@color/tint_secondary"
+                    android:textColor="@color/tint_primary"
                     android:textSize="18sp"
                     app:icon="@drawable/baseline_favorite_24" />
             </LinearLayout>
@@ -401,6 +387,18 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView13" />
+
+                <TextView
+                    android:id="@+id/txtReadMore"
+                    style="@style/Text_Body"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/read_more"
+                    android:textColor="@color/tint_primary"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txtSynopsis" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
@@ -422,7 +420,8 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView26" />
+                app:layout_constraintTop_toBottomOf="@+id/textView26"
+                tools:listitem="@layout/item_person" />
 
             <TextView
                 android:id="@+id/textView25"
@@ -439,14 +438,49 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvSimilar"
                 style="@style/App_RecyclerView_Horizontal"
-                android:layout_marginBottom="20dp"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView25"
                 tools:listitem="@layout/item_common_home" />
+
+            <TextView
+                android:id="@+id/textView111"
+                style="@style/Text_Heading3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="20dp"
+                android:text="@string/rating"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rvSimilar" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvRating"
+                style="@style/App_RecyclerView_Horizontal"
+                android:layout_marginHorizontal="20dp"
+                android:nestedScrollingEnabled="false"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView111"
+                tools:listitem="@layout/item_rating" />
+
+            <TextView
+                android:id="@+id/txtRatingBeingUpdate"
+                style="@style/Text_Body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp"
+                android:text="@string/rating_is_being_updated"
+                android:textAlignment="center"
+                android:textColor="@color/tint_secondary"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@+id/textView111" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>

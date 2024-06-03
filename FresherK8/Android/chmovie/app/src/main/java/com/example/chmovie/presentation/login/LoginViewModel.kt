@@ -2,11 +2,16 @@ package com.example.chmovie.presentation.login
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.chmovie.data.repositories.AuthRepository
 import com.example.chmovie.data.source.local.PrefManager
+import com.example.chmovie.data.source.remote.firebase.FirebaseManager.devicesRef
 import com.example.chmovie.shared.base.BaseViewModel
 import com.example.chmovie.shared.constant.Constant
 import com.example.chmovie.shared.scheduler.DataResult
+import com.google.firebase.messaging.FirebaseMessaging
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class LoginViewModel(
     private val authRepository: AuthRepository,
@@ -46,13 +51,23 @@ class LoginViewModel(
                 }
             },
             onSuccess = { session ->
-                _loginResultLiveData.value = DataResult.Success("successful")
                 prefManager.save(Constant.USERNAME_KEY, username)
                 prefManager.save(Constant.SESSION_KEY, session)
+
+                saveDeviceToken(username)
+                _loginResultLiveData.value = DataResult.Success("successful")
             },
             onError = { exception ->
                 _loginResultLiveData.value = DataResult.Error(exception)
             }
         )
+    }
+
+    private fun saveDeviceToken(username: String) {
+        viewModelScope.launch {
+            val token = FirebaseMessaging.getInstance().token.await()
+            prefManager.save(Constant.DEVICE_TOKEN, token)
+            devicesRef.child(username).child(token).setValue("")
+        }
     }
 }

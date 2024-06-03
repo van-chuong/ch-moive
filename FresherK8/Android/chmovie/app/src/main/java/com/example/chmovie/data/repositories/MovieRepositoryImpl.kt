@@ -94,4 +94,13 @@ class MovieRepositoryImpl(private val moviesDataSource: MovieDataSource.Remote) 
         }
     }
 
+    override suspend fun reviewNotification(id: String, username: String, type: String): DataResult<Boolean> {
+        return try {
+            moviesDataSource.reviewNotification(id, username, type)
+            DataResult.Success(true)
+        } catch (e: Exception) {
+            DataResult.Error(e)
+        }
+    }
+
 }
