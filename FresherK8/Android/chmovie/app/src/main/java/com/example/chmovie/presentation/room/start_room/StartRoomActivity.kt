@@ -1,6 +1,5 @@
 package com.example.chmovie.presentation.room.start_room
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -19,7 +18,11 @@ import com.example.chmovie.presentation.room.start_room.controllers.CustomRoomPl
 import com.example.chmovie.shared.base.BaseActivity
 import com.example.chmovie.shared.constant.Constant.DEEPLINK_JOIN_ROOM_URL
 import com.example.chmovie.shared.scheduler.DataResult
+import com.example.chmovie.shared.widget.dialogManager.DialogManagerImpl
+import com.example.chmovie.shared.widget.dialogManager.QRCodeDialog
 import com.example.chmovie.shared.widget.showFailedSnackbar
+import com.google.zxing.BarcodeFormat
+import com.journeyapps.barcodescanner.BarcodeEncoder
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions
@@ -167,6 +170,18 @@ class StartRoomActivity : BaseActivity<ActivityStartRoomBinding, StartRoomViewMo
             } else {
                 viewBinding.root.showFailedSnackbar("Unable to initialize roomroom link, please try again later")
             }
+        }
+
+        viewBinding.btnQR.setOnClickListener {
+            if (viewModel.room.value != null) {
+                val roomLink = "${DEEPLINK_JOIN_ROOM_URL}?id=${viewModel.room.value!!.key}&type=room"
+                val bitmap = BarcodeEncoder().encodeBitmap(roomLink, BarcodeFormat.QR_CODE, 300, 300)
+                val dialog = QRCodeDialog(this, bitmap)
+                dialog.show()
+            } else {
+                viewBinding.root.showFailedSnackbar("Unable to initialize roomroom link, please try again later")
+            }
+
         }
     }
 

@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.chmovie.data.models.Cast
 import com.example.chmovie.data.models.MovieDetail
+import com.example.chmovie.data.models.MovieProvider
 import com.example.chmovie.data.models.Series
 import com.example.chmovie.databinding.FragmentExploreBinding
 import com.example.chmovie.presentation.explore.adapter.PopularPersonAdapter
@@ -15,6 +16,7 @@ import com.example.chmovie.presentation.explore.adapter.PopularProviderAdapter
 import com.example.chmovie.presentation.main.MainActivity
 import com.example.chmovie.presentation.movie.adapter.PopularMoviesAdapter
 import com.example.chmovie.presentation.series.adapter.TopRatedSeriesAdapter
+import com.example.chmovie.shared.widget.showFailedSnackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ExploreFragment : Fragment() {
@@ -41,6 +43,10 @@ class ExploreFragment : Fragment() {
 
             is Cast -> {
                 findNavController().navigate(ExploreFragmentDirections.actionNavExploreToNavPersonDetail(item.id))
+            }
+
+            is MovieProvider -> {
+                binding.root.showFailedSnackbar("Content about providers is being updated, please try again later")
             }
         }
     }

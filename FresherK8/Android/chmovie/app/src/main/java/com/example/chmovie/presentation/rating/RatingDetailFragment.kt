@@ -34,8 +34,17 @@ class RatingDetailFragment : Fragment() {
     private var buttonAdapter: RatingButtonAdapter = RatingButtonAdapter(::onClickItem)
 
     private var rating = 0
+    private var comment = ""
+
     private fun onClickItem(i: Int) {
         rating = i
+        if (comment.isNotEmpty() && rating !=0) {
+            binding.btnSubmit.setBackgroundResource(R.drawable.button_primary_bg)
+            binding.btnSubmit.setTextColor(resources.getColor(R.color.tint_primary))
+        } else {
+            binding.btnSubmit.setBackgroundResource(R.drawable.button_bg)
+            binding.btnSubmit.setTextColor(resources.getColor(R.color.tint_secondary))
+        }
     }
 
     override fun onCreateView(
@@ -110,7 +119,7 @@ class RatingDetailFragment : Fragment() {
 
     private val textWatcher = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
-            val comment = binding.edtComment.text.toString().trim()
+            comment = binding.edtComment.text.toString().trim()
 
             if (comment.isNotEmpty() && rating !=0) {
                 binding.btnSubmit.setBackgroundResource(R.drawable.button_primary_bg)
