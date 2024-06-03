@@ -1,9 +1,16 @@
 package com.example.chmovie.presentation.watch_video.controllers
 
+import android.app.PictureInPictureParams
 import android.content.pm.ActivityInfo
+import android.content.res.Configuration
+import android.graphics.Point
+import android.os.Build
+import android.util.Rational
+import android.view.Display
 import android.view.View
 import android.widget.ImageButton
 import android.widget.RelativeLayout
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.Lifecycle
 import com.example.chmovie.R
 import com.example.chmovie.presentation.watch_video.WatchVideoActivity
@@ -16,6 +23,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.Abs
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTubePlayerTracker
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 class CustomPlayerUiController(
     val view: View,
     val youtubePlayer: YouTubePlayer,
@@ -24,7 +32,7 @@ class CustomPlayerUiController(
 ) : AbstractYouTubePlayerListener() {
 
     private var playerTracker: YouTubePlayerTracker = YouTubePlayerTracker()
-
+    private var fadeViewHelper:FadeViewHelper? = null
     companion object {
         var isLandscapeMode = false
     }
@@ -37,17 +45,25 @@ class CustomPlayerUiController(
     private fun setUpYoutubePlayer() {
         addFadeView()
         handleActionEvent()
+        initPIP()
     }
 
     private fun addFadeView() {
         val layoutRoot: RelativeLayout = view.findViewById(R.id.control_video_layout_root)
         val layout: View = view.findViewById(R.id.control_video_layout)
-        val fadeViewHelper = FadeViewHelper(layout)
-        fadeViewHelper.animationDuration = FadeViewHelper.DEFAULT_ANIMATION_DURATION
-        fadeViewHelper.fadeOutDelay = FadeViewHelper.DEFAULT_FADE_OUT_DELAY
-        youtubePlayer.addListener(fadeViewHelper)
+        fadeViewHelper = FadeViewHelper(layout)
+        fadeViewHelper!!.animationDuration = FadeViewHelper.DEFAULT_ANIMATION_DURATION
+        fadeViewHelper!!.fadeOutDelay = FadeViewHelper.DEFAULT_FADE_OUT_DELAY
+        youtubePlayer.addListener(fadeViewHelper!!)
         layoutRoot.setOnClickListener {
-            fadeViewHelper.toggleVisibility()
+            fadeViewHelper!!.toggleVisibility()
+        }
+    }
+
+    private fun removeFadeView() {
+        fadeViewHelper?.let {
+            it.toggleVisibility()
+            youtubePlayer.removeListener(it)
         }
     }
 
@@ -64,6 +80,7 @@ class CustomPlayerUiController(
                 youtubePlayer.seekTo(time)
             }
         }
+
         btnPause.setOnClickListener {
             if (playerTracker.state == PlayerConstants.PlayerState.PLAYING) {
                 btnPause.setImageResource(R.drawable.baseline_play_arrow_24)
@@ -73,6 +90,7 @@ class CustomPlayerUiController(
                 youtubePlayer.play()
             }
         }
+
         btnToggleFullScreen.setOnClickListener {
             if (isLandscapeMode) {
                 activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
@@ -81,11 +99,27 @@ class CustomPlayerUiController(
             }
             isLandscapeMode = !isLandscapeMode
         }
+
         btnFastForward.setOnClickListener {
             youtubePlayer.seekTo(playerTracker.currentSecond + 10f)
         }
+
         btnRewind.setOnClickListener {
             youtubePlayer.seekTo(playerTracker.currentSecond - 10f)
+        }
+    }
+
+    private fun initPIP() {
+        val enterPipMode : ImageButton = view.findViewById(R.id.btnPip)
+        enterPipMode.setOnClickListener {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val aspectRatio = Rational(16,9)
+                val params: PictureInPictureParams = PictureInPictureParams.Builder()
+                    .setAspectRatio(aspectRatio)
+                    .build()
+                removeFadeView()
+                activity.enterPictureInPictureMode(params)
+            }
         }
     }
 }
