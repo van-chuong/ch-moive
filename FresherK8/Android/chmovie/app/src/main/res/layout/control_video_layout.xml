@@ -15,8 +15,8 @@
             android:id="@+id/btnPause"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:padding="14dp"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="14dp"
             android:scaleType="fitCenter"
             android:src="@drawable/baseline_pause_24"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -29,8 +29,8 @@
             android:id="@+id/btnFastForward"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:padding="14dp"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="14dp"
             android:scaleType="fitCenter"
             android:src="@drawable/baseline_keyboard_double_arrow_right_24"
             app:layout_constraintBottom_toBottomOf="@+id/btnPause"
@@ -38,12 +38,13 @@
             app:layout_constraintStart_toEndOf="@+id/btnPause"
             app:layout_constraintTop_toTopOf="@+id/btnPause"
             app:tint="@color/tint_primary" />
+
         <ImageButton
             android:id="@+id/btnRewind"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:padding="14dp"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="14dp"
             android:scaleType="fitCenter"
             android:src="@drawable/baseline_keyboard_double_arrow_left_24"
             app:layout_constraintBottom_toBottomOf="@+id/btnPause"
@@ -51,6 +52,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/btnPause"
             app:tint="@color/tint_primary" />
+
+        <ImageButton
+            android:id="@+id/btnPip"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="14dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/baseline_picture_in_picture_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/tint_primary" />
+
         <com.pierfrancescosoffritti.androidyoutubeplayer.core.customui.views.YouTubePlayerSeekBar
             android:id="@+id/playerSeekBar"
             android:layout_width="0dp"
